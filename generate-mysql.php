@@ -94,7 +94,7 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 		if ($str[0] == '.') throw new Exception();
 		if ($str == 'https:' || !strncmp($str, 'http:', 5)) throw new Exception();
 
-		$name = trim(preg_replace('#\s+#u', ' ', preg_replace('#^[0-9\.]+\s#u', '', $a->nodeValue)));
+		$name = trim(preg_replace('#\s+#u', ' ', preg_replace('#^[A-Z0-9\.]+\s#u', '', $a->nodeValue)));
 		if (empty($name)) throw new Exception();
 
 		// which type ?
