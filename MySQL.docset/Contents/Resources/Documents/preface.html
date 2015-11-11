@@ -1,0 +1,69 @@
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>序文と法的通知</title><link rel="stylesheet" type="text/css" href="mvl.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="up" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="prev" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="next" href="introduction.html" title="第 1 章 一般情報">
+<script language="javascript" type="text/javascript">
+  function addOnload(theFunc)
+  {
+    var previous = window.onload;
+    if (typeof window.onload != 'function')
+    {
+      window.onload = theFunc;
+    }
+    else
+    {
+      window.onload = function()
+      {
+        previous();
+        theFunc();
+      }
+    }
+  }
+
+  addOnload(function()
+  {
+    var base = new Date(1446597221*1000);
+    var now = new Date();
+    var diff = ((now-base)/1000)/(24*3600);
+
+    if (diff > 90) {
+      var nodes = document.getElementsByClassName('titlepage');
+      nodes[0].innerHTML = '<p style="border: 5px #ff0000 solid; padding: 5px; margin 5px">' +
+        'This copy of the manual is more than 90 days old. We encourage you to download a ' +
+        'new version from <a href="http://dev.mysql.com">dev.mysql.com/doc</a>.</p>' + nodes[0].innerHTML;
+    }
+  });
+</script>
+<noscript></noscript>
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">序文と法的通知</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="index.html">前</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="introduction.html">次へ</a></td></tr></table><hr></div><div class="preface"><div class="titlepage"><div><div><h1 class="title"><a name="preface"></a>序文と法的通知</h1></div></div></div><p>
+    これは、MySQL Database System バージョン 5.6 (リリース 5.6.23 まで) のリファレンスマニュアルです。MySQL 5.6 のマイナーバージョン間での相違点は、リリース番号 (5.6.<em class="replaceable"><code>x</code></em>) に関連した現在のテキストに記されます。ライセンス情報については、<a class="link" href="preface.html#legalnotice" title="法律上の注意点">法的通知</a>を参照してください。この製品には、サードパーティーのコードが含まれる場合があります。サードパーティーコードのライセンス情報については、<a class="xref" href="licenses-third-party.html" title="付録 E サードパーティーコンポーネントライセンス">付録E <i>サードパーティーコンポーネントライセンス</i></a>を参照してください。
+  </p><p>
+    MySQL 5.6 と以前のバージョンとの間に機能などの多くの相違点があるため、このマニュアルは MySQL ソフトウェアの古いバージョンで用することは想定されていません。MySQL ソフトウェアの以前のリリースを使用している場合は、該当するマニュアルを参照してください。たとえば、<a class="ulink" href="http://dev.mysql.com/doc/refman/5.5/en/" target="_top"><em class="citetitle">MySQL 5.5 リファレンスマニュアル</em></a>には、5.5 シリーズの MySQL ソフトウェアリリースが取り上げられています。
+  </p><div class="simplesect"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="legalnotice"></a>法律上の注意点</h2></div></div></div><p>
+    Copyright © 1997, 2015, Oracle and/or its affiliates.All rights reserved.
+  </p><p>
+    このソフトウェアおよび関連ドキュメントの使用と開示は、ライセンス契約の制約条件に従うものとし、知的財産に関する法律により保護されています。ライセンス契約で明示的に許諾されている場合もしくは法律によって認められている場合を除き、形式、手段に関係なく、いかなる部分も使用、複写、複製、翻訳、放送、修正、ライセンス供与、送信、配布、発表、実行、公開または表示することはできません。このソフトウェアのリバース・エンジニアリング、逆アセンブル、逆コンパイルは互換性のために法律によって規定されている場合を除き、禁止されています。
+  </p><p>
+    ここに記載された情報は予告なしに変更される場合があります。また、誤りが無いことの保証はいたしかねます。誤りを見つけた場合は、オラクルまでご連絡ください。
+  </p><p>
+    このソフトウェアまたは関連ドキュメントを、米国政府機関もしくは米国政府機関に代わってこのソフトウェアまたは関連ドキュメントをライセンスされた者に提供する場合は、次の通知が適用されます。
+  </p><p>
+    U.S. GOVERNMENT END USERS: Oracle programs, including any operating system, integrated software, any programs installed on the hardware, and/or documentation, delivered to U.S. Government end users are “commercial computer software” pursuant to the applicable Federal Acquisition Regulation and agency-specific supplemental regulations. As such, use, duplication, disclosure, modification, and adaptation of the programs, including any operating system, integrated software, any programs installed on the hardware, and/or documentation, shall be  subject to license terms and license restrictions applicable to the programs. No other rights are granted to the U.S. Government.
+  </p><p>
+    このソフトウェアまたはハードウェアは様々な情報管理アプリケーションでの一般的な使用のために開発されたものです。このソフトウェアまたはハードウェアは、危険が伴うアプリケーション (人的傷害を発生させる可能性があるアプリケーションを含む) への用途を目的として開発されていません。このソフトウェアまたはハードウェアを危険が伴うアプリケーションで使用する際、安全に使用するために、適切な安全装置、バックアップ、冗長性(redundancy)、その他の対策を講じることは使用者の責任となります。このソフトウェアまたはハードウェアを危険が伴うアプリケーションで使用したことに起因して損害が発生しても、Oracle Corporation およびその関連会社は一切の責任を負いかねます。
+  </p><p>
+    Oracle および Java はオラクルおよびその関連会社の登録商標です。MySQL は Oracle Corporation およびその関連会社の商標であり、Oracle による明確な書面による認可なしに使用できません。その他の社名、商品名等は各社の商標または登録商標である場合があります。
+  </p><p>
+    このソフトウェアまたはハードウェア、そしてドキュメントは、第三者のコンテンツ、製品、サービスへのアクセス、あるいはそれらに関する情報を提供することがあります。適用されるお客様と Oracle Corporation との間の契約に別段の定めがある場合を除いて、Oracle Corporation およびその関連会社は、第三者のコンテンツ、製品、サービスに関して一切の責任を負わず、いかなる保証もいたしません。適用されるお客様と Oracle Corporation との間の契約に定めがある場合を除いて、Oracle Corporation およびその関連会社は、第三者のコンテンツ、製品、サービスへのアクセスまたは使用によって損失、費用、あるいは損害が発生しても一切の責任を負いかねます。
+  </p><p>
+    このドキュメントには、ソフトウェアまたは印刷物などの形式を問わず、オラクルが独占的な権利を有する財産的情報が含まれています。この機密資料へのアクセスと使用は、お客様とオラクルとの間で締結され、お客様が遵守に同意した、Oracle Master Agreement、Oracle License and Oracle Services Agreement(オラクル・ライセンスおよびサービスに関する契約書)、Oracle PartnerNetwork Agreement、Oracle Distribution Agreementまたはその他のライセンス契約の条件に従うものとします。このドキュメントとその内容の開示、コピー、複製および配布には、オラクルによる事前の承諾を必要とします。このドキュメントはライセンス契約の一部となるものではなく、オラクルおよびその子会社や関連会社との契約を構成するものではありません。
+  </p><p>
+    このドキュメントは、GPL ライセンスに基づき配布されるものではありません。このドキュメントの使用は、次の条項に従います。
+  </p><p>
+    個人的な使用にかぎり、このドキュメントの出力コピーを作成できます。実際のコンテンツをいっさい変更したり編集したりしないかぎり、ほかの形式に変換することは許可されています。このドキュメントはいかなる形態またはいかなるメディアであっても公開または配布されないものとします。ただし、ドキュメントが同じメディアでソフトウェアと一緒に配布されるという条件で、Oracle がこのドキュメントを配布する方法と類似した方法で (すなわち、このソフトウェアを掲載する Web サイトから電子的にダウンロードする場合)、または CD-ROM や類似のメディアでドキュメントを配布する場合を除きます。出力コピーを配布するなど、ほかの形式で使用したり、別の出版物でこのドキュメントの全部または一部を使用したりする場合は、権限を有するOracle の代表者から事前の書面による同意を得る必要があります。Oracle およびその関連会社は、上記で特に認められている場合を除き、このドキュメントに対するあらゆる権利を保有します。
+  </p><p>
+    このライセンスの条項または MySQL ドキュメントの作成方法に関する詳細は、<a class="ulink" href="http://dev.mysql.com/contact/" target="_top">MySQL Contact &amp; Questions</a> にアクセスしてください。
+  </p><p>
+    MySQL 製品が使用するサードパーティーライブラリのライセンスを含め、ライセンスに関する追加情報については、<a class="xref" href="preface.html" title="序文と法的通知">序文と法的通知</a>を参照してください。
+  </p><p>
+    MySQL の使用に関するヘルプは、抱えている問題についてほかの MySQL ユーザーに相談できる <a class="ulink" href="http://forums.mysql.com" target="_top">MySQL フォーラム</a>または <a class="ulink" href="http://lists.mysql.com" target="_top">MySQL メーリングリスト</a>にアクセスしてください。
+  </p><p>
+    ほかの言語へのドキュメントの翻訳を含む MySQL 製品の追加情報と、HTML 形式や PDF 形式などのさまざまな形式でダウンロードできるバージョンについては、<a class="ulink" href="http://dev.mysql.com/doc" target="_top">MySQL Documentation Library</a> を参照してください。
+  </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="index.html">前</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="introduction.html">次へ</a></td></tr><tr><td width="40%" align="left" valign="top">MySQL 5.6 リファレンスマニュアル </td><td width="20%" align="center"><a accesskey="h" href="index.html">ホーム</a></td><td width="40%" align="right" valign="top"> 第 1 章 一般情報</td></tr></table></div><div class="copyright-footer"></div></body></html>

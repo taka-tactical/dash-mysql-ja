@@ -1,0 +1,845 @@
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>第 7 章 バックアップとリカバリ</title><link rel="stylesheet" type="text/css" href="mvl.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="up" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="prev" href="security.html" title="第 6 章 セキュリティー"><link rel="next" href="optimization.html" title="第 8 章 最適化">
+<script language="javascript" type="text/javascript">
+  function addOnload(theFunc)
+  {
+    var previous = window.onload;
+    if (typeof window.onload != 'function')
+    {
+      window.onload = theFunc;
+    }
+    else
+    {
+      window.onload = function()
+      {
+        previous();
+        theFunc();
+      }
+    }
+  }
+
+  addOnload(function()
+  {
+    var base = new Date(1446597221*1000);
+    var now = new Date();
+    var diff = ((now-base)/1000)/(24*3600);
+
+    if (diff > 90) {
+      var nodes = document.getElementsByClassName('titlepage');
+      nodes[0].innerHTML = '<p style="border: 5px #ff0000 solid; padding: 5px; margin 5px">' +
+        'This copy of the manual is more than 90 days old. We encourage you to download a ' +
+        'new version from <a href="http://dev.mysql.com">dev.mysql.com/doc</a>.</p>' + nodes[0].innerHTML;
+    }
+  });
+</script>
+<noscript></noscript>
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">第 7 章 バックアップとリカバリ</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="security.html">前</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="optimization.html">次へ</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="backup-and-recovery"></a>第 7 章 バックアップとリカバリ</h1></div></div></div><div class="toc"><p><b>目次</b></p><dl class="toc"><dt><span class="section"><a href="backup-and-recovery.html#backup-types">7.1 バックアップとリカバリの種類</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#backup-methods">7.2 データベースバックアップ方法</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#backup-strategy-example">7.3 バックアップおよびリカバリ戦略の例</a></span></dt><dd><dl><dt><span class="section"><a href="backup-and-recovery.html#backup-policy">7.3.1 バックアップポリシーの確立</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#recovery-from-backups">7.3.2 リカバリへのバックアップの使用</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#backup-strategy-summary">7.3.3 バックアップ戦略サマリー</a></span></dt></dl></dd><dt><span class="section"><a href="backup-and-recovery.html#using-mysqldump">7.4 バックアップへの mysqldump の使用</a></span></dt><dd><dl><dt><span class="section"><a href="backup-and-recovery.html#mysqldump-sql-format">7.4.1 mysqldump による SQL フォーマットでのデータのダンプ</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#reloading-sql-format-dumps">7.4.2 SQL フォーマットバックアップのリロード</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#mysqldump-delimited-text">7.4.3 mysqldump による区切りテキストフォーマットでのデータのダンプ</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#reloading-delimited-text-dumps">7.4.4 区切りテキストフォーマットバックアップのリロード</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#mysqldump-tips">7.4.5 mysqldump のヒント</a></span></dt></dl></dd><dt><span class="section"><a href="backup-and-recovery.html#point-in-time-recovery">7.5 バイナリログを使用したポイントインタイム (増分) リカバリ</a></span></dt><dd><dl><dt><span class="section"><a href="backup-and-recovery.html#point-in-time-recovery-times">7.5.1 イベント時間を使用したポイントインタイムリカバリ</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#point-in-time-recovery-positions">7.5.2 イベントの位置を使用したポイントインタイムリカバリ</a></span></dt></dl></dd><dt><span class="section"><a href="backup-and-recovery.html#myisam-table-maintenance">7.6 MyISAM テーブルの保守とクラッシュリカバリ</a></span></dt><dd><dl><dt><span class="section"><a href="backup-and-recovery.html#myisam-crash-recovery">7.6.1 クラッシュリカバリへの myisamchk の使用</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#myisam-check">7.6.2 MyISAM テーブルのエラーのチェック方法</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#myisam-repair">7.6.3 MyISAM テーブルの修復方法</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#myisam-optimization">7.6.4 MyISAM テーブルの最適化</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#myisam-maintenance-schedule">7.6.5 MyISAM テーブル保守スケジュールのセットアップ</a></span></dt></dl></dd></dl></div><a class="indexterm" name="idm139926503481696"></a><a class="indexterm" name="idm139926503479584"></a><p>
+    システムクラッシュ、ハードウェアの障害、またはユーザーが誤ってデータを削除するなどの問題が発生した場合に、データをリカバリし、再度起動して、実行できるように、データベースをバックアップすることが重要です。バックアップは、MySQL インストールのアップグレード前の保護手段としても不可欠であり、それらを使用して、MySQL インストールを別のシステムに転送したり、レプリケーションスレーブサーバーをセットアップしたりできます。
+  </p><p>
+    MySQL では、多様なバックアップ戦略を提供しており、それらからインストールの要件にもっとも適合する方法を選択できます。この章では、熟知しておくべきであるいくつかのバックアップとリカバリのトピックについて説明します。
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        バックアップの種類: 論理と物理、完全と増分など。
+      </p></li><li class="listitem"><p>
+        バックアップの作成の方法。
+      </p></li><li class="listitem"><p>
+        ポイントインタイムリカバリを含むリカバリ方法。
+      </p></li><li class="listitem"><p>
+        バックアップのスケジューリング、圧縮、および暗号化。
+      </p></li><li class="listitem"><p>
+        破損したテーブルのリカバリを可能にするためのテーブルの保守。
+      </p></li></ul></div><h2><a name="idm139926503470384"></a>追加のリソース</h2><p>
+    バックアップまたはデータの可用性の維持に関連するリソースには次のものが含まれます。
+  </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+        MySQL Enterprise Edition のお客様はバックアップに MySQL Enterprise Backup 製品を使用できます。MySQL Enterprise Backup 製品の概要については、<a class="xref" href="mysql-enterprise.html#mysql-enterprise-backup" title="25.2 MySQL Enterprise Backup">セクション25.2「MySQL Enterprise Backup」</a>を参照してください。
+      </p></li><li class="listitem"><p>
+        バックアップの問題に特化したフォーラムは <a class="ulink" href="http://forums.mysql.com/list.php?28" target="_top">http://forums.mysql.com/list.php?28</a> にあります。
+      </p></li><li class="listitem"><p>
+        <span class="command"><strong>mysqldump</strong></span>、<span class="command"><strong>mysqlhotcopy</strong></span>、およびほかの MySQL バックアッププログラムの詳細は<a class="xref" href="programs.html" title="第 4 章 MySQL プログラム">第4章「<i>MySQL プログラム</i>」</a>で見つかります。
+      </p></li><li class="listitem"><p>
+        ここで説明している SQL ステートメントの構文は、<a class="xref" href="sql-syntax.html" title="第 13 章 SQL ステートメントの構文">第13章「<i>SQL ステートメントの構文</i>」</a>にあります。
+      </p></li><li class="listitem"><p>
+        <code class="literal">InnoDB</code> バックアップ手順の追加情報については、<a class="xref" href="innodb-storage-engine.html#innodb-backup" title="14.16 InnoDB のバックアップとリカバリ">セクション14.16「InnoDB のバックアップとリカバリ」</a>を参照してください。
+      </p></li><li class="listitem"><p>
+        レプリケーションにより、複数のサーバーで同一のデータを保持できます。これには、クライアントクエリーの負荷をサーバー全体に分散できること、特定のサーバーがオフラインにされるか障害が発生した場合でもデータを使用できること、およびスレーブサーバーを使用して、マスターに影響を与えずにバックアップを作成する機能など、いくつかのメリットがあります。<a class="xref" href="replication.html" title="第 17 章 レプリケーション">第17章「<i>レプリケーション</i>」</a>を参照してください。
+      </p></li><li class="listitem"><p>
+        MySQL Cluster は、分散コンピューティング環境に適した高可用性、高冗長性バージョンの MySQL を提供します。<a class="xref" href="mysql-cluster.html" title="第 18 章 MySQL Cluster NDB 7.3 および MySQL Cluster NDB 7.4">第18章「<i>MySQL Cluster NDB 7.3 および MySQL Cluster NDB 7.4</i>」</a>を参照してください。これは MySQL Cluster NDB 7.3 (MySQL 5.6 に基づいていますが、<code class="literal">NDBCLUSTER</code> ストレージエンジンの最新の改善と修正が含まれます) に関する情報を提供しています。
+      </p><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><div class="admon-title">注記</div><p>
+          <code class="literal">NDBCLUSTER</code> ストレージエンジンは現在 MySQL 5.6 でサポートされていません。
+        </p></div></li><li class="listitem"><p>
+        Distributed Replicated Block Device (DRBD) は別の高可用性ソリューションです。これは、プライマリサーバーからセカンダリサーバーにブロックレベルでブロック型デバイスをレプリケートすることによって機能します。<a class="xref" href="ha-overview.html" title="第 16 章 高可用性と拡張性">第16章「<i>高可用性と拡張性</i>」</a>を参照してください
+      </p></li></ul></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="backup-types"></a>7.1 バックアップとリカバリの種類</h2></div></div></div><p>
+      このセクションでは、さまざまな種類のバックアップの特性について説明します。
+    </p><h3><a name="idm139926503446976"></a>物理 (raw) バックアップと論理バックアップ</h3><p>
+      物理バックアップは、データベースの内容を格納するディレクトリとファイルの raw コピーから構成されます。この種類のバックアップは、問題の発生時に早急にリカバリさせる必要がある大規模で重要なデータベースに適しています。
+    </p><p>
+      論理バックアップは、論理データベース構造として表される情報 (<code class="literal">CREATE DATABASE</code>、<code class="literal">CREATE TABLE</code> ステートメント) と内容 (<code class="literal">INSERT</code> ステートメントまたは区切りテキストファイル) を保存します。この種類のバックアップは、ユーザーがデータ値やテーブル構造を編集したり、別のマシンアーキテクチャーにデータを再作成したりできる少量のデータに適しています。
+    </p><p>
+      物理バックアップ方法にはこれらの特性があります。
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          バックアップはデータベースディレクトリおよびファイルの正確なコピーから構成されます。一般的に、これは MySQL データディレクトリのすべてまたは一部のコピーです。
+        </p></li><li class="listitem"><p>
+          物理バックアップ方法は、変換しないファイルコピーのみが含まれるため、論理より高速です。
+        </p></li><li class="listitem"><p>
+          出力は論理バックアップの場合よりコンパクトです。
+        </p></li><li class="listitem"><p>
+          ビジーで、重要なデータベースには、バックアップの速度やコンパクトさが重要であるため、MySQL Enterprise Backup 製品は物理バックアップを実行します。MySQL Enterprise Backup 製品の概要については、<a class="xref" href="mysql-enterprise.html#mysql-enterprise-backup" title="25.2 MySQL Enterprise Backup">セクション25.2「MySQL Enterprise Backup」</a>を参照してください。
+        </p></li><li class="listitem"><p>
+          バックアップとリストアの粒度は、データディレクトリ全体のレベルから個々のファイルのレベルまでの範囲になります。これは、ストレージエンジンに応じて、テーブルレベルの粒度を提供する場合としない場合があります。たとえば、<code class="literal">InnoDB</code> テーブルは、それぞれ個別のファイルにしたり、ほかの <code class="literal">InnoDB</code> テーブルとファイルストレージを共有したりできます。各 <code class="literal">MyISAM</code> テーブルはファイルのセットに一意に対応します。
+        </p></li><li class="listitem"><p>
+          データベースに加えて、バックアップにはログファイルや構成ファイルなどの関連ファイルを含めることができます。
+        </p></li><li class="listitem"><p>
+          <code class="literal">MEMORY</code> テーブルの内容はディスクに格納されないため、それらのデータをこの方法でバックアップすることは困難です。(MySQL Enterprise Backup 製品には、バックアップ中に <code class="literal">MEMORY</code> テーブルからデータを取得できる機能があります。)
+        </p></li><li class="listitem"><p>
+          バックアップは、同一か類似のハードウェア特性を持つほかのマシンにのみ移植可能です。
+        </p></li><li class="listitem"><p>
+          バックアップは MySQL サーバーが実行していない間に実行できます。サーバーが実行中の場合は、バックアップ中にサーバーがデータベースの内容を変更しないように、適切なロックを実行する必要があります。MySQL Enterprise Backup は、このロックが必要なテーブルに対して、自動的にロックを実行します。
+        </p></li><li class="listitem"><p>
+          物理バックアップツールには、<code class="literal">InnoDB</code> またはその他のテーブル用の MySQL Enterprise Backup の <span class="command"><strong>mysqlbackup</strong></span>、ファイルシステムレベルのコマンド (<span class="command"><strong>cp</strong></span>、<span class="command"><strong>scp</strong></span>、<span class="command"><strong>tar</strong></span>、<span class="command"><strong>rsync</strong></span> など)、または <code class="literal">MyISAM</code> テーブル用の <span class="command"><strong>mysqlhotcopy</strong></span> が含まれます。
+        </p></li><li class="listitem"><p>
+          リストアの場合:
+        </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+              MySQL Enterprise Backup はバックアップした <code class="literal">InnoDB</code> およびその他のテーブルをリストアします。
+            </p></li><li class="listitem"><p>
+              <span class="command"><strong>ndb_restore</strong></span> は <code class="literal">NDB</code> テーブルをリストアします。
+            </p></li><li class="listitem"><p>
+              ファイルシステムレベルまたは <span class="command"><strong>mysqlhotcopy</strong></span> によってコピーされたファイルは、ファイルシステムコマンドによってそれらの元の場所にコピーできます。
+            </p></li></ul></div></li></ul></div><p>
+      論理バックアップ方法にはこれらの特性があります。
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          バックアップは、MySQL サーバーをクエリーし、データベース構造と内容情報を取得して実行されます。
+        </p></li><li class="listitem"><p>
+          サーバーがデータベース情報にアクセスし、それを論理フォーマットに変換する必要があるため、バックアップは物理方法より遅くなります。クライアント側で出力が書き込まれた場合、サーバーはそれをバックアッププログラムに送信する必要もあります。
+        </p></li><li class="listitem"><p>
+          出力は特にテキストフォーマットで保存された場合に物理バックアップより大きくなります。
+        </p></li><li class="listitem"><p>
+          バックアップとリストアの粒度は、サーバーレベル (すべてのデータベース)、データベースレベル (特定のデータベースのすべてのテーブル)、またはテーブルレベルで利用できます。これはストレージエンジンに関係なく当てはまります。
+        </p></li><li class="listitem"><p>
+          バックアップには、ログファイルや構成ファイル、またはデータベースの一部ではないその他のデータベース関連ファイルは含まれません。
+        </p></li><li class="listitem"><p>
+          論理フォーマットで格納されているバックアップはマシンに依存せず、高度に移植可能です。
+        </p></li><li class="listitem"><p>
+          論理バックアップは MySQL サーバーの実行中に実行されます。サーバーはオフラインにされません。
+        </p></li><li class="listitem"><p>
+          論理バックアップツールには、<span class="command"><strong>mysqldump</strong></span> プログラムと <code class="literal">SELECT ... INTO OUTFILE</code> ステートメントが含まれます。これらは <code class="literal">MEMORY</code> でも、すべてのストレージエンジンで機能します。
+        </p></li><li class="listitem"><p>
+          論理バックアップをリストアするには、<span class="command"><strong>mysql</strong></span> クライアントを使用して、SQL フォーマットダンプファイルを処理できます。区切りテキストファイルをロードするには、<code class="literal">LOAD DATA INFILE</code> ステートメントまたは <span class="command"><strong>mysqlimport</strong></span> クライアントを使用します。
+        </p></li></ul></div><h3><a name="idm139926503392752"></a>オンラインバックアップとオフラインバックアップ</h3><p>
+      オンラインバックアップは、データベース情報をサーバーから取得できるように、MySQL サーバーが実行中に行われます。オフラインバックアップは、サーバーが停止中に行われます。この区別は、<span class="quote">「<span class="quote">ホット</span>」</span>バックアップと<span class="quote">「<span class="quote">コールド</span>」</span>バックアップとして表すこともできます。<span class="quote">「<span class="quote">ウォーム</span>」</span>バックアップは、サーバーが実行したままですが、外部からデータベースファイルにアクセスしている間のデータの変更に対してロックされます。
+    </p><p>
+      オンラインバックアップ方法にはこれらの特性があります。
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          このバックアップはほかのクライアントの邪魔になりにくく、クライアントはバックアップ中に MySQL サーバーに接続でき、実行する必要がある操作に応じて、データにアクセスできます。
+        </p></li><li class="listitem"><p>
+          バックアップの完全性を損なう可能性のあるデータの変更が行われないように、適切なロックを適用する場合は、注意を払う必要があります。MySQL Enterprise Backup 製品はそのようなロックを自動的に実行します。
+        </p></li></ul></div><p>
+      オフラインバックアップ方法にはこれらの特性があります。
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          バックアップ中にサーバーを使用できないため、クライアントは影響を受ける可能性があります。そのため、そのようなバックアップは、多くの場合、可用性を損なうことなくオフラインにできるレプリケーションスレーブサーバーから行われます。
+        </p></li><li class="listitem"><p>
+          バックアップ手順は、クライアントのアクティビティーからの干渉の可能性がないため単純になります。
+        </p></li></ul></div><p>
+      オンラインとオフラインの同様の違いは、リカバリ操作にも当てはまり、同様の特性が当てはまります。ただし、リカバリにはより強力なロックが必要であるため、オンラインリカバリではオンラインバックアップより、クライアントが影響を受ける可能性が高くなります。バックアップ時、クライアントはバックアップ中にデータを読み取ることができます。リカバリはデータを変更し、読み取るだけでないため、データのリストア中は、クライアントのデータへのアクセスを妨げる必要があります。
+    </p><h3><a name="idm139926503380464"></a>ローカルバックアップとリモートバックアップ</h3><p>
+      ローカルバックアップは MySQL サーバーが実行している同じホストで実行され、リモートバックアップは別のホストから実行されます。特定の種類のバックアップでは、出力がサーバーホストにローカルで書きこまれる場合でも、バックアップをリモートホストから開始できます。
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          <span class="command"><strong>mysqldump</strong></span> はローカルまたはリモートサーバーに接続できます。SQL 出力 (<code class="literal">CREATE</code> および <code class="literal">INSERT</code> ステートメント) の場合、ローカルまたはリモートダンプを実行でき、クライアント上に出力が生成されます。区切りテキスト出力 (<code class="option">--tab</code> オプションを使用して) の場合、サーバーホスト上にデータファイルが作成されます。
+        </p></li><li class="listitem"><p>
+          <span class="command"><strong>mysqlhotcopy</strong></span> はローカルバックアップのみを実行します。それはサーバーに接続し、データ変更に対してそれをロックしてから、ローカルテーブルファイルをコピーします。
+        </p></li><li class="listitem"><p>
+          <code class="literal">SELECT ... INTO OUTFILE</code> はローカルまたはリモートクライアントホストから起動できますが、出力ファイルはサーバーホスト上に作成されます。
+        </p></li><li class="listitem"><p>
+          物理バックアップ方法は一般に、サーバーをオフラインにできるように、MySQL サーバーホスト上でローカルに開始されますが、コピーされるファイルの宛先はリモートにすることができます。
+        </p></li></ul></div><h3><a name="idm139926503367984"></a>スナップショットバックアップ</h3><p>
+      一部のファイルシステム実装では、<span class="quote">「<span class="quote">スナップショット</span>」</span>を取得できます。これらは、ファイルシステム全体の物理コピーを必要とせずに、特定の時点のファイルシステムの論理コピーを提供します。(たとえば、実装では、スナップショット取得時間後に変更されたファイルシステムの部分のみがコピーされるように、コピーオンライト (copy-on-write) 技法を使用することがあります。)MySQL 自体はファイルシステムスナップショットを取得するための機能を提供していません。これは Veritas、LVM、または ZFS などのサードパーティーソリューションから使用できます。
+    </p><h3><a name="idm139926503365072"></a>完全バックアップと増分バックアップ</h3><p>
+      完全バックアップには、特定の時点の MySQL サーバーによって管理されるすべてのデータが含まれます。増分バックアップは、特定の期間 (ある時点から別の時点まで) 中にデータに行われた変更から構成されます。MySQL では、このセクションで先述したものなど、完全バックアップを実行するためのさまざまな方法があります。増分バックアップは、サーバーのバイナリログを有効にすることによって可能になります。サーバーはそれをデータの変更を記録するために使用します。
+    </p><h3><a name="idm139926503362576"></a>完全リカバリとポイントインタイム (増分) リカバリ</h3><p>
+      完全リカバリでは、完全バックアップからすべてのデータをリストアします。これは、サーバーインスタンスをバックアップが行われたときのその状態にリストアします。その状態が十分に最新でない場合、完全リカバリのあとに、完全バックアップ以降に行われた増分バックアップのリカバリを行なって、サーバーをより新しい状態にすることができます。
+    </p><p>
+      増分リカバリは、特定の期間中に行われた変更のリカバリです。これは、サーバーの状態を特定の時点の最新にするため、ポイントインタイムリカバリとも呼ばれます。ポイントインタイムリカバリは、バイナリログに基づき、一般にバックアップが行われたときの状態にサーバーをリストアするバックアップファイルからの完全リカバリのあとに行われます。バイナリログファイルに書き込まれたデータの変更が増分リカバリとして適用され、データの変更が元に戻され、サーバーが目的の時点の状態になります。
+    </p><h3><a name="idm139926503358944"></a>テーブルの保守</h3><p>
+      テーブルが破損した場合、データの完全性が損なわれる可能性があります。<code class="literal">InnoDB</code> テーブルの場合、これはよくある問題ではありません。<code class="literal">MyISAM</code> テーブルをチェックし、問題が見つかった場合にそれらを修復するプログラムについては、<a class="xref" href="backup-and-recovery.html#myisam-table-maintenance" title="7.6 MyISAM テーブルの保守とクラッシュリカバリ">セクション7.6「MyISAM テーブルの保守とクラッシュリカバリ」</a>を参照してください。
+    </p><h3><a name="idm139926503354608"></a>バックアップのスケジューリング、圧縮、および暗号化</h3><p>
+      バックアップスケジューリングはバックアップ手順の自動化に役立ちます。バックアップ出力の圧縮によって、領域要件が縮小し、出力の暗号化により、バックアップされたデータの権限のないアクセスに対するセキュリティーが強化されます。MySQL 自体はこれらの機能を提供していません。MySQL Enterprise Backup 製品によって <code class="literal">InnoDB</code> バックアップを圧縮し、バックアップ出力の圧縮や暗号化は、ファイルシステムユーティリティーを使用して実現できます。その他のサードパーティーソリューションも利用できます。
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="backup-methods"></a>7.2 データベースバックアップ方法</h2></div></div></div><p>
+      このセクションでは、バックアップを作成する場合の一般的な方法をまとめています。
+    </p><h3><a name="idm139926503349616"></a>MySQL Enterprise Backup によるホットバックアップの作成</h3><p>
+      MySQL Enterprise Edition のお客様は <a class="link" href="glossary.html#glos_mysql_enterprise_backup" title="MySQL Enterprise Backup">MySQL Enterprise Backup</a> 製品を使用して、インスタンス全体または選択されたデータベース、テーブル、またはその両方の<a class="link" href="glossary.html#glos_physical" title="物理">物理</a>バックアップを実行できます。この製品には、<a class="link" href="glossary.html#glos_incremental_backup" title="増分バックアップ">増分</a>および<a class="link" href="glossary.html#glos_compressed_backup" title="圧縮バックアップ">圧縮</a>バックアップの機能が含まれます。物理データベースファイルのバックアップは、リストアが <code class="literal">mysqldump</code> コマンドなどの論理技法よりはるかに高速になります。<code class="literal">InnoDB</code> テーブルは<a class="link" href="glossary.html#glos_hot_backup" title="ホットバックアップ">ホットバックアップ</a>メカニズムを使用してコピーされます。(理想的には <code class="literal">InnoDB</code> テーブルでデータの大部分を表しているべきです。)ほかのストレージエンジンのテーブルは、<a class="link" href="glossary.html#glos_warm_backup" title="ウォームバックアップ">ウォームバックアップ</a>メカニズムを使用してコピーされます。MySQL Enterprise Backup 製品の概要については、<a class="xref" href="mysql-enterprise.html#mysql-enterprise-backup" title="25.2 MySQL Enterprise Backup">セクション25.2「MySQL Enterprise Backup」</a>を参照してください。
+    </p><h3><a name="idm139926503338560"></a>mysqldump または mysqlhotcopy によるバックアップの作成</h3><p>
+      <span class="command"><strong>mysqldump</strong></span> プログラムと <span class="command"><strong>mysqlhotcopy</strong></span> スクリプトでバックアップを作成できます。<span class="command"><strong>mysqldump</strong></span> はあらゆる種類のテーブルをバックアップできるため、より汎用的です。<span class="command"><strong>mysqlhotcopy</strong></span> は一部のストレージエンジンでのみ機能します。(<a class="xref" href="backup-and-recovery.html#using-mysqldump" title="7.4 バックアップへの mysqldump の使用">セクション7.4「バックアップへの mysqldump の使用」</a>および<a class="xref" href="programs.html#mysqlhotcopy" title="4.6.10 mysqlhotcopy — データベースバックアッププログラム">セクション4.6.10「<span class="command"><strong>mysqlhotcopy</strong></span> — データベースバックアッププログラム」</a>を参照してください。)
+    </p><p>
+      <code class="literal">InnoDB</code> テーブルの場合、<span class="command"><strong>mysqldump</strong></span> に <code class="option">--single-transaction</code> オプションを使用して、テーブルをロックしないオンラインバックアップを実行できます。<a class="xref" href="backup-and-recovery.html#backup-policy" title="7.3.1 バックアップポリシーの確立">セクション7.3.1「バックアップポリシーの確立」</a>を参照してください。
+    </p><h3><a name="idm139926503328976"></a>テーブルファイルのコピーによるバックアップの作成</h3><p>
+      独自のファイルを使用して、各テーブルを表すストレージエンジンの場合、テーブルはそれらのファイルをコピーしてバックアップできます。たとえば、<code class="literal">MyISAM</code> テーブルはファイルとして格納されるため、ファイル (<code class="filename">*.frm</code>、<code class="filename">*.MYD</code>、および <code class="filename">*.MYI</code> ファイル) をコピーして、簡単にバックアップを行うことができます。一貫したバックアップを取得するには、サーバーを停止するか、関連するテーブルをロックしてフラッシュします。
+    </p><pre class="programlisting">
+FLUSH TABLES <em class="replaceable"><code>tbl_list</code></em> WITH READ LOCK;
+</pre><p>
+      読み取りロックのみが必要です。これにより、データベースディレクトリ内のファイルのコピー中に、ほかのクライアントが引き続きテーブルをクエリーすることができます。バックアップを開始する前に、すべてのアクティブインデックスページがディスクに書き込まれるようにするため、フラッシュが必要です。<a class="xref" href="sql-syntax.html#lock-tables" title="13.3.5 LOCK TABLES および UNLOCK TABLES 構文">セクション13.3.5「LOCK TABLES および UNLOCK TABLES 構文」</a>および<a class="xref" href="sql-syntax.html#flush" title="13.7.6.3 FLUSH 構文">セクション13.7.6.3「FLUSH 構文」</a>を参照してください。
+    </p><p>
+      サーバーが何も更新していないかぎり、すべてのテーブルファイルをコピーすることによって、バイナリバックアップを簡単に作成することもできます。<span class="command"><strong>mysqlhotcopy</strong></span> スクリプトはこの方法を使用します。(ただし、テーブルファイルコピー方法は、データベースに <code class="literal">InnoDB</code> テーブルが含まれている場合、機能しません。<code class="literal">InnoDB</code> では必ずしもデータベースディレクトリにテーブルの内容を格納しないため、<span class="command"><strong>mysqlhotcopy</strong></span> は <code class="literal">InnoDB</code> テーブルで機能しません。さらに、サーバーがアクティブにデータを更新していない場合、<code class="literal">InnoDB</code> は変更されたデータをまだメモリー内にキャッシュしており、ディスクにフラッシュしていないことがあります。)
+    </p><h3><a name="idm139926503314096"></a>区切りテキストファイルバックアップの作成</h3><p>
+      テーブルのデータを含むテキストファイルを作成するには、<code class="literal">SELECT * INTO OUTFILE '<em class="replaceable"><code>file_name</code></em>' FROM <em class="replaceable"><code>tbl_name</code></em></code> を使用できます。このファイルはクライアントホストではなく、MySQL サーバーホスト上に作成されます。このステートメントの場合、ファイルの上書きを許可すると、セキュリティーリスクになるため、出力ファイルがすでに存在していてはなりません。<a class="xref" href="sql-syntax.html#select" title="13.2.9 SELECT 構文">セクション13.2.9「SELECT 構文」</a>を参照してください。この方法はあらゆる種類のデータファイルに機能しますが、テーブルデータのみ保存し、テーブル構造は保存しません。
+    </p><p>
+      テキストデータファイル (バックアップされたテーブルの <code class="literal">CREATE TABLE</code> ステートメントを含むファイルに加えて) を作成する別の方法は、<span class="command"><strong>mysqldump</strong></span> と <code class="option">--tab</code> オプションを使用することです。<a class="xref" href="backup-and-recovery.html#mysqldump-delimited-text" title="7.4.3 mysqldump による区切りテキストフォーマットでのデータのダンプ">セクション7.4.3「mysqldump による区切りテキストフォーマットでのデータのダンプ」</a>を参照してください。
+    </p><p>
+      区切りテキストデータファイルをリロードするには、<code class="literal">LOAD DATA INFILE</code> または <span class="command"><strong>mysqlimport</strong></span> を使用します。
+    </p><h3><a name="idm139926503302576"></a>バイナリログを有効にすることによる増分バックアップの作成</h3><p>
+      MySQL は増分バックアップをサポートします。<code class="option">--log-bin</code> オプションでサーバーを起動し、バイナリロギングを有効にする必要があります。<a class="xref" href="server-administration.html#binary-log" title="5.2.4 バイナリログ">セクション5.2.4「バイナリログ」</a>を参照してください。バイナリログファイルは、バックアップを実行した時点のあとに行われたデータベースへの変更のレプリケートする必要がある情報を提供します。増分バックアップ (最後の完全バックアップまたは増分バックアップ以降に発生したすべての変更を含む) を作成しようとするときは、<code class="literal">FLUSH LOGS</code> を使用して、バイナリログをローテーションしてください。これが完了したら、最後の完全または増分バックアップの瞬間から最後の 1 つ前の範囲のすべてのバイナリログをバックアップの場所にコピーする必要があります。これらのバイナリログは増分バックアップで、リストア時に、<a class="xref" href="backup-and-recovery.html#point-in-time-recovery" title="7.5 バイナリログを使用したポイントインタイム (増分) リカバリ">セクション7.5「バイナリログを使用したポイントインタイム (増分) リカバリ」</a>に説明するように、それらを適用します。次回に完全バックアップを行うときも、<code class="literal">FLUSH LOGS</code>、<span class="command"><strong>mysqldump --flush-logs</strong></span>、または <span class="command"><strong>mysqlhotcopy --flushlog</strong></span> を使用してバイナリログをローテーションしてください。<a class="xref" href="programs.html#mysqldump" title="4.5.4 mysqldump — データベースバックアッププログラム">セクション4.5.4「<span class="command"><strong>mysqldump</strong></span> — データベースバックアッププログラム」</a>および<a class="xref" href="programs.html#mysqlhotcopy" title="4.6.10 mysqlhotcopy — データベースバックアッププログラム">セクション4.6.10「<span class="command"><strong>mysqlhotcopy</strong></span> — データベースバックアッププログラム」</a>を参照してください。
+    </p><h3><a name="idm139926503291968"></a>レプリケーションスレーブを使用したバックアップの作成</h3><p>
+      バックアップの作成中に、マスターサーバーにパフォーマンスの問題がある場合、役に立つ可能性のある 1 つの戦略は、マスターではなくスレーブでレプリケーションをセットアップし、バックアップを実行することです。<a class="xref" href="replication.html#replication-solutions-backups" title="17.3.1 バックアップ用にレプリケーションを使用する">セクション17.3.1「バックアップ用にレプリケーションを使用する」</a>を参照してください。
+    </p><p>
+      スレーブレプリケーションサーバーをバックアップする場合、選択したバックアップ方法に関係なく、スレーブのデータベースをバックアップする際に、そのマスター情報とリレーログ情報のリポジトリをバックアップしてください (<a class="xref" href="replication.html#slave-logs" title="17.2.2 レプリケーションリレーおよびステータスログ">セクション17.2.2「レプリケーションリレーおよびステータスログ」</a>を参照してください)。これらの情報ファイルは、スレーブのデータをリストアしたあとに、レプリケーションを再開するために常に必要です。スレーブが <code class="literal">LOAD DATA INFILE</code> ステートメントをレプリケートする場合、スレーブがこのために使用するディレクトリ内に存在する <code class="filename">SQL_LOAD-*</code> ファイルもバックアップしてください。スレーブは、中断した <code class="literal">LOAD DATA INFILE</code> 操作のレプリケーションを再開するためにこれらのファイルを必要とします。このディレクトリの場所は <code class="option">--slave-load-tmpdir</code> オプションの値です。そのオプションでサーバーを起動しなかった場合、ディレクトリの場所は <code class="literal">tmpdir</code> システム変数の値になります。
+    </p><h3><a name="idm139926503281440"></a>破損したテーブルのリカバリ</h3><p>
+      破損した <code class="literal">MyISAM</code> テーブルをリストアする必要がある場合、まず <code class="literal">REPAIR TABLE</code> または <span class="command"><strong>myisamchk -r</strong></span> を使用して、それらのリカバリを試みます。それは、すべてのケースの 99.9% で機能するはずです。<span class="command"><strong>myisamchk</strong></span> が失敗した場合は、<a class="xref" href="backup-and-recovery.html#myisam-table-maintenance" title="7.6 MyISAM テーブルの保守とクラッシュリカバリ">セクション7.6「MyISAM テーブルの保守とクラッシュリカバリ」</a>を参照してください。
+    </p><h3><a name="idm139926503275984"></a>ファイルシステムスナップショットを使用したバックアップの作成</h3><p>
+      Veritas ファイルシステムを使用している場合、次のようにバックアップを作成できます。
+    </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+          クライアントプログラムから、<code class="literal">FLUSH TABLES WITH READ LOCK</code> を実行します。
+        </p></li><li class="listitem"><p>
+          別のシェルから、<code class="literal">mount vxfs snapshot</code> を実行します。
+        </p></li><li class="listitem"><p>
+          最初のクライアントから、<code class="literal">UNLOCK TABLES</code> を実行します。
+        </p></li><li class="listitem"><p>
+          スナップショットからファイルをコピーします。
+        </p></li><li class="listitem"><p>
+          スナップショットをアンマウントします。
+        </p></li></ol></div><p>
+      同様のスナップショット機能は、LVM や ZFS などのほかのファイルシステムでも利用できます。
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="backup-strategy-example"></a>7.3 バックアップおよびリカバリ戦略の例</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="backup-and-recovery.html#backup-policy">7.3.1 バックアップポリシーの確立</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#recovery-from-backups">7.3.2 リカバリへのバックアップの使用</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#backup-strategy-summary">7.3.3 バックアップ戦略サマリー</a></span></dt></dl></div><p>
+      このセクションでは、いくつかの種類のクラッシュ後にデータをリカバリできるようにするバックアップを実行するための手順について説明します。
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          オペレーティングシステムのクラッシュ
+        </p></li><li class="listitem"><p>
+          停電
+        </p></li><li class="listitem"><p>
+          ファイルシステムのクラッシュ
+        </p></li><li class="listitem"><p>
+          ハードウェアの問題 (ハードドライブ、マザーボードなど)
+        </p></li></ul></div><p>
+      コマンド例には、<span class="command"><strong>mysqldump</strong></span> および <span class="command"><strong>mysql</strong></span> クライアントプログラム用の <code class="option">--user</code> や <code class="option">--password</code> などのオプションは含まれていません。クライアントプログラムが MySQL サーバーに接続できるようにする必要に応じて、それらのオプションを含めてください。
+    </p><p>
+      データは、トランザクションと自動クラッシュリカバリをサポートする <code class="literal">InnoDB</code> ストレージエンジンに格納されているとします。さらに、MySQL サーバーはクラッシュ時に負荷がかかっているとします。そうでなければ、リカバリは必要ないことがあります。
+    </p><p>
+      オペレーティングシステムのクラッシュや停電の場合、再起動後、MySQL のディスクデータを使用できるものと考えることができます。<code class="literal">InnoDB</code> データファイルにはクラッシュのために一貫したデータが格納されていない可能性がありますが、<code class="literal">InnoDB</code> はそのログを読み取り、データファイルにフラッシュされていないコミット保留中のトランザクションやコミットされていないトランザクションのリストを見つけます。<code class="literal">InnoDB</code> はまだコミットされていないトランザクションを自動的にロールバックし、コミットされたものはデータファイルにフラッシュします。このリカバリプロセスに関する情報は、MySQL エラーログによってユーザーに伝えられます。次はログの抜粋の例です。
+    </p><pre class="programlisting">
+InnoDB: Database was not shut down normally.
+InnoDB: Starting recovery from log files...
+InnoDB: Starting log scan based on checkpoint at
+InnoDB: log sequence number 0 13674004
+InnoDB: Doing recovery: scanned up to log sequence number 0 13739520
+InnoDB: Doing recovery: scanned up to log sequence number 0 13805056
+InnoDB: Doing recovery: scanned up to log sequence number 0 13870592
+InnoDB: Doing recovery: scanned up to log sequence number 0 13936128
+...
+InnoDB: Doing recovery: scanned up to log sequence number 0 20555264
+InnoDB: Doing recovery: scanned up to log sequence number 0 20620800
+InnoDB: Doing recovery: scanned up to log sequence number 0 20664692
+InnoDB: 1 uncommitted transaction(s) which must be rolled back
+InnoDB: Starting rollback of uncommitted transactions
+InnoDB: Rolling back trx no 16745
+InnoDB: Rolling back of trx no 16745 completed
+InnoDB: Rollback of uncommitted transactions completed
+InnoDB: Starting an apply batch of log records to the database...
+InnoDB: Apply batch completed
+InnoDB: Started
+mysqld: ready for connections
+</pre><p>
+      ファイルシステムのクラッシュやハードウェアの問題の場合、再起動後、MySQL ディスクデータを使用でき<span class="emphasis"><em>ない</em></span>ものと考えることができます。これは、ディスクデータの一部のブロックが読み取り不可能になったため、MySQL が正常な起動に失敗することを意味します。この場合、ディスクを再フォーマットするか、新しいディスクをインストールするか、または根本的な問題を修正する必要があります。さらに、バックアップから MySQL データをリカバリする必要があります。これはバックアップがすでに行われていることを意味します。それが確実に当てはまるようにするには、バックアップポリシーを設計し、実装します。
+    </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="backup-policy"></a>7.3.1 バックアップポリシーの確立</h3></div></div></div><p>
+        役に立つように、バックアップは定期的にスケジュールする必要があります。完全バックアップ (特定の時点でのデータのスナップショット) は、MySQL でいくつかのツールを使用して実行できます。たとえば、<a class="link" href="mysql-enterprise.html#mysql-enterprise-backup" title="25.2 MySQL Enterprise Backup">MySQL Enterprise Backup</a> は、<code class="literal">InnoDB</code> データファイルのバックアップ時にオーバーヘッドを最小にし、中断を防ぐ最適化を伴うインスタンス全体の<a class="link" href="glossary.html#glos_physical_backup" title="物理バックアップ">物理バックアップ</a>を実行できます。<span class="command"><strong>mysqldump</strong></span> はオンライン<a class="link" href="glossary.html#glos_logical_backup" title="論理バックアップ">論理バックアップ</a>を提供します。この説明では <span class="command"><strong>mysqldump</strong></span> を使用します。
+      </p><p>
+        負荷が少ない日曜日の午後 1 時に、次のコマンドを使用して、すべてのデータベースのすべての <code class="literal">InnoDB</code> テーブルの完全バックアップを作成するとします。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --single-transaction --all-databases &gt; backup_sunday_1_PM.sql</code></strong>
+</pre><p>
+        <span class="command"><strong>mysqldump</strong></span> によって生成される結果の <code class="filename">.sql</code> ファイルには、あとでダンプしたテーブルのリロードに使用できる SQL <code class="literal">INSERT</code> ステートメントのセットが含まれます。
+      </p><p>
+        このバックアップ操作では、ダンプの最初ですべてのテーブルに対するグローバル読み取りロックを取得します (<code class="literal">FLUSH TABLES WITH READ LOCK</code> を使用して)。このロックが取得されるとすぐに、バイナリログの座標が読み取られ、ロックが解除されます。<code class="literal">FLUSH</code> ステートメントが発行されたときに長い更新ステートメントが実行中の場合、バックアップ操作はそれらのステートメントが終了するまで停止する可能性があります。その後、ダンプはロックフリーとなり、テーブルの読み取りと書き込みを妨げません。
+      </p><p>
+        先に、バックアップするテーブルは <code class="literal">InnoDB</code> テーブルであるとしたため、<code class="option">--single-transaction</code> は、一貫性読み取りを使用し、<span class="command"><strong>mysqldump</strong></span> によって表示されたデータが変更されないことを保証します。(ほかのクライアントによる <code class="literal">InnoDB</code> テーブルへの変更は、<span class="command"><strong>mysqldump</strong></span> プロセスによって表示されません)。バックアップ操作に非トランザクションテーブルが含まれる場合、一貫性には、バックアップ中にそれらが変更されない必要があります。たとえば、<code class="literal">mysql</code> データベース内の <code class="literal">MyISAM</code> テーブルの場合、バックアップ中に、MySQL アカウントへの管理上の変更があってはなりません。
+      </p><p>
+        完全バックアップが必要ですが、それらを作成するために常に都合がよいとは限りません。それらは大きなバックアップファイルを生成し、生成に時間がかかります。それらは、連続した各完全バックアップに、前回の完全バックアップから変更されていない部分でもすべてのデータが含まれるという点で、最適ではありません。初期完全バックアップを作成し、次に増分バックアップを作成するほうが効率的です。増分バックアップは小さく、生成にかかる時間が少なくなります。このトレードオフは、リカバリ時に、完全バックアップをリロードするだけではデータをリストアできないことです。増分バックアップを処理して、増分の変更もリカバリする必要があります。
+      </p><p>
+        増分バックアップを作成するには、増分の変更を保存する必要があります。MySQL では、これらの変更はバイナリログで表されるため、MySQL サーバーを常に <code class="option">--log-bin</code> オプションで起動して、そのログを有効にしてください。バイナリロギングが有効にされていると、サーバーはデータの更新中に、各データの変更をファイルに書き込みます。<code class="option">--log-bin</code> オプションで起動し、数日間実行していた MySQL サーバーのデータディレクトリを調べると、これらの MySQL バイナリログファイルが見つかります。
+      </p><pre class="programlisting">
+-rw-rw---- 1 guilhem  guilhem   1277324 Nov 10 23:59 gbichot2-bin.000001
+-rw-rw---- 1 guilhem  guilhem         4 Nov 10 23:59 gbichot2-bin.000002
+-rw-rw---- 1 guilhem  guilhem        79 Nov 11 11:06 gbichot2-bin.000003
+-rw-rw---- 1 guilhem  guilhem       508 Nov 11 11:08 gbichot2-bin.000004
+-rw-rw---- 1 guilhem  guilhem 220047446 Nov 12 16:47 gbichot2-bin.000005
+-rw-rw---- 1 guilhem  guilhem    998412 Nov 14 10:08 gbichot2-bin.000006
+-rw-rw---- 1 guilhem  guilhem       361 Nov 14 10:07 gbichot2-bin.index
+</pre><p>
+        MySQL サーバーは再起動するたびに、シーケンスの次の番号を使用して、新しいバイナリログファイルを作成します。サーバーが実行している間、<code class="literal">FLUSH LOGS</code> SQL ステートメントを発行するか、<span class="command"><strong>mysqladmin flush-logs</strong></span> コマンドによって、手動で、それに現在のバイナリログファイルをクローズし、新しいファイルを開始するように伝えることもできます。<span class="command"><strong>mysqldump</strong></span> にはログをフラッシュするオプションもあります。データディレクトリ内の <code class="literal">.index</code> ファイルには、ディレクトリ内のすべての MySQL バイナリログのリストが含まれます。
+      </p><p>
+        MySQL バイナリログは、増分バックアップのセットを形成するため、リカバリに重要です。完全バックアップの作成時にログをフラッシュさせる場合、その後作成されるバイナリログファイルには、バックアップ以降に行われたすべてのデータの変更が含まれます。ここで、前述の <span class="command"><strong>mysqldump</strong></span> コマンドを少し修正して、完全バックアップの時点で MySQL バイナリログをフラッシュするようにし、ダンプファイルに新しい現在のバイナリログの名前が含まれるようにします。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --single-transaction --flush-logs --master-data=2 \</code></strong>
+         <strong class="userinput"><code>--all-databases &gt; backup_sunday_1_PM.sql</code></strong>
+</pre><p>
+        このコマンドの実行後、<code class="option">--flush-logs</code> オプションによって、サーバーにそのログをフラッシュさせるため、データディレクトリには新しいバイナリログファイル <code class="filename">gbichot2-bin.000007</code> が格納されます。<code class="option">--master-data</code> オプションは <span class="command"><strong>mysqldump</strong></span> でその出力にバイナリログ情報を書き込ませるため、結果の <code class="filename">.sql</code> ダンプファイルにはこれらの行が含まれます。
+      </p><pre class="programlisting">
+-- Position to start replication or point-in-time recovery from
+-- CHANGE MASTER TO MASTER_LOG_FILE='gbichot2-bin.000007',MASTER_LOG_POS=4;
+</pre><p>
+        <span class="command"><strong>mysqldump</strong></span> コマンドで完全バックアップを作成しているため、これらの行は 2 つのことを意味します。
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            ダンプファイルには、<code class="filename">gbichot2-bin.000007</code> 以降のバイナリログファイルに書き込まれた変更の前に行われたすべての変更が含まれます。
+          </p></li><li class="listitem"><p>
+            バックアップ後にログに記録されたすべてのデータの変更は、ダンプファイルに存在しませんが、<code class="filename">gbichot2-bin.000007</code> 以降のバイナリログファイルに存在します。
+          </p></li></ul></div><p>
+        月曜日の午後 1 時に、ログをフラッシュし、新しいバイナリログファイルを開始することによって、増分バックアップを作成できます。たとえば、<span class="command"><strong>mysqladmin flush-logs</strong></span> コマンドを実行すると、<code class="filename">gbichot2-bin.000008</code> が作成されます。日曜日の午後 1 時の完全バックアップから月曜日の午後 1 時までのすべての変更は、<code class="filename">gbichot2-bin.000007</code> ファイル内にあります。この増分バックアップは重要であるため、それを安全な場所にコピーすることをお勧めします。(たとえば、それをテープや DVD にバックアップするか、別のマシンにコピーします。)火曜日の午後 1 時に、さらに <span class="command"><strong>mysqladmin flush-logs</strong></span> コマンドを実行します。月曜日の午後 1 時から火曜日の午後 1 時までのすべての変更が、<code class="filename">gbichot2-bin.000008</code> ファイル内にあります (これもどこか安全な場所にコピーするべきです)。
+      </p><p>
+        MySQL バイナリログはディスク領域を占有します。領域を解放するため、ときどきそれらをパージします。これを実行する 1 つの方法は、完全バックアップを作成したときなど、必要なくなったバイナリログを削除することです。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --single-transaction --flush-logs --master-data=2 \</code></strong>
+         <strong class="userinput"><code>--all-databases --delete-master-logs &gt; backup_sunday_1_PM.sql</code></strong>
+</pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><div class="admon-title">注記</div><p>
+          サーバーがレプリケーションマスターサーバーである場合、スレーブサーバーでまだバイナリログの内容を完全に処理していない可能性があるため、<span class="command"><strong>mysqldump --delete-master-logs</strong></span> で MySQL バイナリログを削除することは危険な場合があります。<code class="literal">PURGE BINARY LOGS</code> ステートメントの説明では、MySQL バイナリログを削除する前に確認すべきことを説明しています。<a class="xref" href="sql-syntax.html#purge-binary-logs" title="13.4.1.1 PURGE BINARY LOGS 構文">セクション13.4.1.1「PURGE BINARY LOGS 構文」</a>を参照してください。
+        </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="recovery-from-backups"></a>7.3.2 リカバリへのバックアップの使用</h3></div></div></div><p>
+        ここで、水曜日の午前 8 時に、バックアップからのリカバリを必要とする致命的なクラッシュがあったとします。リカバリするには、まず存在する最後の完全バックアップ (日曜日の午後 1 時のもの) をリストアします。完全バックアップファイルは一連の SQL ステートメントにすぎないため、そのリストアはきわめて簡単です。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysql &lt; backup_sunday_1_PM.sql</code></strong>
+</pre><p>
+        この時点で、データは日曜日の午後 1 時現在の状態にリストアされます。それ以降に行われた変更をリストアするには、増分バックアップを使用する必要があります。つまり、<code class="filename">gbichot2-bin.000007</code> と <code class="filename">gbichot2-bin.000008</code> バイナリログファイルです。必要に応じて、バックアップされた場所からファイルをフェッチして、次のようにそれらの内容を処理します。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog gbichot2-bin.000007 gbichot2-bin.000008 | mysql</code></strong>
+</pre><p>
+        これで、データを火曜日の午後 1 時現在の状態にリカバリしましたが、まだその日からクラッシュの日までの変更が不足しています。それらを失わないために、MySQL サーバーにその MySQL バイナリログを、そのデータファイルを格納している場所と異なる安全な場所 (RAID ディスク、SAN など) に保存させ、これらのログが破損したディスク上にないようにする必要がありました。(つまり、データディレクトリが存在する場所と別の物理デバイス上の場所を指定する <code class="option">--log-bin</code> オプションでサーバーを起動できます。このようにすると、ディレクトリを格納するデバイスが失われてもログは安全です。)これを実行していた場合、<code class="filename">gbichot2-bin.000009</code> ファイル (および任意の後続のファイル) が手元にあるため、<span class="command"><strong>mysqlbinlog</strong></span> と <span class="command"><strong>mysql</strong></span> を使用して、それらを適用し、クラッシュの瞬間まで損失なく、最新のデータの変更をリストアできます。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog gbichot2-bin.000009 ... | mysql</code></strong>
+</pre><p>
+        <span class="command"><strong>mysqlbinlog</strong></span> を使用して、バイナリログファイルを処理する詳細については、<a class="xref" href="backup-and-recovery.html#point-in-time-recovery" title="7.5 バイナリログを使用したポイントインタイム (増分) リカバリ">セクション7.5「バイナリログを使用したポイントインタイム (増分) リカバリ」</a>を参照してください。
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="backup-strategy-summary"></a>7.3.3 バックアップ戦略サマリー</h3></div></div></div><p>
+        オペレーティングシステムのクラッシュまたは停電の場合、<code class="literal">InnoDB</code> 自体がデータのリカバリのすべてのジョブを実行します。ただし、安心のため、次のガイドラインを参照してください。
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            常に MySQL サーバーを <code class="option">--log-bin</code> オプションまたは <code class="option">--log-bin=<em class="replaceable"><code>log_name</code></em></code> で実行します。ここでログファイル名は、データディレクトリが存在するドライブと異なる安全なメディア上に配置します。そのような安全なメディアがある場合、この技法は、ディスクの負荷分散にも役立ちます (その結果パフォーマンスも向上します)。
+          </p></li><li class="listitem"><p>
+            <a class="xref" href="backup-and-recovery.html#backup-policy" title="7.3.1 バックアップポリシーの確立">セクション7.3.1「バックアップポリシーの確立」</a>で先に示した、オンラインのブロックしないバックアップを作成する <span class="command"><strong>mysqldump</strong></span> コマンドを使用して、定期的な完全バックアップを作成します。
+          </p></li><li class="listitem"><p>
+            <code class="literal">FLUSH LOGS</code> または <span class="command"><strong>mysqladmin flush-logs</strong></span> を使用して、ログをフラッシュして、定期的な増分バックアップを作成します。
+          </p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-mysqldump"></a>7.4 バックアップへの mysqldump の使用</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="backup-and-recovery.html#mysqldump-sql-format">7.4.1 mysqldump による SQL フォーマットでのデータのダンプ</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#reloading-sql-format-dumps">7.4.2 SQL フォーマットバックアップのリロード</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#mysqldump-delimited-text">7.4.3 mysqldump による区切りテキストフォーマットでのデータのダンプ</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#reloading-delimited-text-dumps">7.4.4 区切りテキストフォーマットバックアップのリロード</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#mysqldump-tips">7.4.5 mysqldump のヒント</a></span></dt></dl></div><a class="indexterm" name="idm139926503151024"></a><a class="indexterm" name="idm139926503148880"></a><p>
+      このセクションでは、<span class="command"><strong>mysqldump</strong></span> を使用して、ダンプファイルを生成する方法およびダンプファイルをリロードする方法について説明します。ダンプファイルはいくつかの方法で使用できます。
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          データ損失の場合にデータリカバリを可能にするためのバックアップとして。
+        </p></li><li class="listitem"><p>
+          レプリケーションスレーブをセットアップするためのデータのソースとして。
+        </p></li><li class="listitem"><p>
+          実験用のデータのソースとして。
+        </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
+              元のデータを変更せずに使用できるデータベースのコピーを作成する場合。
+            </p></li><li class="listitem"><p>
+              アップグレードの非互換性の可能性をテストする場合。
+            </p></li></ul></div></li></ul></div><p>
+      <span class="command"><strong>mysqldump</strong></span> は <code class="option">--tab</code> オプションを指定するかどうかに応じて、2 種類の出力を生成します。
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          <code class="option">--tab</code> がないと、<span class="command"><strong>mysqldump</strong></span> は SQL ステートメントを標準出力に書き込みます。この出力は、ダンプされるオブジェクト (データベース、テーブル、ストアドルーチンなど) を作成する <code class="literal">CREATE</code> ステートメントとデータをテーブルにロードする <code class="literal">INSERT</code> ステートメントから構成されます。出力はファイルに保存して、あとで <span class="command"><strong>mysql</strong></span> を使用してリロードし、ダンプされたオブジェクトを再作成できます。SQL ステートメントのフォーマットを変更し、ダンプされるオブジェクトを制御するためにオプションを使用できます。
+        </p></li><li class="listitem"><p>
+          <code class="option">--tab</code> を付けると、<span class="command"><strong>mysqldump</strong></span> はダンプされるテーブルごとに 2 つの出力ファイルを生成します。サーバーは、テーブル行ごとに 1 行ずつ、タブ区切りテキストとして 1 つのファイルを書き込みます。このファイルは出力ディレクトリ内で <code class="filename"><em class="replaceable"><code>tbl_name</code></em>.txt</code> という名前が付けられます。サーバーはテーブルの <code class="literal">CREATE TABLE</code> ステートメントも <span class="command"><strong>mysqldump</strong></span> に送信し、それは <code class="filename"><em class="replaceable"><code>tbl_name</code></em>.sql</code> という名前のファイルとしてそれを出力ディレクトリに書き込みます。
+        </p></li></ul></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="mysqldump-sql-format"></a>7.4.1 mysqldump による SQL フォーマットでのデータのダンプ</h3></div></div></div><p>
+        このセクションでは、<span class="command"><strong>mysqldump</strong></span> を使用して、SQL フォーマットのダンプファイルを作成する方法について説明します。そのようなダンプファイルのリロードについては、<a class="xref" href="backup-and-recovery.html#reloading-sql-format-dumps" title="7.4.2 SQL フォーマットバックアップのリロード">セクション7.4.2「SQL フォーマットバックアップのリロード」</a>を参照してください。
+      </p><p>
+        デフォルトで、<span class="command"><strong>mysqldump</strong></span> は情報を SQL ステートメントとして標準出力に書き込みます。出力をファイルに保存できます。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump [<em class="replaceable"><code>arguments</code></em>] &gt; <em class="replaceable"><code>file_name</code></em></code></strong>
+</pre><p>
+        すべてのデータベースをダンプするには、<code class="option">--all-databases</code> オプションを付けて <span class="command"><strong>mysqldump</strong></span> を呼び出します。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --all-databases &gt; dump.sql</code></strong>
+</pre><p>
+        特定のデータベースのみをダンプするには、コマンド行でそれらを指定し、<code class="option">--databases</code> オプションを使用します。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --databases db1 db2 db3 &gt; dump.sql</code></strong>
+</pre><p>
+        <code class="option">--databases</code> オプションによって、コマンド行上のすべての名前がデータベース名として扱われます。このオプションを使用しないと、<span class="command"><strong>mysqldump</strong></span> は最初の名前をデータベース名として、そのあとに続く名前をテーブル名として扱います。
+      </p><p>
+        <code class="option">--all-databases</code> または <code class="option">--databases</code> を使用すると、<span class="command"><strong>mysqldump</strong></span> は、各データベースのダンプ出力の前に、<code class="literal">CREATE DATABASE</code> および <code class="literal">USE</code> ステートメントを書き込みます。これにより、ダンプファイルがリロードされると、それが各データベースが存在しなければ作成して、デフォルトのデータベースにするため、データベースの内容がそれらの作成元の同じデータベースにロードされます。ダンプファイルに、各データベースを再作成する前にその削除を強制する場合、<code class="option">--add-drop-database</code> オプションも使用します。この場合、<span class="command"><strong>mysqldump</strong></span> は各 <code class="literal">CREATE DATABASE</code> ステートメントの前に、<code class="literal">DROP DATABASE</code> ステートメントを書き込みます。
+      </p><p>
+        単一のデータベースをダンプするには、コマンド行でそれを指定します。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --databases test &gt; dump.sql</code></strong>
+</pre><p>
+        単一のデータベースの場合、<code class="option">--databases</code> オプションを省略できます。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump test &gt; dump.sql</code></strong>
+</pre><p>
+        2 つの先述のコマンドの違いは、<code class="option">--databases</code> を付けないと、ダンプの出力に <code class="literal">CREATE DATABASE</code> または <code class="literal">USE</code> ステートメントが含まれません。これにはいくつかの問題があります。
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            ダンプファイルをリロードする場合、サーバーがリロードするデータベースを認識するように、デフォルトのデータベース名を指定する必要があります。
+          </p></li><li class="listitem"><p>
+            リロードする場合、元の名前と異なるデータベース名を指定でき、これにより、データを別のデータベースにリロードできます。
+          </p></li><li class="listitem"><p>
+            リロードするデータベースが存在しない場合、まずそれを作成する必要があります。
+          </p></li><li class="listitem"><p>
+            出力には <code class="literal">CREATE DATABASE</code> ステートメントが含まれないため、<code class="option">--add-drop-database</code> オプションは無効です。それを使用しても <code class="literal">DROP DATABASE</code> ステートメントは生成されません。
+          </p></li></ul></div><p>
+        データベースから特定のテーブルのみをダンプするには、コマンド行でデータベース名に続いてそれらを指定します。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump test t1 t3 t7 &gt; dump.sql</code></strong>
+</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="reloading-sql-format-dumps"></a>7.4.2 SQL フォーマットバックアップのリロード</h3></div></div></div><p>
+        SQL ステートメントから構成される <span class="command"><strong>mysqldump</strong></span> によって書き込まれたダンプファイルをリロードするには、それを <span class="command"><strong>mysql</strong></span> クライアントへの入力として使用します。<code class="option">--all-databases</code> または <code class="option">--databases</code> オプションを使用して、<span class="command"><strong>mysqldump</strong></span> によってダンプファイルが作成された場合、それには <code class="literal">CREATE DATABASE</code> および <code class="literal">USE</code> ステートメントが含まれ、データをロードするデフォルトのデータベースを指定する必要がありません。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysql &lt; dump.sql</code></strong>
+</pre><p>
+        または、<span class="command"><strong>mysql</strong></span> 内から、<code class="literal">source</code> コマンドを使用します。
+      </p><pre class="programlisting">
+mysql&gt; <strong class="userinput"><code>source dump.sql</code></strong>
+</pre><p>
+        ファイルが <code class="literal">CREATE DATABASE</code> および <code class="literal">USE</code> ステートメントを含まない単一データベースダンプである場合、まずデータベースを作成します (必要に応じて)。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqladmin create db1</code></strong>
+</pre><p>
+        次に、ダンプファイルをロードする場合、データベース名を指定します。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysql db1 &lt; dump.sql</code></strong>
+</pre><p>
+        または <span class="command"><strong>mysql</strong></span> 内から、データベースを作成し、それをデフォルトのデータベースとして選択し、ダンプファイルをロードします。
+      </p><pre class="programlisting">
+mysql&gt; <strong class="userinput"><code>CREATE DATABASE IF NOT EXISTS db1;</code></strong>
+mysql&gt; <strong class="userinput"><code>USE db1;</code></strong>
+mysql&gt; <strong class="userinput"><code>source dump.sql</code></strong>
+</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="mysqldump-delimited-text"></a>7.4.3 mysqldump による区切りテキストフォーマットでのデータのダンプ</h3></div></div></div><p>
+        このセクションでは、<span class="command"><strong>mysqldump</strong></span> を使用して、区切りテキストのダンプファイルを作成する方法について説明します。そのようなダンプファイルのリロードについては、<a class="xref" href="backup-and-recovery.html#reloading-delimited-text-dumps" title="7.4.4 区切りテキストフォーマットバックアップのリロード">セクション7.4.4「区切りテキストフォーマットバックアップのリロード」</a>を参照してください。
+      </p><p>
+        <code class="option">--tab=<em class="replaceable"><code>dir_name</code></em></code> オプションを付けて、<span class="command"><strong>mysqldump</strong></span> を呼び出した場合、それは <em class="replaceable"><code>dir_name</code></em> を出力ディレクトリとして使用し、テーブルごとに 2 つのファイルを使用して、そのディレクトリに個別にテーブルをダンプします。テーブル名はこれらのファイルのベース名です。<code class="literal">t1</code> という名前のテーブルの場合、ファイルには <code class="filename">t1.sql</code> および <code class="filename">t1.txt</code> という名前が付けられます。<code class="filename">.sql</code> ファイルにはテーブルの <code class="literal">CREATE TABLE</code> ステートメントが含まれます。<code class="filename">.txt</code> ファイルにはテーブル行ごとに 1 行のテーブルデータが含まれます。
+      </p><p>
+        次のコマンドは <code class="literal">db1</code> データベースの内容を <code class="filename">/tmp</code> データベース内のファイルにダンプします。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --tab=/tmp db1</code></strong>
+</pre><p>
+        テーブルデータを格納する <code class="filename">.txt</code> ファイルはサーバーによって書き込まれるため、それらはサーバーの実行に使用されるシステムアカウントによって所有されます。サーバーは <code class="literal">SELECT ... INTO OUTFILE</code> を使用して、ファイルを書き込むため、この操作を実行するために <code class="literal">FILE</code> 権限が必要であり、指定した <code class="filename">.txt</code> ファイルがすでに存在する場合はエラーが発生します。
+      </p><p>
+        サーバーはダンプされるテーブルの <code class="literal">CREATE</code> 定義を <span class="command"><strong>mysqldump</strong></span> に送信し、それはそれらを <code class="filename">.sql</code> ファイルに書き込みます。そのためこれらのファイルは、<span class="command"><strong>mysqldump</strong></span> を実行するユーザーによって所有されます。
+      </p><p>
+        <code class="option">--tab</code> はローカルサーバーのダンプにのみ使用することをお勧めします。それをリモートサーバーに使用する場合、<code class="option">--tab</code> ディレクトリがローカルホストとリモートホストの両方に存在する必要があり、<code class="filename">.txt</code> ファイルはサーバーによってリモートディレクトリ (サーバーホスト上) に書き込まれ、<code class="filename">.sql</code> ファイルは <span class="command"><strong>mysqldump</strong></span> によってローカルディレクトリ (クライアントホスト上) に書き込まれます。
+      </p><p>
+        <span class="command"><strong>mysqldump --tab</strong></span> の場合、サーバーはデフォルトでテーブルデータを、カラム値間にタブを、カラム値を引用符で囲まず、行ターミネータとして改行を使用して、1 行あたり 1 行で <code class="filename">.txt</code> ファイルに書き込みます。(これらは、<code class="literal">SELECT ... INTO OUTFILE</code> の場合と同じデフォルトです。)
+      </p><p>
+        別のフォーマットを使用して、データファイルを書き込めるようにするため、<span class="command"><strong>mysqldump</strong></span> はこれらのオプションをサポートしています。
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            <code class="option">--fields-terminated-by=<em class="replaceable"><code>str</code></em></code>
+          </p><p>
+            カラム値を区切るための文字列 (デフォルト: タブ)。
+          </p></li><li class="listitem"><p>
+            <code class="option">--fields-enclosed-by=<em class="replaceable"><code>char</code></em></code>
+          </p><p>
+            カラム値を囲む文字 (デフォルト: 文字なし)。
+          </p></li><li class="listitem"><p>
+            <code class="option">--fields-optionally-enclosed-by=<em class="replaceable"><code>char</code></em></code>
+          </p><p>
+            数値以外のカラム値を囲む文字 (デフォルト: 文字なし)。
+          </p></li><li class="listitem"><p>
+            <code class="option">--fields-escaped-by=<em class="replaceable"><code>char</code></em></code>
+          </p><p>
+            特殊文字をエスケープするための文字 (デフォルト: エスケープなし)。
+          </p></li><li class="listitem"><p>
+            <code class="option">--lines-terminated-by=<em class="replaceable"><code>str</code></em></code>
+          </p><p>
+            行終了文字列 (デフォルト: 改行)。
+          </p></li></ul></div><p>
+        これらのオプションに指定する値に応じて、コマンド行で、コマンドインタプリタに合わせて値を引用符で囲むかエスケープする必要がある場合があります。または、16 進表記を使用して、値を指定します。<span class="command"><strong>mysqldump</strong></span> にカラム値を二重引用符で囲ませたいとします。そうするには、<code class="option">--fields-enclosed-by</code> オプションの値として、二重引用符を指定します。ただし、この文字は多くの場合コマンドインタプリタに特有であるため、特別に扱う必要があります。たとえば、Unix ではこのように二重引用符を表すことができます。
+      </p><pre class="programlisting">
+--fields-enclosed-by='"'
+</pre><p>
+        どのプラットフォームでも 16 進で値を指定できます。
+      </p><pre class="programlisting">
+--fields-enclosed-by=0x22
+</pre><p>
+        複数のデータフォーマットオプションを一緒に使用することもよくあります。たとえば、行を改行文字/復帰改行ペア (<code class="literal">\r\n</code>) で終了させたカンマ区切り値フォーマットでテーブルをダンプするには、このコマンドを使用します (1 行で入力します)。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --tab=/tmp --fields-terminated-by=,</code></strong>
+         <strong class="userinput"><code>--fields-enclosed-by='"' --lines-terminated-by=0x0d0a db1</code></strong>
+</pre><p>
+        テーブルデータをダンプするために、いずれかのデータフォーマットオプションを使用する場合、あとでデータファイルをリロードするときに、ファイルの内容が正しく解釈されるように、同じフォーマットを指定する必要があります。
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="reloading-delimited-text-dumps"></a>7.4.4 区切りテキストフォーマットバックアップのリロード</h3></div></div></div><p>
+        <span class="command"><strong>mysqldump --tab</strong></span> によって生成されるバックアップの場合、各テーブルは出力ディレクトリに、テーブルの <code class="literal">CREATE TABLE</code> ステートメントを含む <code class="filename">.sql</code> ファイルと、テーブルデータを含む <code class="filename">.txt</code> ファイルで表されます。テーブルをリロードするには、まず場所を出力ディレクトリに変更します。次に、<span class="command"><strong>mysql</strong></span> で <code class="filename">.sql</code> ファイルを処理し、空のテーブルを作成し、<code class="filename">.txt</code> ファイルを処理して、データをテーブルにロードします。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysql db1 &lt; t1.sql</code></strong>
+shell&gt; <strong class="userinput"><code>mysqlimport db1 t1.txt</code></strong>
+</pre><p>
+        <span class="command"><strong>mysqlimport</strong></span> を使用してデータファイルをロードする代替の方法は、<span class="command"><strong>mysql</strong></span> クライアント内から <code class="literal">LOAD DATA INFILE</code> ステートメントを使用することです。
+      </p><pre class="programlisting">
+mysql&gt; <strong class="userinput"><code>USE db1;</code></strong>
+mysql&gt; <strong class="userinput"><code>LOAD DATA INFILE 't1.txt' INTO TABLE t1;</code></strong>
+</pre><p>
+        テーブルを最初にダンプしたときに、<span class="command"><strong>mysqldump</strong></span> で何らかのデータフォーマットオプションを使用した場合、<span class="command"><strong>mysqlimport</strong></span> または <code class="literal">LOAD DATA INFILE</code> で同じオプションを使用して、データファイルの内容が正しく解釈されるようにする必要があります。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlimport --fields-terminated-by=,</code></strong>
+         <strong class="userinput"><code>--fields-enclosed-by='"' --lines-terminated-by=0x0d0a db1 t1.txt</code></strong>
+</pre><p>
+        または:
+      </p><pre class="programlisting">
+mysql&gt; <strong class="userinput"><code>USE db1;</code></strong>
+mysql&gt; <strong class="userinput"><code>LOAD DATA INFILE 't1.txt' INTO TABLE t1</code></strong>
+    -&gt; <strong class="userinput"><code>FIELDS TERMINATED BY ',' FIELDS ENCLOSED BY '"'</code></strong>
+    -&gt; <strong class="userinput"><code>LINES TERMINATED BY '\r\n';</code></strong>
+</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="mysqldump-tips"></a>7.4.5 mysqldump のヒント</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="backup-and-recovery.html#mysqldump-copying-database">7.4.5.1 データベースのコピーの作成</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#mysqldump-copying-to-other-server">7.4.5.2 サーバー間でのデータベースのコピー</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#mysqldump-stored-programs">7.4.5.3 ストアドプログラムのダンプ</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#mysqldump-definition-data-dumps">7.4.5.4 テーブル定義と内容の個別のダンプ</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#mysqldump-upgrade-testing">7.4.5.5 mysqldump を使用したアップグレードの非互換性のテスト</a></span></dt></dl></div><p>
+        このセクションでは、<span class="command"><strong>mysqldump</strong></span> を使用して特定の問題を解決できる技法を調査します。
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            データベースのコピーの作成方法
+          </p></li><li class="listitem"><p>
+            サーバー間でデータベースをコピーする方法
+          </p></li><li class="listitem"><p>
+            ストアドプログラム (ストアドプロシージャーおよび関数、トリガー、およびイベント) をダンプする方法
+          </p></li><li class="listitem"><p>
+            定義とデータを個別にダンプする方法
+          </p></li></ul></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="mysqldump-copying-database"></a>7.4.5.1 データベースのコピーの作成</h4></div></div></div><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump db1 &gt; dump.sql</code></strong>
+shell&gt; <strong class="userinput"><code>mysqladmin create db2</code></strong>
+shell&gt; <strong class="userinput"><code>mysql db2 &lt; dump.sql</code></strong>
+</pre><p>
+          <span class="command"><strong>mysqldump</strong></span> コマンド行に <code class="option">--databases</code> を使用すると、ダンプファイルに <code class="literal">USE db1</code> が含まれ、それによって <span class="command"><strong>mysql</strong></span> コマンド行の <code class="literal">db2</code> の指定の効果がオーバーライドされるため、使用しないでください。
+        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="mysqldump-copying-to-other-server"></a>7.4.5.2 サーバー間でのデータベースのコピー</h4></div></div></div><p>
+          サーバー 1 で:
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --databases db1 &gt; dump.sql</code></strong>
+</pre><p>
+          サーバー 1 からサーバー 2 にダンプファイルをコピーします。
+        </p><p>
+          サーバー 2 で:
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysql &lt; dump.sql</code></strong>
+</pre><p>
+          <span class="command"><strong>mysqldump</strong></span> コマンド行で <code class="option">--databases</code> を使用すると、それが存在する場合にデータベースを作成し、それをリロードされるデータのデフォルトのデータベースにする <code class="literal">CREATE DATABASE</code> および <code class="literal">USE</code> ステートメントがダンプファイルに含まれます。
+        </p><p>
+          または、<span class="command"><strong>mysqldump</strong></span> コマンドから <code class="option">--databases</code> を省略できます。次に、必要に応じて、サーバー 2 にデータベースを作成し、それをダンプファイルのリロード時のデフォルトのデータベースとして指定する必要があります。
+        </p><p>
+          サーバー 1 で:
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump db1 &gt; dump.sql</code></strong>
+</pre><p>
+          サーバー 2 で:
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqladmin create db1</code></strong>
+shell&gt; <strong class="userinput"><code>mysql db1 &lt; dump.sql</code></strong>
+</pre><p>
+          この場合、別のデータベース名を指定できるため、<span class="command"><strong>mysqldump</strong></span> コマンドから <code class="option">--databases</code> を省略すると、あるデータベースからデータをダンプし、別のデータベースにそれをロードすることができます。
+        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="mysqldump-stored-programs"></a>7.4.5.3 ストアドプログラムのダンプ</h4></div></div></div><p>
+          いくつかのオプションは、<span class="command"><strong>mysqldump</strong></span> がストアドプログラム (ストアドプロシージャーおよび関数、トリガー、およびイベント) を処理する方法を制御します。
+        </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+              <code class="option">--events</code>: イベントスケジューラのイベントのダンプ
+            </p></li><li class="listitem"><p>
+              <code class="option">--routines</code>: ストアドプロシージャーおよびストアドファンクションのダンプ
+            </p></li><li class="listitem"><p>
+              <code class="option">--triggers</code>: テーブルのトリガーのダンプ
+            </p></li></ul></div><p>
+          テーブルがダンプされるときに、それらにそれらが持ついずれかのトリガーが伴うように、<code class="option">--triggers</code> オプションはデフォルトで有効にされています。ほかのオプションはデフォルトで無効にされ、対応するオブジェクトをダンプするために明示的に指定する必要があります。これらのオプションのいずれかを明示的に無効にするには、そのスキップフォーム <code class="option">--skip-events</code>、<code class="option">--skip-routines</code>、または <code class="option">--skip-triggers</code> を使用します。
+        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="mysqldump-definition-data-dumps"></a>7.4.5.4 テーブル定義と内容の個別のダンプ</h4></div></div></div><p>
+          <code class="option">--no-data</code> オプションは <span class="command"><strong>mysqldump</strong></span> にテーブルデータをダンプしないように伝えるため、ダンプファイルにはテーブルを作成するステートメントのみが含まれます。逆に、<code class="option">--no-create-info</code> オプションは、ダンプファイルにテーブルデータのみが含まれるように、<span class="command"><strong>mysqldump</strong></span> に出力から <code class="literal">CREATE</code> ステートメントを抑制するように伝えます。
+        </p><p>
+          たとえば、<code class="literal">test</code> データベースのテーブル定義とデータを別々にダンプするには、これらのコマンドを使用します。
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --no-data test &gt; dump-defs.sql</code></strong>
+shell&gt; <strong class="userinput"><code>mysqldump --no-create-info test &gt; dump-data.sql</code></strong>
+</pre><p>
+          定義のみのダンプの場合、ストアドルーチンとイベントの定義も含めるには、<code class="option">--routines</code> および <code class="option">--events</code> オプションを追加します。
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --no-data --routines --events test &gt; dump-defs.sql</code></strong>
+</pre></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="mysqldump-upgrade-testing"></a>7.4.5.5 mysqldump を使用したアップグレードの非互換性のテスト</h4></div></div></div><p>
+          MySQL のアップグレードを検討する場合、新しいバージョンを現在の本番バージョンとべつにインストールすることが賢明です。これによって、本番サーバーからデータベースとデータベースオブジェクト定義をダンプし、新しいサーバーにロードして、それらが正しく処理されることを確認できます。(これはダウングレードのテストの場合にも役立ちます。)
+        </p><p>
+          本番サーバーで:
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --all-databases --no-data --routines --events &gt; dump-defs.sql</code></strong>
+</pre><p>
+          アップグレードされたサーバーで:
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysql &lt; dump-defs.sql</code></strong>
+</pre><p>
+          ダンプファイルにはテーブルデータが含まれないため、すばやく処理できます。これにより、長いデータロード操作を待つことなく、可能性のある非互換性を見分けることができます。ダンプファイルの処理中の警告やエラーを探します。
+        </p><p>
+          定義が正しく処理されていることを確認したら、データをダンプし、それをアップグレードしたサーバーにロードしてみます。
+        </p><p>
+          本番サーバーで:
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqldump --all-databases --no-create-info &gt; dump-data.sql</code></strong>
+</pre><p>
+          アップグレードされたサーバーで:
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysql &lt; dump-data.sql</code></strong>
+</pre><p>
+          ここでテーブルの内容を確認し、いくつかのテストクエリーを実行します。
+        </p></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="point-in-time-recovery"></a>7.5 バイナリログを使用したポイントインタイム (増分) リカバリ</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="backup-and-recovery.html#point-in-time-recovery-times">7.5.1 イベント時間を使用したポイントインタイムリカバリ</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#point-in-time-recovery-positions">7.5.2 イベントの位置を使用したポイントインタイムリカバリ</a></span></dt></dl></div><a class="indexterm" name="idm139926502899824"></a><a class="indexterm" name="idm139926502898368"></a><a class="indexterm" name="idm139926502896304"></a><a class="indexterm" name="idm139926502894944"></a><p>
+      ポイントインタイムリカバリは、特定の時点以降に行われたデータ変更のリカバリを表します。一般に、この種類のリカバリは、サーバーをバックアップが行われた時点の状態にする完全バックアップのリストア後に実行されます。(完全バックアップは、<a class="xref" href="backup-and-recovery.html#backup-methods" title="7.2 データベースバックアップ方法">セクション7.2「データベースバックアップ方法」</a>に示すものなど、いくつかの方法で行うことができます。)さらに、ポイントインタイムリカバリは、完全バックアップの時点からより最近の時点まで、増分的にサーバーを最新にします。
+    </p><p>
+      ポイントインタイムリカバリは、これらの原則に基づきます。
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          ポイントインタイムリカバリの情報のソースは、完全バックアップ操作のあとに生成されたバイナリログファイルによって表される一連の増分バックアップです。そのため、サーバーを <code class="option">--log-bin</code> オプションで起動して、バイナリロギングを有効にする必要があります (<a class="xref" href="server-administration.html#binary-log" title="5.2.4 バイナリログ">セクション5.2.4「バイナリログ」</a>を参照してください)。
+        </p><p>
+          バイナリログからデータをリストアするには、現在のバイナリログファイルの名前と場所を知っている必要があります。デフォルトで、サーバーはデータディレクトリにバイナリログファイルを作成しますが、<code class="option">--log-bin</code> オプションでパス名を指定して、別の場所にファイルを配置できます。<a class="xref" href="server-administration.html#binary-log" title="5.2.4 バイナリログ">セクション5.2.4「バイナリログ」</a>。
+        </p><p>
+          すべてのバイナリログファイルのリストを表示するには、次のステートメントを使用します。
+        </p><pre class="programlisting">
+mysql&gt; <strong class="userinput"><code>SHOW BINARY LOGS;</code></strong>
+</pre><p>
+          現在のバイナリログファイルの名前を判断するには、次のステートメントを発行します。
+        </p><pre class="programlisting">
+mysql&gt; <strong class="userinput"><code>SHOW MASTER STATUS;</code></strong>
+</pre></li><li class="listitem"><p>
+          <span class="command"><strong>mysqlbinlog</strong></span> ユーティリティーは、バイナリログファイル内のイベントを、実行したり、表示したりできるように、バイナリフォーマットからテキストに変換します。<span class="command"><strong>mysqlbinlog</strong></span> には、イベント時間やログ内のイベントの位置に基づいて、バイナリログのセクションを選択するためのオプションがあります。<a class="xref" href="programs.html#mysqlbinlog" title="4.6.8 mysqlbinlog — バイナリログファイルを処理するためのユーティリティー">セクション4.6.8「<span class="command"><strong>mysqlbinlog</strong></span> — バイナリログファイルを処理するためのユーティリティー」</a>を参照してください。
+        </p></li><li class="listitem"><p>
+          バイナリログからイベントを実行すると、それらが表すデータの変更が再実行されます。これにより、特定の期間のデータの変更のリカバリが可能です。バイナリログからイベントを実行するには、<span class="command"><strong>mysql</strong></span> クライアントを使用して、<span class="command"><strong>mysqlbinlog</strong></span> 出力を処理します。
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog <em class="replaceable"><code>binlog_files</code></em> | mysql -u root -p</code></strong>
+</pre></li><li class="listitem"><p>
+          ログの内容を表示すると、イベントを実行する前に、イベントの時間や位置を特定して、ログの内容の一部を選択する必要がある場合に役立つことがあります。ログからイベントを表示するには、<span class="command"><strong>mysqlbinlog</strong></span> 出力をページングプログラムに送信します。
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog <em class="replaceable"><code>binlog_files</code></em> | more</code></strong>
+</pre><p>
+          または、出力をファイルに保存し、テキストエディタでファイルを表示します。
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog <em class="replaceable"><code>binlog_files</code></em> &gt; tmpfile</code></strong>
+shell&gt; ... <em class="replaceable"><code>edit tmpfile</code></em> ...
+</pre></li><li class="listitem"><p>
+          ファイルに出力を保存することは、予期しない <code class="literal">DROP DATABASE</code> など、特定のイベントが削除されたログの内容を実行する場合の予備として役立ちます。ファイルの内容を実行する前に、実行されないステートメントをファイルから削除できます。ファイルの編集後、次のように内容を実行します。
+        </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysql -u root -p &lt; tmpfile</code></strong>
+</pre></li></ul></div><p>
+      MySQL サーバーに実行する複数のバイナリログがある場合、安全な方法は、サーバーへの 1 つの接続を使用して、それらすべてを処理することです。これは、<span class="emphasis"><em>安全でない</em></span>可能性があることを示す例です。
+    </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog binlog.000001 | mysql -u root -p # DANGER!!</code></strong>
+shell&gt; <strong class="userinput"><code>mysqlbinlog binlog.000002 | mysql -u root -p # DANGER!!</code></strong>
+</pre><p>
+      最初のログファイルに <code class="literal">CREATE TEMPORARY TABLE</code> ステートメントが含まれており、2 番目のログに一時テーブルを使用するステートメントが含まれている場合、サーバーへの異なる接続を使用して、このようにバイナリログを処理すると問題が発生します。最初の <span class="command"><strong>mysql</strong></span> プロセスが終了すると、サーバーは一時テーブルを削除します。2 番目の <span class="command"><strong>mysql</strong></span> プロセスでテーブルの使用を試みると、サーバーは<span class="quote">「<span class="quote">不明なテーブル</span>」</span>と報告します。
+    </p><p>
+      このような問題を回避するには、<span class="emphasis"><em>1 つ</em></span>の接続を使用して、処理するすべてのバイナリログの内容を実行します。これはそれを実行する 1 つの方法です。
+    </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog binlog.000001 binlog.000002 | mysql -u root -p</code></strong>
+</pre><p>
+      もう 1 つのアプローチは、すべてのログを 1 つのファイルに書き込み、次にそのファイルを処理することです。
+    </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog binlog.000001 &gt;  /tmp/statements.sql</code></strong>
+shell&gt; <strong class="userinput"><code>mysqlbinlog binlog.000002 &gt;&gt; /tmp/statements.sql</code></strong>
+shell&gt; <strong class="userinput"><code>mysql -u root -p -e "source /tmp/statements.sql"</code></strong>
+</pre><p>
+      GTID (<a class="xref" href="replication.html#replication-gtids" title="17.1.3 グローバルトランザクション識別子を使用したレプリケーション">セクション17.1.3「グローバルトランザクション識別子を使用したレプリケーション」</a>を参照) を含むバイナリログから読み取りながら、ダンプファイルに書き込む場合、次のように、<span class="command"><strong>mysqlbinlog</strong></span> で <code class="option">--skip-gtids</code> オプションを使用します。
+    </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog --skip-gtids binlog.000001 &gt;  /tmp/dump.sql</code></strong>
+shell&gt; <strong class="userinput"><code>mysqlbinlog --skip-gtids binlog.000002 &gt;&gt; /tmp/dump.sql</code></strong>
+shell&gt; <strong class="userinput"><code>mysql -u root -p -e "source /tmp/dump.sql"</code></strong>
+</pre><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="point-in-time-recovery-times"></a>7.5.1 イベント時間を使用したポイントインタイムリカバリ</h3></div></div></div><p>
+        リカバリの開始時間と終了時間を指示するには、<span class="command"><strong>mysqlbinlog</strong></span> に <code class="option">--start-datetime</code> および <code class="option">--stop-datetime</code> オプションを <code class="literal">DATETIME</code> フォーマットで指定します。例として、2005 年 4 月 20 日午前 10 時ちょうどに、大きなテーブルを削除する SQL ステートメントが実行されたとします。テーブルとデータをリストアするには、前夜のバックアップをリストアして、次のコマンドを実行します。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog --stop-datetime="2005-04-20 9:59:59" \</code></strong>
+         <strong class="userinput"><code>/var/log/mysql/bin.123456 | mysql -u root -p</code></strong>
+</pre><p>
+        このコマンドは、すべてのデータを <code class="option">--stop-datetime</code> オプションで指定された日時までリカバリします。数時間たって、入力された誤った SQL ステートメントを検出しなかった場合、その後発生したアクティビティーもリカバリする必要がある可能性があります。これに基づいて、次のように開始日時で <span class="command"><strong>mysqlbinlog</strong></span> を再度実行できます。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog --start-datetime="2005-04-20 10:01:00" \</code></strong>
+         <strong class="userinput"><code>/var/log/mysql/bin.123456 | mysql -u root -p</code></strong>
+</pre><p>
+        このコマンドでは、午前 10:01 から記録された SQL ステートメントが再実行されます。前夜のダンプファイルのリストアと 2 つの <span class="command"><strong>mysqlbinlog</strong></span> コマンドの組み合わせでは、午前 10:00 の 1 秒前までのすべてのものと午前 10:01 からのすべてのものをリストアします。
+      </p><p>
+        ポイントインタイムリカバリのこの方法を使用するには、ログを調べて、コマンドに指定する正確な時間を確認してください。ログファイルの内容を実行せずに表示するには、次のコマンドを使用します。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog /var/log/mysql/bin.123456 &gt; /tmp/mysql_restore.sql</code></strong>
+</pre><p>
+        次に、テキストエディタで <code class="filename">/tmp/mysql_restore.sql</code> ファイルを開き、それを調べます。
+      </p><p>
+        <span class="command"><strong>mysqlbinlog</strong></span> に時間を指定して、特定の変更を除外することは、除外されるステートメントと同時に複数のステートメントが実行された場合、うまく機能しません。
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="point-in-time-recovery-positions"></a>7.5.2 イベントの位置を使用したポイントインタイムリカバリ</h3></div></div></div><p>
+        日時を指定する代わりに、ログ位置を指定するために、<span class="command"><strong>mysqlbinlog</strong></span> で <code class="option">--start-position</code> および <code class="option">--stop-position</code> オプションを使用できます。それらは、日付ではなく、ログの位置番号を指定することを除いて、開始日および停止日オプションと同じように機能します。位置を使用することで、特に損害を与える SQL ステートメントと同じころに多くのトランザクションが発生している場合に、リカバリするログの部分をより正確に把握できます。位置番号を確認するには、予期していないトランザクションが実行された時間付近の期間で <span class="command"><strong>mysqlbinlog</strong></span> を実行しますが、結果を調査のためにテキストファイルにリダイレクトします。これは次のように実行できます。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog --start-datetime="2005-04-20 9:55:00" \</code></strong>
+         <strong class="userinput"><code>--stop-datetime="2005-04-20 10:05:00" \</code></strong>
+         <strong class="userinput"><code>/var/log/mysql/bin.123456 &gt; /tmp/mysql_restore.sql</code></strong>
+</pre><p>
+        このコマンドは、<code class="filename">/tmp</code> ディレクトリに、有害な SQL ステートメントが実行された時間付近の SQL ステートメントを含む小さなテキストファイルを作成します。テキストエディタでこのファイルを開き、繰り返したくないステートメントを探します。リカバリを停止し、再開するバイナリログの位置を特定し、それらを書きとめます。位置は、うしろに番号が付いた <code class="literal">log_pos</code> とラベル付けされます。前のバックアップファイルのリストア後、位置番号を使用して、バイナリログファイルを処理します。たとえば、これらのようなコマンドを使用します。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysqlbinlog --stop-position=368312 /var/log/mysql/bin.123456 \</code></strong>
+         <strong class="userinput"><code>| mysql -u root -p</code></strong>
+
+shell&gt; <strong class="userinput"><code>mysqlbinlog --start-position=368315 /var/log/mysql/bin.123456 \</code></strong>
+         <strong class="userinput"><code>| mysql -u root -p</code></strong>
+</pre><p>
+        最初のコマンドは、指定した停止位置まで、すべてのトランザクションをリカバリします。2 番目のコマンドは、バイナリログの最後まで、指定された開始位置からのすべてのトランザクションをリカバリします。<span class="command"><strong>mysqlbinlog</strong></span> の出力には、各 SQL ステートメントが記録される前に、<code class="literal">SET TIMESTAMP</code> ステートメントが含まれるため、リカバリされたデータおよび関連する MySQL ログは、トランザクションが実行された元の時間を反映します。
+      </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="myisam-table-maintenance"></a>7.6 MyISAM テーブルの保守とクラッシュリカバリ</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="backup-and-recovery.html#myisam-crash-recovery">7.6.1 クラッシュリカバリへの myisamchk の使用</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#myisam-check">7.6.2 MyISAM テーブルのエラーのチェック方法</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#myisam-repair">7.6.3 MyISAM テーブルの修復方法</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#myisam-optimization">7.6.4 MyISAM テーブルの最適化</a></span></dt><dt><span class="section"><a href="backup-and-recovery.html#myisam-maintenance-schedule">7.6.5 MyISAM テーブル保守スケジュールのセットアップ</a></span></dt></dl></div><p>
+      このセクションでは、<span class="command"><strong>myisamchk</strong></span> を使用して、<code class="literal">MyISAM</code> テーブル (データとインデックスを格納するための <code class="filename">.MYD</code> ファイルおよび <code class="filename">.MYI</code> ファイルのあるテーブル) をチェックまたは修復する方法について説明します。<span class="command"><strong>myisamchk</strong></span> の一般的な背景に関しては、<a class="xref" href="programs.html#myisamchk" title="4.6.3 myisamchk — MyISAM テーブルメンテナンスユーティリティー">セクション4.6.3「<span class="command"><strong>myisamchk</strong></span> — MyISAM テーブルメンテナンスユーティリティー」</a>を参照してください。その他のテーブル修復情報については、<a class="xref" href="installing.html#rebuilding-tables" title="2.11.4 テーブルまたはインデックスの再作成または修復">セクション2.11.4「テーブルまたはインデックスの再作成または修復」</a>にあります。
+    </p><p>
+      <span class="command"><strong>myisamchk</strong></span> を使用して、データベーステーブルをチェック、修復、または最適化できます。次のセクションでは、これらの操作を実行する方法と、テーブル保守スケジュールをセットアップする方法について説明します。<span class="command"><strong>myisamchk</strong></span> を使用して、テーブルに関する情報を取得することについては、<a class="xref" href="programs.html#myisamchk-table-info" title="4.6.3.5 myisamchk によるテーブル情報の取得">セクション4.6.3.5「myisamchk によるテーブル情報の取得」</a>を参照してください。
+    </p><p>
+      <span class="command"><strong>myisamchk</strong></span> によるテーブルの修復はきわめてセキュアですが、テーブルに対して多くの変更を行う可能性のある修復または保守操作を実行する<span class="emphasis"><em>前に</em></span>、常にバックアップを作成することをお勧めします。
+    </p><p>
+      インデックスに影響する <span class="command"><strong>myisamchk</strong></span> 操作により、<code class="literal">MyISAM</code> <code class="literal">FULLTEXT</code> インデックスが、MySQL サーバーで使用されている値と互換性がない全文パラメータで再構築される可能性があります。この問題を回避するには、<a class="xref" href="programs.html#myisamchk-general-options" title="4.6.3.1 myisamchk の一般オプション">セクション4.6.3.1「myisamchk の一般オプション」</a>のガイドラインに従ってください。
+    </p><p>
+      <code class="literal">MyISAM</code> テーブルの保守は、<span class="command"><strong>myisamchk</strong></span> が実行するものと似た操作を実行する SQL ステートメントを使用しても実行できます。
+    </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+          <code class="literal">MyISAM</code> テーブルをチェックするには、<code class="literal">CHECK TABLE</code> を使用します。
+        </p></li><li class="listitem"><p>
+          <code class="literal">MyISAM</code> テーブルを修復するには、<code class="literal">REPAIR TABLE</code> を使用します。
+        </p></li><li class="listitem"><p>
+          <code class="literal">MyISAM</code> テーブルを最適化するには、<code class="literal">OPTIMIZE TABLE</code> を使用します。
+        </p></li><li class="listitem"><p>
+          <code class="literal">MyISAM</code> テーブルを分析するには、<code class="literal">ANALYZE TABLE</code> を使用します。
+        </p></li></ul></div><p>
+      これらのステートメントの詳細については、<a class="xref" href="sql-syntax.html#table-maintenance-sql" title="13.7.2 テーブル保守ステートメント">セクション13.7.2「テーブル保守ステートメント」</a>を参照してください。
+    </p><p>
+      これらのステートメントは、直接または <span class="command"><strong>mysqlcheck</strong></span> クライアントプログラムを利用して使用できます。<span class="command"><strong>myisamchk</strong></span> に勝るこれらのステートメントの利点の 1 つは、サーバーがすべての作業を行うということです。<span class="command"><strong>myisamchk</strong></span> では、<span class="command"><strong>myisamchk</strong></span> とサーバー間で不要なやり取りがないように、サーバーが同時にテーブルを使用しないことを確認する必要があります。
+    </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="myisam-crash-recovery"></a>7.6.1 クラッシュリカバリへの myisamchk の使用</h3></div></div></div><a class="indexterm" name="idm139926502768160"></a><a class="indexterm" name="idm139926502766048"></a><a class="indexterm" name="idm139926502764016"></a><a class="indexterm" name="idm139926502762672"></a><p>
+        このセクションでは、MySQL データベースのデータの破損をチェックし、処理する方法について説明します。テーブルが頻繁に破損する場合は、その理由を見つけるようにしてください。<a class="xref" href="error-handling.html#crashing" title="B.5.4.2 MySQL が繰り返しクラッシュする場合の対処方法">セクションB.5.4.2「MySQL が繰り返しクラッシュする場合の対処方法」</a>を参照してください。
+      </p><p>
+        <code class="literal">MyISAM</code> テーブルがどのように破損する可能性があるかについての説明は、<a class="xref" href="storage-engines.html#myisam-table-problems" title="15.2.4 MyISAM テーブルの問題点">セクション15.2.4「MyISAM テーブルの問題点」</a>を参照してください。
+      </p><p>
+        外部ロックを無効にして <span class="command"><strong>mysqld</strong></span> を実行した (これはデフォルトです) 場合、<span class="command"><strong>mysqld</strong></span> が同じテーブルを使用中に、<span class="command"><strong>myisamchk</strong></span> を使用して、テーブルを確実にチェックすることはできません。<span class="command"><strong>myisamchk</strong></span> を実行している間、<span class="command"><strong>mysqld</strong></span> 経由でテーブルにだれもアクセスしないことを確信できる場合は、テーブルのチェックを開始する前に、<span class="command"><strong>mysqladmin flush-tables</strong></span> を実行する必要があるだけです。これを保証できない場合は、テーブルのチェック中に、<span class="command"><strong>mysqld</strong></span> を停止する必要があります。<span class="command"><strong>myisamchk</strong></span> を実行して、<span class="command"><strong>mysqld</strong></span> が同時に更新しているテーブルをチェックすると、テーブルが破損していなくても、破損しているという警告を受け取ることがあります。
+      </p><p>
+        外部ロックを有効にしてサーバーを実行する場合は、<span class="command"><strong>myisamchk</strong></span> を使用していつでもテーブルをチェックできます。この場合に、サーバーが <span class="command"><strong>myisamchk</strong></span> で使用しているテーブルを更新しようとする場合、サーバーは <span class="command"><strong>myisamchk</strong></span> が終了するまで待ってから、続行します。
+      </p><p>
+        <span class="command"><strong>myisamchk</strong></span> を使用して、テーブルを修復または最適化する場合は、<span class="command"><strong>mysqld</strong></span> サーバーがそのテーブルを使用していないことを常に確認する<span class="emphasis"><em>必要があります</em></span> (これは外部ロックが無効にされている場合にも適用されます)。<span class="command"><strong>mysqld</strong></span> を停止しない場合、<span class="command"><strong>myisamchk</strong></span> を実行する前に、少なくとも <span class="command"><strong>mysqladmin flush-tables</strong></span> を実行してください。サーバーと <span class="command"><strong>myisamchk</strong></span> が同時にテーブルにアクセスすると、テーブルが<span class="emphasis"><em>破損する可能性があります</em></span>。
+      </p><p>
+        クラッシュリカバリを実行する場合、データベース内の各 <code class="literal">MyISAM</code> テーブル <em class="replaceable"><code>tbl_name</code></em> が次の表に示すデータベースディレクトリ内の 3 つのファイルに対応することを理解しておくことが重要です。
+      </p><div class="informaltable"><table summary="この表では、各 MyISAM テーブルに対応するデータベースディレクトリ内の 3 つのファイルを一覧表示しています。" border="1"><colgroup><col><col></colgroup><thead><tr><th scope="col">ファイル</th><th scope="col">目的</th></tr></thead><tbody><tr><td scope="row"><code class="filename"><em class="replaceable"><code>tbl_name</code></em>.frm</code></td><td>定義 (フォーマット) ファイル</td></tr><tr><td scope="row"><code class="filename"><em class="replaceable"><code>tbl_name</code></em>.MYD</code></td><td>データファイル</td></tr><tr><td scope="row"><code class="filename"><em class="replaceable"><code>tbl_name</code></em>.MYI</code></td><td>インデックスファイル</td></tr></tbody></table></div><p>
+        これらの 3 つのファイルの種類はそれぞれさまざまに破損することがありますが、ほとんどの場合に問題はデータファイルとインデックスファイルで発生します。
+      </p><p>
+        <span class="command"><strong>myisamchk</strong></span> は、<code class="filename">.MYD</code> データファイルのコピーを行ごとに作成することによって機能します。これは、古い <code class="filename">.MYD</code> ファイルを削除し、新しいファイルを元のファイル名に変更して、修復ステージを終了します。<code class="option">--quick</code> を使用した場合、<span class="command"><strong>myisamchk</strong></span> は一時 <code class="filename">.MYD</code> ファイルを作成せず、代わりに <code class="filename">.MYD</code> ファイルが正しいとみなし、<code class="filename">.MYD</code> ファイルに手を加えずに新しいインデックスファイルだけを生成します。<span class="command"><strong>myisamchk</strong></span> は <code class="filename">.MYD</code> ファイルが破損しているかどうかを自動的に検出し、破損している場合は修復を中止するため、これは安全です。<span class="command"><strong>myisamchk</strong></span> に <code class="option">--quick</code> オプションを 2 回指定することもできます。この場合、<span class="command"><strong>myisamchk</strong></span> は一部のエラー (重複キーエラーなど) で中止せず、<code class="filename">.MYD</code> ファイルを修正して、それらを解決しようとします。通常、2 つの <code class="option">--quick</code> オプションの使用は、通常の修復を実行するためにディスクの空き容量が少なすぎる場合にのみ役立ちます。その場合、少なくとも <span class="command"><strong>myisamchk</strong></span> を実行する前に、テーブルのバックアップを作成してください。
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="myisam-check"></a>7.6.2 MyISAM テーブルのエラーのチェック方法</h3></div></div></div><a class="indexterm" name="idm139926502709376"></a><a class="indexterm" name="idm139926502707232"></a><a class="indexterm" name="idm139926502705200"></a><p>
+        <code class="literal">MyISAM</code> テーブルをチェックするには、次のコマンドを使用します。
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            <span class="command"><strong>myisamchk <em class="replaceable"><code>tbl_name</code></em></strong></span>
+          </p><p>
+            これはすべてのエラーの 99.99% を発見します。これで発見できないエラーは、データファイル<span class="emphasis"><em>のみ</em></span>に関連する破損です (きわめてまれです)。テーブルをチェックする場合、通常、<span class="command"><strong>myisamchk</strong></span> をオプションなし、または <code class="option">-s</code> (サイレント) オプションで実行してください。
+          </p></li><li class="listitem"><p>
+            <span class="command"><strong>myisamchk -m <em class="replaceable"><code>tbl_name</code></em></strong></span>
+          </p><p>
+            これはすべてのエラーの 99.999% を発見します。それは最初にすべてのインデックスエントリでエラーをチェックし、次にすべての行を読み取ります。それは行内のすべてのキー値のチェックサムを計算し、チェックサムがインデックスツリー内のキーのチェックサムと一致することを確認します。
+          </p></li><li class="listitem"><p>
+            <span class="command"><strong>myisamchk -e <em class="replaceable"><code>tbl_name</code></em></strong></span>
+          </p><p>
+            これはすべてのデータの完全で徹底的なチェックを実行します (<code class="option">-e</code> は<span class="quote">「<span class="quote">拡張チェック</span>」</span>を意味します)。それは各行のすべてのキーのチェック読み取りを実行し、それらが実際に正しい行を指していることを確認します。これは、多数のインデックスを持つ大きなテーブルの場合に長い時間がかかることがあります。通常、<span class="command"><strong>myisamchk</strong></span> は見つかった最初のエラーのあとで停止します。詳細情報を取得する場合は、<code class="option">-v</code> (verbose) オプションを追加できます。これにより、<span class="command"><strong>myisamchk</strong></span> は最大 20 のエラーまで続行します。
+          </p></li><li class="listitem"><p>
+            <span class="command"><strong>myisamchk -e -i <em class="replaceable"><code>tbl_name</code></em></strong></span>
+          </p><p>
+            これは、前述のコマンドと同様ですが、<code class="option">-i</code> オプションは <span class="command"><strong>myisamchk</strong></span> に追加の統計情報を出力するように伝えます。
+          </p></li></ul></div><p>
+        ほとんどの場合、テーブルをチェックするためには、テーブル名以外の引数なしの単純な <span class="command"><strong>myisamchk</strong></span> コマンドで十分です。
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="myisam-repair"></a>7.6.3 MyISAM テーブルの修復方法</h3></div></div></div><a class="indexterm" name="idm139926502682064"></a><a class="indexterm" name="idm139926502679952"></a><p>
+        このセクションの説明では、<code class="literal">MyISAM</code> テーブル (拡張子 <code class="filename">.MYI</code> および <code class="filename">.MYD</code>) に対し <span class="command"><strong>myisamchk</strong></span> を使用する方法について説明します。
+      </p><p>
+        さらに、<code class="literal">CHECK TABLE</code> および <code class="literal">REPAIR TABLE</code> ステートメントを使用して、<code class="literal">MyISAM</code> テーブルをチェックして修復することもできます。<a class="xref" href="sql-syntax.html#check-table" title="13.7.2.2 CHECK TABLE 構文">セクション13.7.2.2「CHECK TABLE 構文」</a>および<a class="xref" href="sql-syntax.html#repair-table" title="13.7.2.5 REPAIR TABLE 構文">セクション13.7.2.5「REPAIR TABLE 構文」</a>を参照してください。
+      </p><p>
+        破損したテーブルの兆候として、予期せずに中止するクエリーや次のような観察可能なエラーが含まれます。
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            <code class="filename"><em class="replaceable"><code>tbl_name</code></em>.frm</code> が変更に対してロックされます
+          </p></li><li class="listitem"><p>
+            ファイル <code class="filename"><em class="replaceable"><code>tbl_name</code></em>.MYI</code> が見つかりません (エラーコード: <em class="replaceable"><code>nnn</code></em>)。
+          </p></li><li class="listitem"><p>
+            予期しないファイルの終わり
+          </p></li><li class="listitem"><p>
+            レコードファイルがクラッシュしました
+          </p></li><li class="listitem"><p>
+            テーブルハンドラからエラー <em class="replaceable"><code>nnn</code></em> を取得します
+          </p></li></ul></div><p>
+        エラーの詳細を取得するには、<span class="command"><strong>perror</strong></span> <em class="replaceable"><code>nnn</code></em> を実行します。ここで、<em class="replaceable"><code>nnn</code></em> はエラー番号です。次の例は、<span class="command"><strong>perror</strong></span> を使用して、テーブルの問題を示すもっとも一般的なエラー番号の意味を見つける方法を示しています。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>perror 126 127 132 134 135 136 141 144 145</code></strong>
+MySQL error code 126 = Index file is crashed
+MySQL error code 127 = Record-file is crashed
+MySQL error code 132 = Old database file
+MySQL error code 134 = Record was already deleted (or record file crashed)
+MySQL error code 135 = No more room in record file
+MySQL error code 136 = No more room in index file
+MySQL error code 141 = Duplicate unique key or constraint on write or update
+MySQL error code 144 = Table is crashed and last repair failed
+MySQL error code 145 = Table was marked as crashed and should be repaired
+</pre><p>
+        エラー 135 (レコードファイルに空きがない) およびエラー 136 (インデックスファイルに空きがない) は、単純な修復で修正できるエラーではありません。この場合、<code class="literal">ALTER TABLE</code> を使用して、<code class="literal">MAX_ROWS</code> および <code class="literal">AVG_ROW_LENGTH</code> テーブルオプションの値を増やす必要があります。
+      </p><pre class="programlisting">
+ALTER TABLE <em class="replaceable"><code>tbl_name</code></em> MAX_ROWS=<em class="replaceable"><code>xxx</code></em> AVG_ROW_LENGTH=<em class="replaceable"><code>yyy</code></em>;
+</pre><p>
+        現在のテーブルオプション値が不明な場合は、<code class="literal">SHOW CREATE TABLE</code> を使用します。
+      </p><p>
+        その他のエラーの場合は、テーブルを修復する必要があります。<span class="command"><strong>myisamchk</strong></span> は通常発生するほとんどの問題を検出し、修正できます。
+      </p><p>
+        修復プロセスには、ここに示す最大 4 つのステージがあります。始める前に、場所をデータベースディレクトリに変更し、テーブルファイルの権限をチェックしてください。Unix では、<span class="command"><strong>mysqld</strong></span> を実行するユーザーによって (およびチェックするファイルにアクセスする必要があるため、チェックするユーザーにも)、それらが読み取り可能であることを確認します。ファイルを変更する必要があることが分かったら、それらに書き込みできる必要もあります。
+      </p><p>
+        このセクションでは、テーブルチェックが失敗した (<a class="xref" href="backup-and-recovery.html#myisam-check" title="7.6.2 MyISAM テーブルのエラーのチェック方法">セクション7.6.2「MyISAM テーブルのエラーのチェック方法」</a> で説明しているものなど) 場合、または <span class="command"><strong>myisamchk</strong></span> が提供する拡張機能を使用する場合について説明します。
+      </p><p>
+        テーブル保守に使用される <span class="command"><strong>myisamchk</strong></span> オプションについては、<a class="xref" href="programs.html#myisamchk" title="4.6.3 myisamchk — MyISAM テーブルメンテナンスユーティリティー">セクション4.6.3「<span class="command"><strong>myisamchk</strong></span> — MyISAM テーブルメンテナンスユーティリティー」</a>で説明しています。<span class="command"><strong>myisamchk</strong></span> には、パフォーマンスを向上できるメモリー割り当てを制御するために設定できる変数もあります。<a class="xref" href="programs.html#myisamchk-memory" title="4.6.3.6 myisamchk メモリー使用量">セクション4.6.3.6「myisamchk メモリー使用量」</a>を参照してください。
+      </p><p>
+        コマンド行からテーブルを修復する場合は、まず <span class="command"><strong>mysqld</strong></span> サーバーを停止する必要があります。リモートサーバーで <span class="command"><strong>mysqladmin shutdown</strong></span> を実行すると、<span class="command"><strong>mysqladmin</strong></span> が戻ったあとに、すべてのステートメント処理が停止し、すべてのインデックス変更がディスクにフラッシュされるまで、しばらくの間 <span class="command"><strong>mysqld</strong></span> サーバーがまだ使用できることに注意してください。
+      </p><p>
+        <span class="bold"><strong>ステージ 1: テーブルのチェック</strong></span>
+      </p><p>
+        <span class="command"><strong>myisamchk *.MYI</strong></span> または時間があれば <span class="command"><strong>myisamchk -e *.MYI</strong></span> を実行します。<code class="option">-s</code> (サイレント) オプションを使用すると、不要な情報を抑制します。
+      </p><p>
+        <span class="command"><strong>mysqld</strong></span> サーバーが停止している場合は、<code class="option">--update-state</code> オプションを使用して、<span class="command"><strong>myisamchk</strong></span> にテーブルを<span class="quote">「<span class="quote">チェック済み</span>」</span>とマークするように指示してください。
+      </p><p>
+        <span class="command"><strong>myisamchk</strong></span> がエラーを報告しているテーブルだけを修復する必要があります。そのようなテーブルの場合、ステージ 2 に進みます。
+      </p><p>
+        チェック時に、予期しないエラー (<code class="literal">out of memory</code> エラーなど) を受け取った場合、または <span class="command"><strong>myisamchk</strong></span> がクラッシュした場合、ステージ 3 へ進みます。
+      </p><p>
+        <span class="bold"><strong>ステージ 2: 簡単で安全な修復</strong></span>
+      </p><p>
+        まず <span class="command"><strong>myisamchk -r -q <em class="replaceable"><code>tbl_name</code></em></strong></span> を試します (<code class="option">-r -q</code> は<span class="quote">「<span class="quote">クイックリカバリモード</span>」</span>を意味します)。これは、データファイルにアクセスせずに、インデックスファイルを修復しようとします。データファイルに、必要なすべてのものが含まれ、削除リンクがデータファイル内の正しい場所を指している場合、これは機能するはずであり、テーブルが修正されます。次のテーブルの修復を開始します。そうでない場合は、次の手順を使用します。
+      </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+            続行する前に、データファイルのバックアップを作成します。
+          </p></li><li class="listitem"><p>
+            <span class="command"><strong>myisamchk -r <em class="replaceable"><code>tbl_name</code></em></strong></span> を使用します (<code class="option">-r</code> は<span class="quote">「<span class="quote">リカバリモード</span>」</span>を意味します)。これによって、正しくない行と削除された行がデータファイルから削除され、インデックスファイルが再構築されます。
+          </p></li><li class="listitem"><p>
+            先述のステップが失敗した場合、<span class="command"><strong>myisamchk --safe-recover <em class="replaceable"><code>tbl_name</code></em></strong></span> を使用します。安全なリカバリモードでは、通常のリカバリモードで扱われないわずかなケースを処理する古いリカバリ方法を使用します (ただし遅くなります)。
+          </p></li></ol></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><div class="admon-title">注記</div><p>
+          修復操作を大幅に高速化する場合、<code class="literal">sort_buffer_size</code> および <code class="literal">key_buffer_size</code> 変数の値をそれぞれ、<span class="command"><strong>myisamchk</strong></span> の実行時に使用可能なメモリーの約 25% に設定してください。
+        </p></div><p>
+        修復時に、予期しないエラー (<code class="literal">out of memory</code> エラーなど) を受け取った場合、または <span class="command"><strong>myisamchk</strong></span> がクラッシュした場合、ステージ 3 へ進みます。
+      </p><p>
+        <span class="bold"><strong>ステージ 3: 困難な修復</strong></span>
+      </p><p>
+        このステージに到達するのは、インデックスファイル内の最初の 16K バイトのブロックが破損しているか、誤った情報が含まれている場合、またはインデックスファイルが失われている場合に限られるはずです。この場合、新しいインデックスファイルを作成する必要があります。次のように実行します。
+      </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+            データファイルを安全な場所に移動します。
+          </p></li><li class="listitem"><p>
+            テーブル記述ファイルを使用して、新しい (空の) データファイルとインデックスファイルを作成します。
+          </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>mysql <em class="replaceable"><code>db_name</code></em></code></strong>
+mysql&gt; <strong class="userinput"><code>SET autocommit=1;</code></strong>
+mysql&gt; <strong class="userinput"><code>TRUNCATE TABLE <em class="replaceable"><code>tbl_name</code></em>;</code></strong>
+mysql&gt; <strong class="userinput"><code>quit</code></strong>
+</pre></li><li class="listitem"><p>
+            古いデータファイルを新しく作成したデータファイルにコピーします。(古いファイルを新しいファイルに単に移動しないでください。何か異常があった場合に備えて、コピーを保持する必要があります。)
+          </p></li></ol></div><div class="important" style="margin-left: 0.5in; margin-right: 0.5in;"><div class="admon-title">重要</div><p>
+          レプリケーションを使用している場合、それにはファイルシステム操作が含まれ、これらは MySQL によって記録されないため、上記の手順を実行する前に、それを停止してください。
+        </p></div><p>
+        ステージ 2 に戻ります。<span class="command"><strong>myisamchk -r -q</strong></span> が機能するはずです。(これは無限ループにならないはずです。)
+      </p><p>
+        手順全体を自動的に実行する <code class="literal">REPAIR TABLE <em class="replaceable"><code>tbl_name</code></em> USE_FRM</code> SQL ステートメントを使用することもできます。<code class="literal">REPAIR TABLE</code> を使用すると、サーバーがすべての作業を実行するため、ユーティリティーとサーバー間の不要なやり取りの可能性もなくなります。<a class="xref" href="sql-syntax.html#repair-table" title="13.7.2.5 REPAIR TABLE 構文">セクション13.7.2.5「REPAIR TABLE 構文」</a>を参照してください。
+      </p><p>
+        <span class="bold"><strong>ステージ 4: きわめて困難な修復</strong></span>
+      </p><p>
+        <code class="filename">.frm</code> 記述ファイルもクラッシュしている場合のみ、このステージに到達するはずです。記述ファイルはテーブルが作成されたあとに変更されないため、これが発生することはないはずです。
+      </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+            バックアップから記述ファイルをリストアし、ステージ 3 に戻ります。インデックスファイルをリストアし、ステージ 2 に戻ることもできます。後者の場合、<span class="command"><strong>myisamchk -r</strong></span> で起動してください。
+          </p></li><li class="listitem"><p>
+            バックアップがないが、テーブルの作成方法が正確にわかっている場合は、別のデータベースにテーブルのコピーを作成します。新しいデータファイルを削除して、ほかのデータベースから <code class="filename">.frm</code> 記述ファイルと <code class="filename">.MYI</code> インデックスファイルを、クラッシュしたデータベースへ移動します。これにより、新しい記述ファイルとインデックスファイルが得られますが、<code class="filename">.MYD</code> データファイルはそのまま残ります。ステージ 2 に戻り、インデックスファイルの再構築を試みます。
+          </p></li></ol></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="myisam-optimization"></a>7.6.4 MyISAM テーブルの最適化</h3></div></div></div><a class="indexterm" name="idm139926502579072"></a><a class="indexterm" name="idm139926502576960"></a><p>
+        断片化した行を結合し、行の削除または更新の結果発生した無駄な領域を削除するには、<span class="command"><strong>myisamchk</strong></span> をリカバリモードで実行します。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>myisamchk -r <em class="replaceable"><code>tbl_name</code></em></code></strong>
+</pre><p>
+        <code class="literal">OPTIMIZE TABLE</code> SQL ステートメントを使用して、同様にテーブルを最適化することができます。<code class="literal">OPTIMIZE TABLE</code> はテーブルの修復とキー分析を行い、さらに、キーのルックアップが速くなるように、インデックスツリーをソートします。<code class="literal">OPTIMIZE TABLE</code> を使用すると、サーバーがすべての作業を実行するため、ユーティリティーとサーバー間の不要なやり取りの可能性もなくなります。<a class="xref" href="sql-syntax.html#optimize-table" title="13.7.2.4 OPTIMIZE TABLE 構文">セクション13.7.2.4「OPTIMIZE TABLE 構文」</a>を参照してください。
+      </p><p>
+        <span class="command"><strong>myisamchk</strong></span> には、テーブルのパフォーマンスを向上させるために使用できる多数のその他オプションがあります。
+      </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+            <code class="option">--analyze</code> または <code class="option">-a</code>: キー分布分析を実行します。これは、結合オプティマイザが、テーブルを結合する順番と、それが使用するインデックスをより適切に選択できるようにすることで、結合パフォーマンスを向上させます。
+          </p></li><li class="listitem"><p>
+            <code class="option">--sort-index</code> または <code class="option">-S</code>: インデックスブロックをソートします。これはシークを最適化し、インデックスを使用するテーブルスキャンを高速化します。
+          </p></li><li class="listitem"><p>
+            <code class="option">--sort-records=<em class="replaceable"><code>index_num</code></em></code> または <code class="option">-R <em class="replaceable"><code>index_num</code></em></code>: 特定のインデックスに従って、データ行をソートします。これにより、データが大幅に局所に集中化されるため、このインデックスを使用する、範囲に基づいた <code class="literal">SELECT</code> または <code class="literal">ORDER BY</code> 操作が高速化する可能性があります。
+          </p></li></ul></div><p>
+        利用可能なすべてのオプションの完全な説明については、<a class="xref" href="programs.html#myisamchk" title="4.6.3 myisamchk — MyISAM テーブルメンテナンスユーティリティー">セクション4.6.3「<span class="command"><strong>myisamchk</strong></span> — MyISAM テーブルメンテナンスユーティリティー」</a>を参照してください。
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="myisam-maintenance-schedule"></a>7.6.5 MyISAM テーブル保守スケジュールのセットアップ</h3></div></div></div><a class="indexterm" name="idm139926502552848"></a><a class="indexterm" name="idm139926502550736"></a><p>
+        問題が発生するのを待つより、テーブルチェックを定期的に実行することをお勧めします。<code class="literal">MyISAM</code> テーブルをチェックまたは修復する 1 つの方法は、<code class="literal">CHECK TABLE</code> および <code class="literal">REPAIR TABLE</code> ステートメントを使用することです。<a class="xref" href="sql-syntax.html#table-maintenance-sql" title="13.7.2 テーブル保守ステートメント">セクション13.7.2「テーブル保守ステートメント」</a>を参照してください。
+      </p><p>
+        テーブルをチェックする別の方法は、<span class="command"><strong>myisamchk</strong></span> を使用することです。保守の目的には、<span class="command"><strong>myisamchk -s</strong></span> を使用できます。<code class="option">-s</code> オプション (<code class="option">--silent</code> の短縮形) により、サイレントモードで <span class="command"><strong>myisamchk</strong></span> が実行され、エラーが発生した場合のみ、メッセージが出力されます。
+      </p><a class="indexterm" name="idm139926502540288"></a><p>
+        自動 <code class="literal">MyISAM</code> テーブルチェックを有効にすることをお勧めします。たとえば、マシンが更新の途中で再起動を実行した場合、通常、影響を受けた可能性のある各テーブルが使用される前に、それをチェックする必要があります。(これらは<span class="quote">「<span class="quote">予期されるクラッシュしたテーブル</span>」</span>です。) サーバーに<code class="literal">MyISAM</code> テーブルを自動的にチェックさせるには、それを <code class="option">--myisam-recover-options</code> オプションを付けて起動します。<a class="xref" href="server-administration.html#server-options" title="5.1.3 サーバーコマンドオプション">セクション5.1.3「サーバーコマンドオプション」</a>を参照してください。
+      </p><p>
+        通常のシステム操作時にも定期的にテーブルをチェックしてください。たとえば、<code class="filename">crontab</code> ファイル内の次のような行を使用して、週 1 回 <span class="command"><strong>cron</strong></span> ジョブを実行し、重要なテーブルをチェックします。
+      </p><pre class="programlisting">
+35 0 * * 0 <em class="replaceable"><code>/path/to/myisamchk</code></em> --fast --silent <em class="replaceable"><code>/path/to/datadir</code></em>/*/*.MYI
+</pre><p>
+        これはクラッシュしたテーブルに関する情報を出力するため、テーブルを調査し、必要に応じて修復できます。
+      </p><p>
+        はじめに、過去 24 時間中に更新されたすべてのテーブルに対して、毎晩 <span class="command"><strong>myisamchk -s</strong></span> を実行します。その問題がまれにしか発生しないことがわかったら、チェックの頻度を週 1 回などに減らすことができます。
+      </p><a class="indexterm" name="idm139926502527968"></a><p>
+        通常、MySQL テーブルはほとんど保守が必要ありません。動的サイズの行のある <code class="literal">MyISAM</code> テーブル (<code class="literal">VARCHAR</code>、<code class="literal">BLOB</code>、または <code class="literal">TEXT</code> カラムのあるテーブル) に何回も更新を実行するか、または多くの削除された行のあるテーブルがある場合、ときどきテーブルの領域をデフラグ/再利用する必要がある場合があります。これは、問題のテーブルに <code class="literal">OPTIMIZE TABLE</code> を使用して実行できます。または、しばらくの間、<span class="command"><strong>mysqld</strong></span> サーバーを停止できる場合は、サーバーの停止中に、場所をデータディレクトリ内に変更し、次のコマンドを使用します。
+      </p><pre class="programlisting">
+shell&gt; <strong class="userinput"><code>myisamchk -r -s --sort-index --myisam_sort_buffer_size=16M */*.MYI</code></strong>
+</pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="security.html">前</a> </td><td width="20%" align="center"> </td><td width="40%" align="right"> <a accesskey="n" href="optimization.html">次へ</a></td></tr><tr><td width="40%" align="left" valign="top">第 6 章 セキュリティー </td><td width="20%" align="center"><a accesskey="h" href="index.html">ホーム</a></td><td width="40%" align="right" valign="top"> 第 8 章 最適化</td></tr></table></div><div class="copyright-footer"></div></body></html>
