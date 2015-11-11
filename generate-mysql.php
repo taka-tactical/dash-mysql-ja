@@ -106,6 +106,10 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 				if (substr($name, -1 * strlen($c_state)) == $c_state) $type = 'Statement';
 				break;
 
+			case 'licenses-third-party.html':
+				throw new Exception();
+				break;
+
 			default:
 				break;
 		}
