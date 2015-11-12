@@ -70,7 +70,7 @@ $dom = new DomDocument;
 @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
 $html = null;
 
-echo "\nCreate search indexes ...\n\n";
+echo "\nCreate search indexes from TOC ...\n\n";
 
 foreach ($dom->getElementsByTagName('dt') as $q) {
 	try {
@@ -107,7 +107,7 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 		}
 
 		$db->query("INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (\"{$name}\",\"{$type}\",\"{$href}\")");
-		echo "{$name}\n";
+		echo "[{$type}] {$name}\n";
 	}
 	catch (Exception $e) {}
 }
@@ -116,6 +116,8 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 $html = file_get_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/functions.html');
 @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
 $html = array();
+
+echo "\nCreate search indexes from function/operator page ...\n\n";
 
 foreach ($dom->getElementsByTagName('table') as $q) {
 	// target table has 'tbody' child ?
@@ -159,7 +161,7 @@ foreach ($html as $q) {
 				$type = (count($str) > 1 && substr($str[1], 0, 8) == 'operator') ? 'Operator' : 'Function';
 
 				$db->query("INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (\"{$name}\",\"{$type}\",\"{$href}\")");
-				echo "{$name}\n";
+				echo "[{$type}] {$name}\n";
 			}
 		}
 		catch (Exception $e) {}
@@ -170,6 +172,8 @@ foreach ($html as $q) {
 $html = file_get_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/sql-syntax.html');
 @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
 $html = null;
+
+echo "\nCreate search indexes from sql-syntax page ...\n\n";
 
 foreach ($dom->getElementsByTagName('dt') as $q) {
 	try {
@@ -197,7 +201,7 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 
 		foreach ($name as $p) {
 			$db->query("INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (\"{$p}\",\"{$type}\",\"{$href}\")");
-			echo "{$p}\n";
+			echo "[{$type}] {$p}\n";
 		}
 	}
 	catch (Exception $e) {}
@@ -207,6 +211,8 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 $html = file_get_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/data-types.html');
 @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
 $html = null;
+
+echo "\nCreate search indexes from data-type page ...\n\n";
 
 foreach ($dom->getElementsByTagName('dt') as $q) {
 	try {
@@ -240,7 +246,7 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 
 		foreach ($name as $p) {
 			$db->query("INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (\"{$p}\",\"{$type}\",\"{$href}\")");
-			echo "{$p}\n";
+			echo "[{$type}] {$p}\n";
 		}
 	}
 	catch (Exception $e) {}
