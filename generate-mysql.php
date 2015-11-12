@@ -171,9 +171,9 @@ foreach ($html as $q) {
 // add search index from sql-syntax page
 $html = file_get_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/sql-syntax.html');
 @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
-$html = null;
 
 echo "\nCreate search indexes from sql-syntax page ...\n\n";
+$html = array();
 
 foreach ($dom->getElementsByTagName('dt') as $q) {
 	try {
@@ -200,7 +200,11 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 		}
 
 		foreach ($name as $p) {
+			$pkey = "{$p}{$type}{$href}";
+			if (isset($html[$pkey])) continue;
+
 			$db->query("INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (\"{$p}\",\"{$type}\",\"{$href}\")");
+			$html[$pkey] = true;
 			echo "[{$type}] {$p}\n";
 		}
 	}
@@ -210,9 +214,9 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 // add search index from data-types page
 $html = file_get_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/data-types.html');
 @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
-$html = null;
 
 echo "\nCreate search indexes from data-type page ...\n\n";
+$html = array();
 
 foreach ($dom->getElementsByTagName('dt') as $q) {
 	try {
@@ -245,7 +249,11 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 		}
 
 		foreach ($name as $p) {
+			$pkey = "{$p}{$type}{$href}";
+			if (isset($html[$pkey])) continue;
+
 			$db->query("INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (\"{$p}\",\"{$type}\",\"{$href}\")");
+			$html[$pkey] = true;
 			echo "[{$type}] {$p}\n";
 		}
 	}
