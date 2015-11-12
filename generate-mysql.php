@@ -6,12 +6,14 @@ $ver  = '5.6';
 
 
 // const
+$c_class = ' クラス';
 $c_state = ' 構文';
 $c_types = ' 型';
 $c_mbcom = '、';
 $c_mbor  = 'および';
 
 
+//----------------------------------------
 // get manual
 $dir  = "refman-{$ver}-{$lang}.html-chapter";
 $zip  = "{$dir}.zip";
@@ -66,38 +68,19 @@ if (($p = strpos($html, $str)) !== false) {
 // add search index from toc
 $dom = new DomDocument;
 @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
-
 $html = null;
+
 echo "\nCreate search indexes ...\n\n";
 
 foreach ($dom->getElementsByTagName('dt') as $q) {
 	try {
 		// have 'span>a' or 'a' child ?
-		if (!$q->firstChild) throw new Exception();
-		$a = strtolower($q->firstChild->nodeName);
-
-		switch ($a) {
-			case 'span':
-				$p = $q->firstChild;
-				if (!$p->firstChild || strtolower($p->firstChild->nodeName) != 'a') throw new Exception();
-				$a = $p->firstChild;
-				break;
-
-			case 'a':
-				$a = $q->firstChild;
-				break;
-
-			default:
-				throw new Exception();
-				break;
-		}
+		if (!$a = get_span_a_child($q)) throw new Exception();
 
 		$href = $a->getAttribute('href');
-		$str  = substr($href, 0, 6);
-		if ($str[0] == '.') throw new Exception();
-		if ($str == 'https:' || !strncmp($str, 'http:', 5)) throw new Exception();
+		if (!validate_page_href($href)) throw new Exception();
 
-		$name = trim(preg_replace('#\s+#u', ' ', preg_replace('#^[A-Z0-9\.]+\s#u', '', $a->nodeValue)));
+		$name = trim_name($a->nodeValue, true);
 		if (empty($name)) throw new Exception();
 
 		// which type ?
@@ -106,7 +89,8 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 
 		switch ($str[0]) {
 			case 'sql-syntax.html':
-				if (substr($name, -1 * strlen($c_state)) == $c_state) $type = 'Statement';
+				if (substr($name, -1 * strlen($c_state)) == $c_state)
+					throw new Exception();
 				break;
 
 			case 'licenses-third-party.html':
@@ -160,15 +144,13 @@ foreach ($html as $q) {
 
 			if ($a && strtolower($a->nodeName) == 'a') {
 				$href = $a->getAttribute('href');
-				$str  = substr($href, 0, 6);
-				if ($str[0] == '.') throw new Exception();
-				if ($str == 'https:' || !strncmp($str, 'http:', 5)) throw new Exception();
+				if (!validate_page_href($href)) throw new Exception();
 
 				$name = trim(preg_replace('#\s+#u', ' ', $a->nodeValue));
 				if (empty($name)) throw new Exception();
 
 				// which type ?
-				$str  = explode('#', $href);
+				$str  = explode('#', $href, 2);
 				$type = (count($str) > 1 && substr($str[1], 0, 8) == 'operator') ? 'Operator' : 'Function';
 
 				$db->query("INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (\"{$name}\",\"{$type}\",\"{$href}\")");
@@ -182,56 +164,25 @@ foreach ($html as $q) {
 // add search index from sql-syntax page
 $html = file_get_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/sql-syntax.html');
 @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
-$html = array();
+$html = null;
 
 foreach ($dom->getElementsByTagName('dt') as $q) {
 	try {
 		// have 'span>a' or 'a' child ?
-		if (!$q->firstChild) throw new Exception();
-		$a = strtolower($q->firstChild->nodeName);
-
-		switch ($a) {
-			case 'span':
-				$p = $q->firstChild;
-				if (!$p->firstChild || strtolower($p->firstChild->nodeName) != 'a') throw new Exception();
-				$a = $p->firstChild;
-				break;
-
-			case 'a':
-				$a = $q->firstChild;
-				break;
-
-			default:
-				throw new Exception();
-				break;
-		}
+		if (!$a = get_span_a_child($q)) throw new Exception();
 
 		$href = $a->getAttribute('href');
-		$str  = substr($href, 0, 6);
-		if ($str[0] == '.') throw new Exception();
-		if ($str == 'https:' || !strncmp($str, 'http:', 5)) throw new Exception();
+		if (!validate_page_href($href)) throw new Exception();
 
-		$name = trim(preg_replace('#\s+#u', ' ', preg_replace('#^[0-9\.]+\s#u', '', $a->nodeValue)));
+		$name = trim_name($a->nodeValue);
 		if (empty($name)) throw new Exception();
 
 		// which type ?
-		$type = (substr($name, -1 * strlen($c_state)) == $c_state) ? true : false;
-
-		if ($type) {
+		if (substr($name, -1 * strlen($c_state)) == $c_state) {
 			if (strpos($name, $c_mbcom) !== false || strpos($name, $c_mbor) !== false)
 				$name = substr($name, 0, -1 * strlen($c_state));
 
-			$str  = explode($c_mbcom, $name);
-			$name = array();
-
-			foreach ($str as $p) {
-				$tmp = explode($c_mbor, trim($p));
-
-				foreach ($tmp as $p) {
-					$name[] = trim($p);
-				}
-			}
-			$name = array_filter($name);
+			$name = split_name_to_keywords($name);
 			$type = 'Statement';
 		}
 		else {
@@ -247,5 +198,106 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 	catch (Exception $e) {}
 }
 
+// add search index from data-types page
+$html = file_get_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/data-types.html');
+@$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+$html = null;
+
+foreach ($dom->getElementsByTagName('dt') as $q) {
+	try {
+		// have 'span>a' or 'a' child ?
+		if (!$a = get_span_a_child($q)) throw new Exception();
+
+		$href = $a->getAttribute('href');
+		if (!validate_page_href($href)) throw new Exception();
+
+		$name = trim_name($a->nodeValue);
+		if (empty($name)) throw new Exception();
+
+		// which type ?
+		if (substr($name, -1 * strlen($c_types)) == $c_types) {
+			if (strpos($name, $c_mbcom) !== false || strpos($name, $c_mbor) !== false)
+				$name = substr($name, 0, -1 * strlen($c_types));
+
+			$name = split_name_to_keywords($name);
+			$type = 'Type';
+		}
+		else if (strpos($name, ' - ')) { // exclude pos=0 too
+			$str  = explode(' - ', $name, 2);
+			$name = split_name_to_keywords(trim($str[1]));
+			$name[] = trim($str[0]);
+			$type = 'Type';
+		}
+		else {
+			$name = array($name);
+			$type = (substr($name, -1 * strlen($c_class)) == $c_class) ? 'Class' : 'Guide';
+		}
+
+		foreach ($name as $p) {
+			$db->query("INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (\"{$p}\",\"{$type}\",\"{$href}\")");
+			echo "{$p}\n";
+		}
+	}
+	catch (Exception $e) {}
+}
+
 echo "\nMySQL docset created !\n";
+
+
+//----------------------------------------
+// helper functions
+
+function get_span_a_child($element) {
+	$child = null;
+	if (!$element || !$element->firstChild) return $child;
+
+	switch (strtolower($element->firstChild->nodeName)) {
+		case 'span':
+			$sub = $element->firstChild;
+			if (!$sub->firstChild || strtolower($sub->firstChild->nodeName) != 'a') return $child;
+			$child = $sub->firstChild;
+			break;
+
+		case 'a':
+			$child = $element->firstChild;
+			break;
+
+		default:
+			break;
+	}
+
+	return $child;
+}
+
+function trim_name($name, $extend = false) {
+	if (!$name) return '';
+	$rule = $extend ? '#^[A-Z0-9\.]+\s#u' : '#^[0-9\.]+\s#u';
+	return trim(preg_replace('#\s+#u', ' ', preg_replace($rule, '', $name)));
+}
+
+function split_name_to_keywords($name) {
+	global $c_mbcom, $c_mbor;
+	$atom = array();
+	$tmp  = explode($c_mbcom, $name);
+
+	foreach ($tmp as $val) {
+		$word = explode($c_mbor, trim($val));
+
+		foreach ($word as $val) {
+			$atom[] = trim($val);
+		}
+	}
+
+	return array_filter($atom);
+}
+
+function validate_page_href($href) {
+	if (!$href) return false;
+	$tmp = substr($href, 0, 6);
+
+	if ($tmp[0] == '.') return false;
+	if ($tmp == 'https:' || !strncmp($tmp, 'http:', 5)) return false;
+
+	return true;
+}
 
