@@ -7,6 +7,9 @@ $ver  = '5.6';
 
 // const
 $c_state = ' 構文';
+$c_types = ' 型';
+$c_mbcom = '、';
+$c_mbor  = 'および';
 
 
 // get manual
@@ -212,10 +215,34 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 		if (empty($name)) throw new Exception();
 
 		// which type ?
-		$type = (substr($name, -1 * strlen($c_state)) == $c_state) ? 'Statement' : 'Guide';
+		$type = (substr($name, -1 * strlen($c_state)) == $c_state) ? true : false;
 
-		$db->query("INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (\"{$name}\",\"{$type}\",\"{$href}\")");
-		echo "{$name}\n";
+		if ($type) {
+			if (strpos($name, $c_mbcom) !== false || strpos($name, $c_mbor) !== false)
+				$name = substr($name, 0, -1 * strlen($c_state));
+
+			$str  = explode($c_mbcom, $name);
+			$name = array();
+
+			foreach ($str as $p) {
+				$tmp = explode($c_mbor, trim($p));
+
+				foreach ($tmp as $p) {
+					$name[] = trim($p);
+				}
+			}
+			$name = array_filter($name);
+			$type = 'Statement';
+		}
+		else {
+			$name = array($name);
+			$type = 'Guide';
+		}
+
+		foreach ($name as $p) {
+			$db->query("INSERT OR IGNORE INTO searchIndex(name, type, path) VALUES (\"{$p}\",\"{$type}\",\"{$href}\")");
+			echo "{$p}\n";
+		}
 	}
 	catch (Exception $e) {}
 }
