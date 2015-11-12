@@ -59,7 +59,7 @@ $str  = '<td width="20%" align="left"> </td>';
 if (($p = strpos($html, $str)) !== false) {
 	$q = strlen($str);
 	$html = substr($html, 0, $p) .
-		str_replace('> <', '><a href="ix01.html" accesskey="p">索引</a> <', $str) .
+		str_replace('> <', '><a href="ix01.html" accesskey="p">索引</a> <', $str) .
 		substr($html, $p + $q);
 
 	file_put_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/index.html', $html);
@@ -244,8 +244,8 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 			$type = 'Type';
 		}
 		else {
-			$name = array($name);
 			$type = (substr($name, -1 * strlen($c_class)) == $c_class) ? 'Class' : 'Guide';
+			$name = array($name);
 		}
 
 		foreach ($name as $p) {
