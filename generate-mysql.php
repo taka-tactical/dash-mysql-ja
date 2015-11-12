@@ -88,6 +88,11 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 		$str  = explode('#', $href);
 
 		switch ($str[0]) {
+			case 'data-types.html':
+				if (substr($name, -1 * strlen($c_types)) == $c_types || strpos($name, ' - '))
+					throw new Exception();
+				break;
+
 			case 'sql-syntax.html':
 				if (substr($name, -1 * strlen($c_state)) == $c_state)
 					throw new Exception();
