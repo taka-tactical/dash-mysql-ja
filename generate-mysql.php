@@ -15,6 +15,7 @@ $c_mbor  = 'および';
 
 //----------------------------------------
 // get manual
+$base = '/MySQL.docset/Contents/Resources/Documents';
 $dir  = "refman-{$ver}-{$lang}.html-chapter";
 $zip  = "{$dir}.zip";
 
@@ -22,7 +23,7 @@ exec('rm -rf MySQL.docset/Contents/Resources/');
 exec('mkdir -p MySQL.docset/Contents/Resources/');
 exec("wget http://downloads.mysql.com/docs/{$zip}");
 exec("unzip {$zip}");
-exec('mv ' . __DIR__ . "/{$dir} " . __DIR__ . '/MySQL.docset/Contents/Resources/Documents');
+exec('mv ' . __DIR__ . "/{$dir} " . __DIR__ . $base);
 exec('rm -f ' . __DIR__ . "/{$zip}");
 
 // gen plist
@@ -52,7 +53,7 @@ $db = new sqlite3(__DIR__ . '/MySQL.docset/Contents/Resources/docSet.dsidx');
 $db->query("CREATE TABLE searchIndex(id INTEGER PRIMARY KEY, name TEXT, type TEXT, path TEXT)");
 $db->query("CREATE UNIQUE INDEX anchor ON searchIndex (name, type, path)");
 
-$html = file_get_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/index.html');
+$html = file_get_contents(__DIR__ . $base . '/index.html');
 $str  = '<td width="20%" align="left"> </td>';
 
 // add link to indexes page
@@ -62,7 +63,7 @@ if (($p = strpos($html, $str)) !== false) {
 		str_replace('> <', '><a href="ix01.html" accesskey="p">索引</a> <', $str) .
 		substr($html, $p + $q);
 
-	file_put_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/index.html', $html);
+	file_put_contents(__DIR__ . $base . '/index.html', $html);
 }
 
 // add search index from toc
@@ -113,7 +114,7 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 }
 
 // add search index from function/operator page
-$html = file_get_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/functions.html');
+$html = file_get_contents(__DIR__ . $base . '/functions.html');
 @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
 $html = array();
 
@@ -169,7 +170,7 @@ foreach ($html as $q) {
 }
 
 // add search index from sql-syntax page
-$html = file_get_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/sql-syntax.html');
+$html = file_get_contents(__DIR__ . $base . '/sql-syntax.html');
 @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
 
 echo "\nCreate search indexes from sql-syntax page ...\n\n";
@@ -212,7 +213,7 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 }
 
 // add search index from data-types page
-$html = file_get_contents(__DIR__ . '/MySQL.docset/Contents/Resources/Documents/data-types.html');
+$html = file_get_contents(__DIR__ . $base . '/data-types.html');
 @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
 
 echo "\nCreate search indexes from data-type page ...\n\n";
@@ -259,6 +260,39 @@ foreach ($dom->getElementsByTagName('dt') as $q) {
 	}
 	catch (Exception $e) {}
 }
+
+// remove scripts
+$dir = new DirectoryIterator(__DIR__ . $base);
+
+foreach ($dir as $file) {
+	if ($file->isDot() || $file->isDir()) continue;
+	if ($file->getExtension() != 'html') continue;
+
+	// load file
+	$name = $file->getPathname();
+	if (!$html = file_get_contents($name)) continue;
+	$type = false;
+
+	// remove javascript
+	if (strpos($html, '<script') !== false) {
+		$html = remove_jstag($html);
+		$type = true;
+	}
+
+	// other things
+
+	// save
+	if ($type) file_put_contents($name, $html);
+}
+
+// adjust css
+$html =<<< EOF
+
+.navheader td, .navfooter td {
+  border: none;
+}
+EOF;
+file_put_contents(__DIR__ . $base . '/mvl.css', $html, FILE_APPEND);
 
 echo "\nMySQL docset created !\n";
 
@@ -318,5 +352,13 @@ function validate_page_href($href) {
 	if ($tmp == 'https:' || !strncmp($tmp, 'http:', 5)) return false;
 
 	return true;
+}
+
+function remove_jstag($html) {
+	if ($html && ($p = strpos($html, '<script language="javascript" type="text/javascript">')) !== false) {
+		if (($q = strpos($html, '<noscript></noscript>', $p + 1)) !== false)
+			$html = substr($html, 0, $p) . $alt . substr($html, $q + 21);
+	}
+	return $html;
 }
 
