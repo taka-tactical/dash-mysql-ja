@@ -1,40 +1,8 @@
-<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>付録 D 制約と制限</title><link rel="stylesheet" type="text/css" href="mvl.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="up" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="prev" href="news.html" title="付録 C MySQL リリースノート"><link rel="next" href="glossary.html" title="MySQL 用語集">
-<script language="javascript" type="text/javascript">
-  function addOnload(theFunc)
-  {
-    var previous = window.onload;
-    if (typeof window.onload != 'function')
-    {
-      window.onload = theFunc;
-    }
-    else
-    {
-      window.onload = function()
-      {
-        previous();
-        theFunc();
-      }
-    }
-  }
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>付録 D 制約と制限</title><link rel="stylesheet" type="text/css" href="mvl.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="up" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="prev" href="news.html" title="付録 C MySQL リリースノート"><link rel="next" href="glossary.html" title="MySQL 用語集">
 
-  addOnload(function()
-  {
-    var base = new Date(1446597221*1000);
-    var now = new Date();
-    var diff = ((now-base)/1000)/(24*3600);
-
-    if (diff > 90) {
-      var nodes = document.getElementsByClassName('titlepage');
-      nodes[0].innerHTML = '<p style="border: 5px #ff0000 solid; padding: 5px; margin 5px">' +
-        'This copy of the manual is more than 90 days old. We encourage you to download a ' +
-        'new version from <a href="http://dev.mysql.com">dev.mysql.com/doc</a>.</p>' + nodes[0].innerHTML;
-    }
-  });
-</script>
-<noscript></noscript>
 </head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">付録 D 制約と制限</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="news.html">前</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="glossary.html">次へ</a></td></tr></table><hr></div><div class="appendix"><div class="titlepage"><div><div><h1 class="title"><a name="restrictions"></a>付録 D 制約と制限</h1></div></div></div><div class="toc"><p><b>目次</b></p><dl class="toc"><dt><span class="section"><a href="restrictions.html#stored-program-restrictions">D.1 ストアドプログラムの制約</a></span></dt><dt><span class="section"><a href="restrictions.html#condition-handling-restrictions">D.2 条件処理の制約</a></span></dt><dt><span class="section"><a href="restrictions.html#cursor-restrictions">D.3 サーバー側のカーソルの制約</a></span></dt><dt><span class="section"><a href="restrictions.html#subquery-restrictions">D.4 サブクエリーの制約</a></span></dt><dt><span class="section"><a href="restrictions.html#view-restrictions">D.5 ビューの制約</a></span></dt><dt><span class="section"><a href="restrictions.html#xa-restrictions">D.6 XA トランザクションの制約</a></span></dt><dt><span class="section"><a href="restrictions.html#charset-restrictions">D.7 文字セットの制約</a></span></dt><dt><span class="section"><a href="restrictions.html#performance-schema-restrictions">D.8 パフォーマンススキーマの制約</a></span></dt><dt><span class="section"><a href="restrictions.html#pluggable-authentication-restrictions">D.9 プラガブルな認証の制約</a></span></dt><dt><span class="section"><a href="restrictions.html#limits">D.10 MySQL での制限</a></span></dt><dd><dl><dt><span class="section"><a href="restrictions.html#joins-limits">D.10.1 結合の制限</a></span></dt><dt><span class="section"><a href="restrictions.html#database-count-limit">D.10.2 データベースおよびテーブルの数に対する制限</a></span></dt><dt><span class="section"><a href="restrictions.html#table-size-limit">D.10.3 テーブルサイズの制限</a></span></dt><dt><span class="section"><a href="restrictions.html#column-count-limit">D.10.4 テーブルカラム数と行サイズの制限</a></span></dt><dt><span class="section"><a href="restrictions.html#limits-frm-file">D.10.5 .frm ファイル構造により課せられる制限</a></span></dt><dt><span class="section"><a href="restrictions.html#limits-windows">D.10.6 Windows プラットフォームの制限</a></span></dt></dl></dd></dl></div><p>
     ここでは、サブクエリーやビューなどの MySQL 機能の使用に適用される制約について説明します。
-  </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="stored-program-restrictions"></a>D.1 ストアドプログラムの制約</h2></div></div></div><a class="indexterm" name="idm139926374373280"></a><a class="indexterm" name="idm139926374371104"></a><a class="indexterm" name="idm139926374369040"></a><a class="indexterm" name="idm139926374367008"></a><a class="indexterm" name="idm139926374364976"></a><a class="indexterm" name="idm139926374362976"></a><p>
+  </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="stored-program-restrictions"></a>D.1 ストアドプログラムの制約</h2></div></div></div><a class="indexterm" name="idm140396734934240"></a><a class="indexterm" name="idm140396734932064"></a><a class="indexterm" name="idm140396734930000"></a><a class="indexterm" name="idm140396734927968"></a><a class="indexterm" name="idm140396734925936"></a><a class="indexterm" name="idm140396734923904"></a><p>
       これらの制約は、<a class="xref" href="stored-programs-views.html" title="第 20 章 ストアドプログラムおよびビュー">第20章「<i>ストアドプログラムおよびビュー</i>」</a>で説明している機能に適用されます。
     </p><p>
       ここに記載されている制約の中には、すべてのストアドルーチン、つまりストアドプロシージャーとストアドファンクションの両方に適用されるものがあります。また、ストアドプロシージャーには適用されず、<a class="link" href="restrictions.html#stored-routines-function-restrictions" title="ストアドファンクションの制約">ストアドファンクションに固有の制約</a>もいくつか存在します。
@@ -122,7 +90,7 @@ END;
           <code class="literal">UNDO</code> ハンドラ
         </p></li><li class="listitem"><p>
           <code class="literal">FOR</code> ループ
-        </p></li></ul></div><h3><a name="idm139926374265504"></a>並列性に関する考慮事項</h3><p>
+        </p></li></ul></div><h3><a name="idm140396734826640"></a>並列性に関する考慮事項</h3><p>
       セッション間のやり取りの問題を防止するために、クライアントのステートメント発行時、サーバーではステートメントの実行に利用できるルーチンとトリガーのスナップショットが使用されます。つまり、サーバーは、ステートメントの実行中に使用される可能性のあるプロシージャー、関数、およびトリガーのリストを算出してロードし、ステートメントの実行に進みます。ステートメントの実行時は、ほかのセッションが実行するルーチンへの変更は認識されません。
     </p><p>
       並列性を最大にするために、ストアドファンクションでは、その副作用を最小限に抑える必要があります。特に、ストアドファンクション内のテーブルを更新することにより、そのテーブルでの並列操作が減少することがあります。ストアドファンクションは、実行前にテーブルロックを取得して、ステートメントが実行する順序とログに表示されるときの順序の不一致によるバイナリログの不整合を回避します。ステートメントベースのバイナリロギングが使用される場合、関数内で実行されるステートメントではなく、関数を呼び出すステートメントが記録されます。その結果、ベースとなる同じテーブルを更新するストアドファンクションは、並列で実行しません。対照的に、ストアドプロシージャーはテーブルレベルのロックを取得しません。ストアドプロシージャー内で実行されたすべてのステートメントは、ステートメントベースのバイナリロギングの場合でも、バイナリログに書き込まれます。<a class="xref" href="stored-programs-views.html#stored-programs-logging" title="20.7 ストアドプログラムのバイナリロギング">セクション20.7「ストアドプログラムのバイナリロギング」</a>を参照してください。
@@ -142,7 +110,7 @@ END;
           イベントは、Unix エポックの最後の時間以降をサポートしません。この時間は 2038 年の年頭あたりになります。このような日付はイベントスケジューラで特に許可されません。(Bug #16396)
         </p></li><li class="listitem"><p>
           <code class="literal">CREATE EVENT</code> および <code class="literal">ALTER EVENT</code> ステートメントの <code class="literal">ON SCHEDULE</code> 句でのストアドファンクション、ユーザー定義関数、およびテーブルの参照はサポートされていません。このような種類の参照は許可されていません。(詳細は Bug #22830 を参照してください。)
-        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="condition-handling-restrictions"></a>D.2 条件処理の制約</h2></div></div></div><a class="indexterm" name="idm139926374233408"></a><a class="indexterm" name="idm139926374231264"></a><p>
+        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="condition-handling-restrictions"></a>D.2 条件処理の制約</h2></div></div></div><a class="indexterm" name="idm140396734794480"></a><a class="indexterm" name="idm140396734792336"></a><p>
       <code class="literal">SIGNAL</code>、<code class="literal">RESIGNAL</code>、および <code class="literal">GET DIAGNOSTICS</code> は準備済みのステートメントとして許可されていません。たとえば、次のステートメントは無効です。
     </p><pre class="programlisting">
 PREPARE stmt1 FROM 'SIGNAL SQLSTATE "02000"';
@@ -159,7 +127,7 @@ GET DIAGNOSTICS CONDITION 1 @errno = MYSQL_ERRNO;
     </p><pre class="programlisting">
 GET DIAGNOSTICS @cno = NUMBER;
 GET DIAGNOSTICS CONDITION @cno @errno = MYSQL_ERRNO;
-</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cursor-restrictions"></a>D.3 サーバー側のカーソルの制約</h2></div></div></div><a class="indexterm" name="idm139926374214736"></a><a class="indexterm" name="idm139926374212592"></a><p>
+</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="cursor-restrictions"></a>D.3 サーバー側のカーソルの制約</h2></div></div></div><a class="indexterm" name="idm140396734775824"></a><a class="indexterm" name="idm140396734773680"></a><p>
       サーバー側のカーソルは、<code class="literal">mysql_stmt_attr_set()</code> 関数を使用して C API に実装されます。ストアドルーチンのカーソルにも同じ実装が使用されます。サーバー側のカーソルによって、サーバー側で結果セットを生成できるようになりますが、クライアントが要求する行を除いてクライアントに転送することはできません。たとえば、クライアントがクエリーを実行するが、最初の行のみが必要な場合、残りの行は転送されません。
     </p><p>
       MySQL では、サーバー側のカーソルは内部一時テーブルに実体化されます。最初これは <code class="literal">MEMORY</code> テーブルですが、そのサイズが <code class="literal">max_heap_table_size</code> および <code class="literal">tmp_table_size</code> システム変数の最小値を超えると、<code class="literal">MyISAM</code> テーブルに変換されます。カーソルの結果セットを保持するために作成された内部一時テーブルには、内部一時テーブルをほかに使用する場合と同じ制約が適用されます。<a class="xref" href="optimization.html#internal-temporary-tables" title="8.4.4 MySQL が内部一時テーブルを使用する仕組み">セクション8.4.4「MySQL が内部一時テーブルを使用する仕組み」</a>を参照してください。この実装の制限の 1 つには、大きな結果セットの場合に、カーソルによる行の取得に時間がかかることがあるというものがあります。
@@ -179,7 +147,7 @@ GET DIAGNOSTICS CONDITION @cno @errno = MYSQL_ERRNO;
       準備済みステートメントごとに、カーソルを 1 つだけ開いておくことができます。複数のカーソルが必要な場合は、複数のステートメントを準備する必要があります。
     </p><p>
       結果セットを生成するステートメントで、準備モードでサポートされていないものにはカーソルを使用できません。このようなステートメントには、<code class="literal">CHECK TABLE</code>、<code class="literal">HANDLER READ</code>、<code class="literal">SHOW BINLOG EVENTS</code> などがあります。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subquery-restrictions"></a>D.4 サブクエリーの制約</h2></div></div></div><a class="indexterm" name="idm139926374192368"></a><a class="indexterm" name="idm139926374190256"></a><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="subquery-restrictions"></a>D.4 サブクエリーの制約</h2></div></div></div><a class="indexterm" name="idm140396734753392"></a><a class="indexterm" name="idm140396734751280"></a><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           <code class="literal">IN</code> に対するサブクエリーの最適化は、<code class="literal">=</code> 演算子または <code class="literal">IN(<em class="replaceable"><code>value_list</code></em>)</code> 演算子の場合のようには効果的ではありません。
         </p><p>
           <code class="literal">IN</code> サブクエリーのパフォーマンスが不十分である一般的な例では、サブクエリーが少数の行を返すのに対し、外部クエリーがサブクエリーの結果と比較して多数の行を返す場合があります。
@@ -252,7 +220,7 @@ SELECT ... WHERE x IN (SELECT f() ...);
           ステートメントベースまたは混合形式のレプリケーションの場合、この不確定性には、このようなクエリーが、マスターとそのスレーブで異なる結果を生成することがあります。
         </p></li><li class="listitem"><p>
           MySQL 5.6.3 より前では、<code class="literal">FROM</code> 句のサブクエリーは、結果を一時テーブルに実体化することにより評価され、このテーブルではインデックスが使用されません。5.6.3 以降では、クエリー実行がさらに高速になる場合は、オプティマイザは実体化されたテーブルにインデックスを作成します。<a class="xref" href="optimization.html#from-clause-subquery-optimization" title="8.2.1.18.3 FROM 句内のサブクエリー (派生テーブル) の最適化">セクション8.2.1.18.3「FROM 句内のサブクエリー (派生テーブル) の最適化」</a>を参照してください。
-        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="view-restrictions"></a>D.5 ビューの制約</h2></div></div></div><a class="indexterm" name="idm139926374120128"></a><a class="indexterm" name="idm139926374117984"></a><p>
+        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="view-restrictions"></a>D.5 ビューの制約</h2></div></div></div><a class="indexterm" name="idm140396734681088"></a><a class="indexterm" name="idm140396734678944"></a><p>
       ビューの処理は最適化されていません。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           ビューにはインデックスを作成できません。
@@ -288,7 +256,7 @@ EXECUTE s;
           <code class="literal">UPDATE</code> を使用して、結合として定義されたビューの複数のベースとなるテーブルは更新できません。
         </p></li><li class="listitem"><p>
           <code class="literal">DELETE</code> を使用して、結合として定義されたビューは更新できません。
-        </p></li></ul></div><a class="indexterm" name="idm139926374084240"></a><a class="indexterm" name="idm139926374082096"></a><a class="indexterm" name="idm139926374080064"></a><a class="indexterm" name="idm139926374078032"></a><a class="indexterm" name="idm139926374076000"></a><a class="indexterm" name="idm139926374073968"></a><p>
+        </p></li></ul></div><a class="indexterm" name="idm140396734645200"></a><a class="indexterm" name="idm140396734643056"></a><a class="indexterm" name="idm140396734641024"></a><a class="indexterm" name="idm140396734638992"></a><a class="indexterm" name="idm140396734636960"></a><a class="indexterm" name="idm140396734634928"></a><p>
       ビューの現在の実装には欠点があります。ビューの作成に必要な基本権限 (<code class="literal">CREATE VIEW</code> 権限と <code class="literal">SELECT</code> 権限) がユーザーに付与されていても、<code class="literal">SHOW VIEW</code> 権限も付与されていない場合、オブジェクトで <code class="literal">SHOW CREATE VIEW</code> を呼び出すことはできません。
     </p><p>
       権限の不足のために <span class="command"><strong>mysqldump</strong></span> が失敗する可能性があるという欠点によって、このコマンドを使用したデータベースのバックアップで問題が発生する場合があります。この問題については Bug #22062 で説明しています。
@@ -306,7 +274,7 @@ EXECUTE s;
       これらの問題を回避するには、短いカラム名を提供するエイリアスを使用するように、問題のある各ビュー定義を変更します。この場合、ビューは正しく複製され、エラーを生成しないでダンプおよびリロードできます。定義を変更するには、<code class="literal">DROP VIEW</code> および <code class="literal">CREATE VIEW</code> でビューを削除してから再度作成するか、<code class="literal">CREATE OR REPLACE VIEW</code> を使用して定義を置き換えます。
     </p><p>
       ダンプファイルのビュー定義リロード時に問題が発生する場合は、<code class="literal">CREATE VIEW</code> ステートメントを変更するようにダンプファイルを編集するとこの問題を回避できます。ただし、これは元のビュー定義を変更しないので、その後のダンプ操作の問題を引き起こす可能性があります。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xa-restrictions"></a>D.6 XA トランザクションの制約</h2></div></div></div><a class="indexterm" name="idm139926374045120"></a><a class="indexterm" name="idm139926374042960"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="xa-restrictions"></a>D.6 XA トランザクションの制約</h2></div></div></div><a class="indexterm" name="idm140396734606016"></a><a class="indexterm" name="idm140396734603856"></a><p>
       XA トランザクションのサポートは、<code class="literal">InnoDB</code> ストレージエンジンに限られています。
     </p><p>
       <span class="quote">「<span class="quote">外部 XA</span>」</span> の場合、MySQL Server がリソースマネージャーとして機能し、クライアントプログラムがトランザクションマネージャーとして機能します。<span class="quote">「<span class="quote">内部 XA</span>」</span> の場合、MySQL サーバー内のストレージエンジンがリソースマネージャーとして機能し、サーバー自体がトランザクションマネージャーとして機能します。内部 XA サポートは、個々のストレージエンジンの機能によって制限されています。内部 XA は、複数のストレージエンジンが関与する XA トランザクションを処理するために必要になります。内部 XA の実装では、ストレージエンジンがテーブルハンドラレベルでの 2 フェーズコミットをサポートしている必要であり、現在これは <code class="literal">InnoDB</code> にのみ当てはまります。
@@ -320,7 +288,7 @@ EXECUTE s;
       XA トランザクションが <code class="literal">PREPARED</code> 状態に達していれば、MySQL サーバーが (たとえば、Unix の <span class="command"><strong>kill -9</strong></span> で) 強制終了されたり、異常にシャットダウンしたりした場合でも、サーバーが再起動したあとでトランザクションを継続できます。ただし、クライアントが再接続し、トランザクションをコミットした場合、そのトランザクションは、コミットされていてもバイナリログには記録されません。これは、データとバイナリログの同期性がなくなったことを意味します。XA はレプリケーションとともに安全に使用できません。
     </p><p>
       <code class="literal">PREPARED</code> 状態に達しているものも含めた保留中の XA トランザクションを、サーバーがロールバックする可能性があります。これは、クライアントの接続が終了して、サーバーが起動を続ける場合、またはクライアントが接続していて、サーバーが正常にシャットダウンする場合に起こります。(後者の場合、サーバーは、各接続に終了というマークを付けから、関連付けられた <code class="literal">PREPARED</code> XA トランザクションをロールバックします。)<code class="literal">PREPARED</code> XA トランザクションをコミットまたはロールバック可能である必要がありますが、これはバイナリロギングメカニズムに変更を加えずに行うことはできません。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="charset-restrictions"></a>D.7 文字セットの制約</h2></div></div></div><a class="indexterm" name="idm139926374021008"></a><a class="indexterm" name="idm139926374018896"></a><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="charset-restrictions"></a>D.7 文字セットの制約</h2></div></div></div><a class="indexterm" name="idm140396734581904"></a><a class="indexterm" name="idm140396734579792"></a><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           識別子は、<code class="literal">utf8</code> を使用して <code class="literal">mysql</code> データベーステーブル (<code class="literal">user</code>、<code class="literal">db</code> など) に格納されますが、識別子には Basic Multilingual Plane (BMP) の文字だけを含めることができます。識別子では補助文字は許可されません。
         </p></li><li class="listitem"><p>
           <code class="literal">ucs2</code>、<code class="literal">utf16</code>、<code class="literal">utf16le</code>、および <code class="literal">utf32</code> 文字セットには次の制約があります。
@@ -334,7 +302,7 @@ EXECUTE s;
               ベースとなるシステム呼び出しではゼロバイトで終了する文字列が要求されるため、これらの文字セットを含む <code class="literal">ENCRYPT()</code> の使用はお勧めしません。
             </p></li></ul></div></li><li class="listitem"><p>
           <code class="literal">REGEXP</code> および <code class="literal">RLIKE</code> 演算子はバイト単位で機能するため、マルチバイトセーフではなく、マルチバイト文字セットを使用すると想定外の結果が生成される可能性があります。さらに、これらの演算子ではそのバイト値に基づいて文字が比較されるため、アクセント記号付き文字は、指定された照合順序では等しいとみなされた場合でも、等しいとして比較されない可能性があります。
-        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="performance-schema-restrictions"></a>D.8 パフォーマンススキーマの制約</h2></div></div></div><a class="indexterm" name="idm139926373993152"></a><a class="indexterm" name="idm139926373990976"></a><a class="indexterm" name="idm139926373988864"></a><a class="indexterm" name="idm139926373986864"></a><p>
+        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="performance-schema-restrictions"></a>D.8 パフォーマンススキーマの制約</h2></div></div></div><a class="indexterm" name="idm140396734554048"></a><a class="indexterm" name="idm140396734551872"></a><a class="indexterm" name="idm140396734549760"></a><a class="indexterm" name="idm140396734547760"></a><p>
       パフォーマンススキーマでは、データの収集または生成に相互排他ロックを使用できないので、一貫性は保証されず、適切な結果にならないことがあります。<code class="literal">performance_schema</code> テーブルのイベント値は、非決定的であり、反復不可です。
     </p><p>
       別のテーブルにイベント情報を保存した場合、元のイベントはあとから利用できません。たとえば、<code class="literal">performance_schema</code> テーブルから一時テーブルにイベントを選択し、あとからそのテーブルと元のテーブルを結合させる場合、一致するものがない可能性があります。
@@ -354,11 +322,11 @@ EXECUTE s;
       タイマーの種類は、プラットフォームごとに異なります。<code class="literal">performance_timers</code> テーブルは使用可能なイベントタイマーを示します。特定のタイマー名に対するこのテーブルでの値が <code class="literal">NULL</code> の場合、そのタイマーはプラットフォームでサポートされていません。
     </p><p>
       ストレージエンジンに適用されるインストゥルメントは、すべてのストレージエンジンに実装されていないことがあります。各サードパーティーエンジンのインストゥルメンテーションはエンジン管理者の責任です。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pluggable-authentication-restrictions"></a>D.9 プラガブルな認証の制約</h2></div></div></div><a class="indexterm" name="idm139926373965456"></a><a class="indexterm" name="idm139926373963280"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="pluggable-authentication-restrictions"></a>D.9 プラガブルな認証の制約</h2></div></div></div><a class="indexterm" name="idm140396734526352"></a><a class="indexterm" name="idm140396734524176"></a><p>
       このセクションの最初の部分では、<a class="xref" href="security.html#pluggable-authentication" title="6.3.7 プラガブル認証">セクション6.3.7「プラガブル認証」</a>で説明しているプラガブルな認証フレームワークの適用基準に関する一般的な制約について説明します。2 番目の部分では、サードパーティーコネクタ開発者が、コネクタがプラガブルな認証機能を利用できる範囲と、対応性を高めるために行うステップについて判断する方法について説明します。
     </p><p>
       ここで使用する<span class="quote">「<span class="quote">ネイティブ認証</span>」</span>という語は、<code class="literal">mysql.user</code> テーブルの <code class="literal">Password</code> カラムに格納されたパスワードに対する認証を指します。これは、プラガブルな認証が実装される前に古い MySQL Server で提供されていたものと同じ認証方法です。これが引き続きデフォルトの方法ですが、現在はプラグインを使用して実装されます。<span class="quote">「<span class="quote">Windows ネイティブ認証</span>」</span>とは、Windows ネイティブ認証プラグイン (<span class="quote">「<span class="quote">Windows プラグイン</span>」</span>と略します) で実装された、すでに Windows にログインしているユーザーの資格証明を使用した認証を示します。
-    </p><h3><a name="idm139926373955088"></a>一般的なプラガブルな認証の制約</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+    </p><h3><a name="idm140396734515936"></a>一般的なプラガブルな認証の制約</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           <span class="bold"><strong>Connector/C、Connector/C++:</strong></span> これらのコネクタを使用するクライアントは、ネイティブ認証を使用するアカウントを通じてのみ、サーバーに接続できます。
         </p><p>
           例外: コネクタは、<code class="literal">libmysqlclient</code> に (静的ではなく) 動的にリンクするように構築された場合にプラガブルな認証をサポートし、最新バージョンの <code class="literal">libmysqlclient</code> がインストールされている場合、またはコネクタが最新の <code class="literal">libmysqlclient</code> に対してリンクするようにソースから再コンパイルされている場合にそのバージョンをロードします。
@@ -382,7 +350,7 @@ EXECUTE s;
           <span class="bold"><strong>レプリケーション:</strong></span> MySQL 5.6.4 より前では、レプリケーションスレーブは、ネイティブ認証を使用するマスターアカウントを通じてのみマスターサーバーに接続できます。5.6.4 以降では、レプリケーションスレーブは、必要なクライアント側のプラグインが利用できる場合、ネイティブ以外の認証を使用するマスターアカウントを通じて接続することもできます。プラグインは、<code class="literal">libmysqlclient</code> に組み込まれている場合、デフォルトで利用できます。それ以外の場合、プラグインは、スレーブ <code class="literal">plugin_dir</code> システム変数によって指名された、スレーブ側のディレクトリにインストールする必要があります。
         </p></li><li class="listitem"><p>
           <span class="bold"><strong><code class="literal">FEDERATED</code> テーブル:</strong></span> <code class="literal">FEDERATED</code> テーブルは、ネイティブ認証を使用するリモートサーバー上のアカウントを通じてのみリモートテーブルにアクセスできます。
-        </p></li></ul></div><h3><a name="idm139926373920880"></a>プラガブルな認証とサードパーティーコネクタ</h3><p>
+        </p></li></ul></div><h3><a name="idm140396734481776"></a>プラガブルな認証とサードパーティーコネクタ</h3><p>
       サードパーティーコネクタ開発者は、次のガイドラインを使用して、プラガブルな認証機能を利用するためのコネクタの準備と、対応性を高めるために行うステップについて判断できます。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           変更が行われていない既存のコネクタは、ネイティブ認証を使用し、このコネクタを使用するクライアントは、ネイティブ認証を使用するアカウントを通じてのみサーバーに接続できます。<span class="emphasis"><em>ただし、最新バージョンのサーバーに対してコネクタをテストして、このような接続が引き続き問題なく機能することを検証する必要があります。</em></span>
@@ -398,17 +366,17 @@ EXECUTE s;
           コネクタが、デフォルトのプラグインディレクトリとは異なるディレクトリから、クライアント側のプラグインをロードできる必要がある場合、クライアントユーザーがそのディレクトリを指定するための手段を実装する必要があります。この候補としては、コネクタがディレクトリ名を取得できるコマンド行オプションまたは環境変数などがあります。<span class="command"><strong>mysql</strong></span> や <span class="command"><strong>mysqladmin</strong></span> などの標準 MySQL クライアントプログラムは、<code class="option">--plugin-dir</code> オプションを実装します。<a class="xref" href="connectors-apis.html#c-api-plugin-functions" title="23.8.14 C API クライアントプラグイン関数">セクション23.8.14「C API クライアントプラグイン関数」</a>も参照してください。
         </p></li><li class="listitem"><p>
           コネクタでのプロキシユーザーのサポートは、このセクションで前述したように、コネクタがサポートする認証方式がプロキシユーザーを許可するかどうかによって異なります。
-        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="limits"></a>D.10 MySQL での制限</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="restrictions.html#joins-limits">D.10.1 結合の制限</a></span></dt><dt><span class="section"><a href="restrictions.html#database-count-limit">D.10.2 データベースおよびテーブルの数に対する制限</a></span></dt><dt><span class="section"><a href="restrictions.html#table-size-limit">D.10.3 テーブルサイズの制限</a></span></dt><dt><span class="section"><a href="restrictions.html#column-count-limit">D.10.4 テーブルカラム数と行サイズの制限</a></span></dt><dt><span class="section"><a href="restrictions.html#limits-frm-file">D.10.5 .frm ファイル構造により課せられる制限</a></span></dt><dt><span class="section"><a href="restrictions.html#limits-windows">D.10.6 Windows プラットフォームの制限</a></span></dt></dl></div><a class="indexterm" name="idm139926373897824"></a><a class="indexterm" name="idm139926373895696"></a><p>
+        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="limits"></a>D.10 MySQL での制限</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="restrictions.html#joins-limits">D.10.1 結合の制限</a></span></dt><dt><span class="section"><a href="restrictions.html#database-count-limit">D.10.2 データベースおよびテーブルの数に対する制限</a></span></dt><dt><span class="section"><a href="restrictions.html#table-size-limit">D.10.3 テーブルサイズの制限</a></span></dt><dt><span class="section"><a href="restrictions.html#column-count-limit">D.10.4 テーブルカラム数と行サイズの制限</a></span></dt><dt><span class="section"><a href="restrictions.html#limits-frm-file">D.10.5 .frm ファイル構造により課せられる制限</a></span></dt><dt><span class="section"><a href="restrictions.html#limits-windows">D.10.6 Windows プラットフォームの制限</a></span></dt></dl></div><a class="indexterm" name="idm140396734458656"></a><a class="indexterm" name="idm140396734456528"></a><p>
       このセクションでは、MySQL 5.6 での現在の制限を示します。
-    </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="joins-limits"></a>D.10.1 結合の制限</h3></div></div></div><a class="indexterm" name="idm139926373892016"></a><p>
+    </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="joins-limits"></a>D.10.1 結合の制限</h3></div></div></div><a class="indexterm" name="idm140396734452848"></a><p>
         1 つの結合で参照できるテーブルの最大数は 61 です。これはビューの定義で参照できるテーブルの数にも適用されます。
-      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="database-count-limit"></a>D.10.2 データベースおよびテーブルの数に対する制限</h3></div></div></div><a class="indexterm" name="idm139926373887824"></a><a class="indexterm" name="idm139926373885680"></a><p>
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="database-count-limit"></a>D.10.2 データベースおよびテーブルの数に対する制限</h3></div></div></div><a class="indexterm" name="idm140396734448656"></a><a class="indexterm" name="idm140396734446512"></a><p>
         MySQL にはデータベース数の制限はありません。ベースとなるファイルシステムによっては、ディレクトリ数に制限がある場合があります。
       </p><p>
         MySQL にはテーブル数の制限はありません。ベースとなるファイルシステムによっては、テーブルを表すファイル数に制限がある場合があります。個々のストレージエンジンには、エンジン固有の制約が課される場合があります。<code class="literal">InnoDB</code> では、最大 40 億個のテーブルを使用できます。
-      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="table-size-limit"></a>D.10.3 テーブルサイズの制限</h3></div></div></div><a class="indexterm" name="idm139926373879776"></a><a class="indexterm" name="idm139926373877664"></a><a class="indexterm" name="idm139926373875632"></a><a class="indexterm" name="idm139926373874256"></a><a class="indexterm" name="idm139926373872160"></a><a class="indexterm" name="idm139926373870128"></a><p>
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="table-size-limit"></a>D.10.3 テーブルサイズの制限</h3></div></div></div><a class="indexterm" name="idm140396734440672"></a><a class="indexterm" name="idm140396734438560"></a><a class="indexterm" name="idm140396734436528"></a><a class="indexterm" name="idm140396734435152"></a><a class="indexterm" name="idm140396734433056"></a><a class="indexterm" name="idm140396734431024"></a><p>
         MySQL データベースの事実上の最大テーブルサイズは、通常、MySQL の内部制限ではなくオペレーティングシステムのファイルサイズに関する制約によって判断します。次の表に、オペレーティングシステムのファイルサイズの制限に関するいくつかの例を示します。これは、大まかなガイドに過ぎず、確実なものではありません。もっとも新しい情報については、使用しているオペレーティングシステムに固有のドキュメントを必ず確認してください。
-      </p><div class="informaltable"><table summary="次の表は、オペレーティングシステムのファイルサイズ制限の例を示します。" border="1"><colgroup><col><col></colgroup><thead><tr><th scope="col">オペレーティングシステム</th><th scope="col">ファイルサイズの制限</th></tr></thead><tbody><tr><td scope="row">Win32 (FAT/FAT32)</td><td>2G バイト/4G バイト</td></tr><tr><td scope="row">Win32 (NTFS)</td><td>2T バイト (これを超える可能性あり)</td></tr><tr><td scope="row">Linux 2.2-Intel 32 ビット</td><td>2G バイト (LFS: 4G バイト)</td></tr><tr><td scope="row">Linux 2.4+</td><td>(ext3 ファイルシステムを使用) 4T バイト</td></tr><tr><td scope="row">Solaris 9/10</td><td>16T バイト</td></tr><tr><td scope="row">OS X (HFS+)</td><td>2T バイト</td></tr></tbody></table></div><p>
+      </p><div class="informaltable"><table class="informaltable" summary="次の表は、オペレーティングシステムのファイルサイズ制限の例を示します。" border="1"><colgroup><col><col></colgroup><thead><tr><th scope="col">オペレーティングシステム</th><th scope="col">ファイルサイズの制限</th></tr></thead><tbody><tr><td scope="row">Win32 (FAT/FAT32)</td><td>2G バイト/4G バイト</td></tr><tr><td scope="row">Win32 (NTFS)</td><td>2T バイト (これを超える可能性あり)</td></tr><tr><td scope="row">Linux 2.2-Intel 32 ビット</td><td>2G バイト (LFS: 4G バイト)</td></tr><tr><td scope="row">Linux 2.4+</td><td>(ext3 ファイルシステムを使用) 4T バイト</td></tr><tr><td scope="row">Solaris 9/10</td><td>16T バイト</td></tr><tr><td scope="row">OS X (HFS+)</td><td>2T バイト</td></tr></tbody></table></div><p>
         Windows ユーザーの場合、FAT および VFAT (FAT32) は、MySQL で本番使用に適しているとは見なされ<span class="emphasis"><em>ません</em></span>。代わりに NTFS を使用してください。
       </p><p>
         Linux 2.2 では、ext2 ファイルシステム用の Large File Support (LFS) パッチを使用すると、サイズが 2G バイトより大きな <code class="literal">MyISAM</code> テーブルを取得できます。ほとんどの最近の Linux 配布は、カーネル 2.4 以上に基づいており、必要な LFS パッチはすべて含まれています。Linux 2.4 では、大きなファイル (最大 2T バイト) をサポートするための ReiserFS 用のパッチも存在しています。JFS および XFS では、Linux でペタバイト以上のファイルが可能です。
@@ -450,7 +418,7 @@ SHOW TABLE STATUS FROM <em class="replaceable"><code>db_name</code></em> LIKE '<
                 MySQL には、単一の <code class="literal">MERGE</code> テーブルと同一の構造を持つ <code class="literal">MyISAM</code> テーブルの集まりを処理できるようにする <code class="literal">MERGE</code> ライブラリが含まれます。<a class="xref" href="storage-engines.html#merge-storage-engine" title="15.7 MERGE ストレージエンジン">セクション15.7「MERGE ストレージエンジン」</a>を参照してください。
               </p></li></ul></div></li><li class="listitem"><p>
             <code class="literal">MEMORY</code> (<code class="literal">HEAP</code>) ストレージエンジンを使用している場合は、<code class="literal">max_heap_table_size</code> システム変数の値を増やす必要があります。<a class="xref" href="server-administration.html#server-system-variables" title="5.1.4 サーバーシステム変数">セクション5.1.4「サーバーシステム変数」</a>を参照してください。
-          </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="column-count-limit"></a>D.10.4 テーブルカラム数と行サイズの制限</h3></div></div></div><a class="indexterm" name="idm139926373798608"></a><a class="indexterm" name="idm139926373796432"></a><a class="indexterm" name="idm139926373794368"></a><a class="indexterm" name="idm139926373792320"></a><p>
+          </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="column-count-limit"></a>D.10.4 テーブルカラム数と行サイズの制限</h3></div></div></div><a class="indexterm" name="idm140396734359440"></a><a class="indexterm" name="idm140396734357264"></a><a class="indexterm" name="idm140396734355200"></a><a class="indexterm" name="idm140396734353152"></a><p>
         テーブルあたり 4096 カラムというハード制限がありますが、特定のテーブルでは有効な最大数がこれより少なくなる可能性があります。正確な制限は、相互作用する複数の要因によって異なります。
       </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
             すべてのテーブル (ストレージエンジンには無関係) の最大行サイズは 65,535 バイトです。ストレージエンジンではこの制限に対してさらなる制約を加えられる場合があり、有効な最大行サイズは少なくなります。
@@ -508,7 +476,7 @@ columns to TEXT or BLOBs
                 異なる <code class="literal">InnoDB</code> ストレージフォーマット (<code class="literal">COMPRESSED</code>、<code class="literal">REDUNDANT</code>) では、使用するページヘッダーおよびトレーラデータの量が違うため、行に使用できるストレージ量に影響がおよびます。
               </p></li></ul></div></li><li class="listitem"><p>
             それぞれのテーブルにはテーブル定義を含む <code class="filename">.frm</code> ファイルがあります。この定義は、テーブルで許可されるカラム数に影響する方法でこのファイルの内容に影響を与えます。詳細は、<a class="xref" href="restrictions.html#limits-frm-file" title="D.10.5 .frm ファイル構造により課せられる制限">セクションD.10.5「.frm ファイル構造により課せられる制限」</a>を参照してください。
-          </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="limits-frm-file"></a>D.10.5 .frm ファイル構造により課せられる制限</h3></div></div></div><a class="indexterm" name="idm139926373731968"></a><p>
+          </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="limits-frm-file"></a>D.10.5 .frm ファイル構造により課せられる制限</h3></div></div></div><a class="indexterm" name="idm140396734292800"></a><p>
         それぞれのテーブルにはテーブル定義を含む <code class="filename">.frm</code> ファイルがあります。サーバーは次の式を使用して、64K バイトの上限に対して、ファイルに格納されたいくつかのテーブル情報をチェックします。
       </p><pre class="programlisting">
 if (info_length+(ulong) create_fields.elements*FCOMP+288+
@@ -542,7 +510,7 @@ e1 ENUM('a','b','c')
 e2 ENUM('a','b','c')
 </pre></li><li class="listitem"><p>
             一意の <code class="literal">ENUM</code> および <code class="literal">SET</code> 定義内の要素名の合計長は、64K バイトの制限に対して加えられるので、特定の <code class="literal">ENUM</code> カラムの要素の数に対する理論的な制限は 65,535 ですが、実際の限度は 3000 未満です。
-          </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="limits-windows"></a>D.10.6 Windows プラットフォームの制限</h3></div></div></div><a class="indexterm" name="idm139926373692144"></a><p>
+          </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="limits-windows"></a>D.10.6 Windows プラットフォームの制限</h3></div></div></div><a class="indexterm" name="idm140396734252976"></a><p>
         次の制限が、Windows プラットフォームで MySQL を使用する場合に適用されます。
       </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
             <span class="bold"><strong>プロセスメモリー</strong></span>

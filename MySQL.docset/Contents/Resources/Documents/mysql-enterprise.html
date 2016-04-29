@@ -1,37 +1,5 @@
-<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>第 25 章 MySQL Enterprise Edition</title><link rel="stylesheet" type="text/css" href="mvl.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="up" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="prev" href="extending-mysql.html" title="第 24 章 MySQL の拡張"><link rel="next" href="workbench.html" title="第 26 章 MySQL Workbench">
-<script language="javascript" type="text/javascript">
-  function addOnload(theFunc)
-  {
-    var previous = window.onload;
-    if (typeof window.onload != 'function')
-    {
-      window.onload = theFunc;
-    }
-    else
-    {
-      window.onload = function()
-      {
-        previous();
-        theFunc();
-      }
-    }
-  }
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>第 25 章 MySQL Enterprise Edition</title><link rel="stylesheet" type="text/css" href="mvl.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="up" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="prev" href="extending-mysql.html" title="第 24 章 MySQL の拡張"><link rel="next" href="workbench.html" title="第 26 章 MySQL Workbench">
 
-  addOnload(function()
-  {
-    var base = new Date(1446597221*1000);
-    var now = new Date();
-    var diff = ((now-base)/1000)/(24*3600);
-
-    if (diff > 90) {
-      var nodes = document.getElementsByClassName('titlepage');
-      nodes[0].innerHTML = '<p style="border: 5px #ff0000 solid; padding: 5px; margin 5px">' +
-        'This copy of the manual is more than 90 days old. We encourage you to download a ' +
-        'new version from <a href="http://dev.mysql.com">dev.mysql.com/doc</a>.</p>' + nodes[0].innerHTML;
-    }
-  });
-</script>
-<noscript></noscript>
 </head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">第 25 章 MySQL Enterprise Edition</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="extending-mysql.html">前</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="workbench.html">次へ</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="mysql-enterprise"></a>第 25 章 MySQL Enterprise Edition</h1></div></div></div><div class="toc"><p><b>目次</b></p><dl class="toc"><dt><span class="section"><a href="mysql-enterprise.html#mysql-enterprise-monitor">25.1 MySQL Enterprise Monitor</a></span></dt><dt><span class="section"><a href="mysql-enterprise.html#mysql-enterprise-backup">25.2 MySQL Enterprise Backup</a></span></dt><dt><span class="section"><a href="mysql-enterprise.html#mysql-enterprise-security">25.3 MySQL Enterprise Security</a></span></dt><dt><span class="section"><a href="mysql-enterprise.html#mysql-enterprise-encryption">25.4 MySQL Enterprise Encryption</a></span></dt><dt><span class="section"><a href="mysql-enterprise.html#mysql-enterprise-audit">25.5 MySQL Enterprise Audit</a></span></dt><dt><span class="section"><a href="mysql-enterprise.html#mysql-enterprise-thread-pool">25.6 MySQL Enterprise Thread Pool</a></span></dt></dl></div><p>
     MySQL Enterprise Edition は商用製品です。MySQL Community Edition と同様に、MySQL Enterprise Edition には MySQL Server が含まれており、これは、完全なコミット、ロールバック、クラッシュリカバリ、および行レベルのロックの機能を持つ、完全に統合されたトランザクションセーフな ACID 準拠のデータベースです。また、MySQL Enterprise Edition には、モニタリングおよびオンラインバックアップに加えて、改良されたセキュリティーおよびスケーラビリティーを提供するように設計された次のコンポーネントが含まれています。
   </p><p>
@@ -48,7 +16,7 @@
         <a class="link" href="mysql-enterprise.html#mysql-enterprise-audit" title="25.5 MySQL Enterprise Audit">MySQL Enterprise Audit</a>
       </p></li><li class="listitem"><p>
         <a class="link" href="mysql-enterprise.html#mysql-enterprise-thread-pool" title="25.6 MySQL Enterprise Thread Pool">MySQL Enterprise Thread Pool</a>
-      </p></li></ul></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-monitor"></a>25.1 MySQL Enterprise Monitor</h2></div></div></div><a class="indexterm" name="idm139926381696096"></a><a class="indexterm" name="idm139926381694720"></a><a class="indexterm" name="idm139926381692448"></a><a class="indexterm" name="idm139926381691104"></a><p>
+      </p></li></ul></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-monitor"></a>25.1 MySQL Enterprise Monitor</h2></div></div></div><a class="indexterm" name="idm140396742440960"></a><a class="indexterm" name="idm140396742439712"></a><a class="indexterm" name="idm140396742437632"></a><a class="indexterm" name="idm140396742436384"></a><p>
       MySQL Enterprise Monitor は MySQL のエンタープライズモニタリングシステムであり、MySQL サーバーを監視して、潜在的な問題を通知し、問題を修正する方法をアドバイスします。MySQL Enterprise Monitor は、ビジネスで重要な単一の MySQL サーバーから、アクセスの多い Web サイトをささえる大規模な施設の MySQL サーバーまでのすべての種類の構成をモニターできます。
     </p><p>
       以降では、MySQL Enterprise Monitor 製品を構成する基本的なコンポーネントについて簡単に概要を示します。詳細は、<a class="ulink" href="http://dev.mysql.com/doc/mysql-monitor/en/" target="_top">http://dev.mysql.com/doc/mysql-monitor/en/</a> で閲覧できる MySQL Enterprise Monitor のマニュアルを参照してください。
@@ -72,7 +40,7 @@
       MySQL Enterprise Monitor Agent の処理によって提供される情報には、グラフ形式で表示できる統計およびクエリーの情報も含まれています。たとえば、サーバーの負荷、クエリーの数、インデックスの使用状況の情報などの特性をグラフとして時間の経過に従って表示できます。このグラフを使用すると、サーバー上での問題や潜在的な問題が正確に特定され、特定の期間のデータを検査することによって、データベースの問題または外部の問題 (外部システムまたはネットワーク障害など) からの影響を診断するために役立ちます。
     </p><p>
       MySQL Enterprise Monitor Agent は、サーバーで実行されたクエリーに関する詳細な情報 (行数および各クエリーを実行するためにかかった実行時間を含む) を収集するように構成することもできます。詳細なクエリーデータをグラフィカルな情報に関連付けることによって、著しく高い負荷やインデックスなどの問題が発生したときに実行されていたクエリーを識別できます。クエリーデータはクエリーアナライザと呼ばれるシステムによってサポートされており、ニーズに応じて異なる方法でデータを表示できます。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-backup"></a>25.2 MySQL Enterprise Backup</h2></div></div></div><a class="indexterm" name="idm139926381669296"></a><a class="indexterm" name="idm139926381667840"></a><a class="indexterm" name="idm139926381666608"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-backup"></a>25.2 MySQL Enterprise Backup</h2></div></div></div><a class="indexterm" name="idm140396742415344"></a><a class="indexterm" name="idm140396742413984"></a><a class="indexterm" name="idm140396742412848"></a><p>
       MySQL Enterprise Backup は、MySQL データベースに対してホットバックアップ操作を実行します。この製品は、InnoDB ストレージエンジンによって作成されたテーブルの信頼できる効率的なバックアップが行われるように設計されています。補完するために、MyISAM およびほかのストレージエンジンのテーブルをバックアップすることもできます。
     </p><p>
       以降では、MySQL Enterprise Backup の概要を簡単に示します。詳細は、<a class="ulink" href="http://dev.mysql.com/doc/mysql-enterprise-backup/en/" target="_top">http://dev.mysql.com/doc/mysql-enterprise-backup/en/</a> で閲覧できる MySQL Enterprise Backup のマニュアルを参照してください。
@@ -80,7 +48,7 @@
       ホットバックアップは、データベースが実行されていて、アプリケーションがそれに対して読み取りおよび書き込みを行なっている間に実行します。このタイプのバックアップは、通常のデータベースの操作をブロックせず、バックアップが行われているときに発生したすべての変更を取得します。これらの理由で、ホットバックアップが望ましいのは、データベースが<span class="quote">「<span class="quote">拡張</span>」</span>され、データが大きくなってバックアップ処理に長い時間がかかるようになったとき、およびデータがビジネスにとって重要になって、アプリケーション、Web サイト、または Web サービスをオフラインにすることなく、最後に行われたすべての変更を取得する必要があるようになったときです。
     </p><p>
       MySQL Enterprise Backup は、InnoDB ストレージエンジンを使用するすべてのテーブルのホットバックアップを実行します。MyISAM またはその他の InnoDB 以外のストレージエンジンを使用しているテーブルの場合、データベースの実行は継続されるがバックアップされている間はテーブルを変更できない<span class="quote">「<span class="quote">ウォーム</span>」</span>バックアップが行われます。バックアップ操作を効率的にするために、InnoDB を新しいテーブルのデフォルトのストレージエンジンに指定するか、InnoDB ストレージエンジンを使用するように既存のテーブルを変更できます。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-security"></a>25.3 MySQL Enterprise Security</h2></div></div></div><a class="indexterm" name="idm139926381656448"></a><a class="indexterm" name="idm139926381655072"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-security"></a>25.3 MySQL Enterprise Security</h2></div></div></div><a class="indexterm" name="idm140396742403312"></a><a class="indexterm" name="idm140396742402064"></a><p>
       MySQL Enterprise Edition は、外部サービスを使用した認証を実装するプラグインを提供しています。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           MySQL Enterprise Edition には、MySQL サーバーが PAM (Pluggable Authentication Modules) を使用して MySQL ユーザーを認証できる認証プラグインが含まれています。PAM を使用すると、システムは標準インタフェースを使用して、さまざまな種類の認証方式 (Unix パスワードや LDAP ディレクトリなど) にアクセスできます。
@@ -90,7 +58,7 @@
       詳細は、<a class="xref" href="security.html#pam-authentication-plugin" title="6.3.8.5 PAM 認証プラグイン">セクション6.3.8.5「PAM 認証プラグイン」</a>および<a class="xref" href="security.html#windows-authentication-plugin" title="6.3.8.6 Windows ネイティブ認証プラグイン">セクション6.3.8.6「Windows ネイティブ認証プラグイン」</a>を参照してください。
     </p><p>
       ほかの関連するエンタープライズセキュリティー機能については、<a class="xref" href="mysql-enterprise.html#mysql-enterprise-encryption" title="25.4 MySQL Enterprise Encryption">セクション25.4「MySQL Enterprise Encryption」</a>を参照してください。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-encryption"></a>25.4 MySQL Enterprise Encryption</h2></div></div></div><a class="indexterm" name="idm139926381644528"></a><a class="indexterm" name="idm139926381643152"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-encryption"></a>25.4 MySQL Enterprise Encryption</h2></div></div></div><a class="indexterm" name="idm140396742392752"></a><a class="indexterm" name="idm140396742391504"></a><p>
       MySQL 5.6 では、MySQL Enterprise Edition には SQL レベルで OpenSSL 機能を提供する OpenSSL ライブラリに基づく一連の暗号化関数が含まれています。これらの関数を使用することによって、エンタープライズアプリケーションが次の操作を実行できるようになります。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           公開鍵非対称暗号方式を使用した、追加のデータ保護の実装
@@ -102,13 +70,13 @@
           デジタル署名およびデータの検証や妥当性検査に対する暗号化ハッシュの使用
         </p></li></ul></div><p>
       詳細は、<a class="xref" href="functions.html#enterprise-encryption" title="12.17 MySQL Enterprise Encryption の関数">セクション12.17「MySQL Enterprise Encryption の関数」</a>を参照してください。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-audit"></a>25.5 MySQL Enterprise Audit</h2></div></div></div><a class="indexterm" name="idm139926381633344"></a><a class="indexterm" name="idm139926381632000"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-audit"></a>25.5 MySQL Enterprise Audit</h2></div></div></div><a class="indexterm" name="idm140396742382416"></a><a class="indexterm" name="idm140396742381168"></a><p>
       MySQL Enterprise Edition には、サーバープラグインを使用して実装される MySQL Enterprise Audit が含まれています。MySQL Enterprise Audit はオープンな MySQL Audit API を使用し、特定の MySQL サーバーに対して実行された接続およびクエリーのアクティビティーについて、標準のポリシーベースのモニタリングおよびロギングを行うことができます。MySQL Enterprise Audit は、オラクルの監査仕様を満たすように設計されており、内部および外部の規制ガイドラインの両方に管理されているアプリケーションに対して、そのままで簡単に使用できる監査およびコンプライアンスのソリューションを提供しています。
     </p><p>
       インストール時に監査プラグインを使用すると、MySQL サーバーはサーバーアクティビティーの監査レコードを含むログファイルを生成できます。ログの内容には、クライアントが接続および切断した時間、接続中に実行したアクション (アクセスしたデータベースおよびテーブルなど) が含まれます。
     </p><p>
       詳細は、<a class="xref" href="security.html#audit-log-plugin" title="6.3.12 MySQL Enterprise Audit ログプラグイン">セクション6.3.12「MySQL Enterprise Audit ログプラグイン」</a>を参照してください。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-thread-pool"></a>25.6 MySQL Enterprise Thread Pool</h2></div></div></div><a class="indexterm" name="idm139926381624384"></a><a class="indexterm" name="idm139926381623040"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="mysql-enterprise-thread-pool"></a>25.6 MySQL Enterprise Thread Pool</h2></div></div></div><a class="indexterm" name="idm140396742374320"></a><a class="indexterm" name="idm140396742373072"></a><p>
       MySQL Enterprise Edition には、サーバープラグインを使用して実装される MySQL Thread Pool が含まれています。MySQL サーバーのデフォルトのスレッド処理モデルでは、クライアント接続ごとに 1 つのスレッドを使用してステートメントが実行されます。より多くのクライアントがサーバーに接続してステートメントを実行すると、全体的なパフォーマンスが低下します。MySQL Enterprise Edition では、オーバーヘッドを減らしてパフォーマンスを向上させる代替のスレッド処理モデルが、スレッドプールプラグインによって提供されています。このプラグインは、多数のクライアント接続に対してステートメント実行スレッドを効率的に管理することによってサーバーのパフォーマンスを向上させるスレッドプールを実装します。
     </p><p>
       詳細は、<a class="xref" href="optimization.html#thread-pool-plugin" title="8.11.6 スレッドプールプラグイン">セクション8.11.6「スレッドプールプラグイン」</a>を参照してください。

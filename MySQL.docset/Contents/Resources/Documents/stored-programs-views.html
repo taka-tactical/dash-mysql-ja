@@ -1,38 +1,6 @@
-<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>第 20 章 ストアドプログラムおよびビュー</title><link rel="stylesheet" type="text/css" href="mvl.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="up" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="prev" href="partitioning.html" title="第 19 章 パーティション化"><link rel="next" href="information-schema.html" title="第 21 章 INFORMATION_SCHEMA テーブル">
-<script language="javascript" type="text/javascript">
-  function addOnload(theFunc)
-  {
-    var previous = window.onload;
-    if (typeof window.onload != 'function')
-    {
-      window.onload = theFunc;
-    }
-    else
-    {
-      window.onload = function()
-      {
-        previous();
-        theFunc();
-      }
-    }
-  }
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>第 20 章 ストアドプログラムおよびビュー</title><link rel="stylesheet" type="text/css" href="mvl.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="up" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="prev" href="partitioning.html" title="第 19 章 パーティション化"><link rel="next" href="information-schema.html" title="第 21 章 INFORMATION_SCHEMA テーブル">
 
-  addOnload(function()
-  {
-    var base = new Date(1446597221*1000);
-    var now = new Date();
-    var diff = ((now-base)/1000)/(24*3600);
-
-    if (diff > 90) {
-      var nodes = document.getElementsByClassName('titlepage');
-      nodes[0].innerHTML = '<p style="border: 5px #ff0000 solid; padding: 5px; margin 5px">' +
-        'This copy of the manual is more than 90 days old. We encourage you to download a ' +
-        'new version from <a href="http://dev.mysql.com">dev.mysql.com/doc</a>.</p>' + nodes[0].innerHTML;
-    }
-  });
-</script>
-<noscript></noscript>
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">第 20 章 ストアドプログラムおよびビュー</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="partitioning.html">前</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="information-schema.html">次へ</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="stored-programs-views"></a>第 20 章 ストアドプログラムおよびビュー</h1></div></div></div><div class="toc"><p><b>目次</b></p><dl class="toc"><dt><span class="section"><a href="stored-programs-views.html#stored-programs-defining">20.1 ストアドプログラムの定義</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines">20.2 ストアドルーチン (プロシージャーと関数) の使用</a></span></dt><dd><dl><dt><span class="section"><a href="stored-programs-views.html#stored-routines-syntax">20.2.1 ストアドルーチンの構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-privileges">20.2.2 ストアドルーチンと MySQL 権限</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-metadata">20.2.3 ストアドルーチンのメタデータ</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-last-insert-id">20.2.4 ストアドプロシージャー、関数、トリガー、および LAST_INSERT_ID()</a></span></dt></dl></dd><dt><span class="section"><a href="stored-programs-views.html#triggers">20.3 トリガーの使用</a></span></dt><dd><dl><dt><span class="section"><a href="stored-programs-views.html#trigger-syntax">20.3.1 トリガーの構文と例</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#trigger-metadata">20.3.2 トリガーのメタデータ</a></span></dt></dl></dd><dt><span class="section"><a href="stored-programs-views.html#events">20.4 イベントスケジューラの使用</a></span></dt><dd><dl><dt><span class="section"><a href="stored-programs-views.html#events-overview">20.4.1 イベントスケジューラの概要</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-configuration">20.4.2 イベントスケジューラの構成</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-syntax">20.4.3 イベント構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-metadata">20.4.4 イベントメタデータ</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-status-info">20.4.5 イベントスケジューラのステータス</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-privileges">20.4.6 イベントスケジューラと MySQL 権限</a></span></dt></dl></dd><dt><span class="section"><a href="stored-programs-views.html#views">20.5 ビューの使用</a></span></dt><dd><dl><dt><span class="section"><a href="stored-programs-views.html#view-syntax">20.5.1 ビューの構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-algorithms">20.5.2 ビュー処理アルゴリズム</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-updatability">20.5.3 更新可能および挿入可能なビュー</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-metadata">20.5.4 ビューのメタデータ</a></span></dt></dl></dd><dt><span class="section"><a href="stored-programs-views.html#stored-programs-security">20.6 ストアドプログラムおよびビューのアクセスコントロール</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-programs-logging">20.7 ストアドプログラムのバイナリロギング</a></span></dt></dl></div><a class="indexterm" name="idm139926399610288"></a><a class="indexterm" name="idm139926399608832"></a><a class="indexterm" name="idm139926399606800"></a><a class="indexterm" name="idm139926399605456"></a><a class="indexterm" name="idm139926399604112"></a><a class="indexterm" name="idm139926399602736"></a><p>
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">第 20 章 ストアドプログラムおよびビュー</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="partitioning.html">前</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="information-schema.html">次へ</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="stored-programs-views"></a>第 20 章 ストアドプログラムおよびビュー</h1></div></div></div><div class="toc"><p><b>目次</b></p><dl class="toc"><dt><span class="section"><a href="stored-programs-views.html#stored-programs-defining">20.1 ストアドプログラムの定義</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines">20.2 ストアドルーチン (プロシージャーと関数) の使用</a></span></dt><dd><dl><dt><span class="section"><a href="stored-programs-views.html#stored-routines-syntax">20.2.1 ストアドルーチンの構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-privileges">20.2.2 ストアドルーチンと MySQL 権限</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-metadata">20.2.3 ストアドルーチンのメタデータ</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-last-insert-id">20.2.4 ストアドプロシージャー、関数、トリガー、および LAST_INSERT_ID()</a></span></dt></dl></dd><dt><span class="section"><a href="stored-programs-views.html#triggers">20.3 トリガーの使用</a></span></dt><dd><dl><dt><span class="section"><a href="stored-programs-views.html#trigger-syntax">20.3.1 トリガーの構文と例</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#trigger-metadata">20.3.2 トリガーのメタデータ</a></span></dt></dl></dd><dt><span class="section"><a href="stored-programs-views.html#events">20.4 イベントスケジューラの使用</a></span></dt><dd><dl><dt><span class="section"><a href="stored-programs-views.html#events-overview">20.4.1 イベントスケジューラの概要</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-configuration">20.4.2 イベントスケジューラの構成</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-syntax">20.4.3 イベント構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-metadata">20.4.4 イベントメタデータ</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-status-info">20.4.5 イベントスケジューラのステータス</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-privileges">20.4.6 イベントスケジューラと MySQL 権限</a></span></dt></dl></dd><dt><span class="section"><a href="stored-programs-views.html#views">20.5 ビューの使用</a></span></dt><dd><dl><dt><span class="section"><a href="stored-programs-views.html#view-syntax">20.5.1 ビューの構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-algorithms">20.5.2 ビュー処理アルゴリズム</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-updatability">20.5.3 更新可能および挿入可能なビュー</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-metadata">20.5.4 ビューのメタデータ</a></span></dt></dl></dd><dt><span class="section"><a href="stored-programs-views.html#stored-programs-security">20.6 ストアドプログラムおよびビューのアクセスコントロール</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-programs-logging">20.7 ストアドプログラムのバイナリロギング</a></span></dt></dl></div><a class="indexterm" name="idm140396760164896"></a><a class="indexterm" name="idm140396760163440"></a><a class="indexterm" name="idm140396760161408"></a><a class="indexterm" name="idm140396760160064"></a><a class="indexterm" name="idm140396760158720"></a><a class="indexterm" name="idm140396760157344"></a><p>
     この章では、あとから実行するためにサーバーに格納された SQL コードの点で定義されたデータベースオブジェクトである、ストアドプログラムとビューについて説明します。
   </p><p>
     ストアドプログラムには次のオブジェクトが含まれます。
@@ -106,7 +74,7 @@ mysql&gt; <strong class="userinput"><code>SELECT hello('world');</code></strong>
 | Hello, world!  |
 +----------------+
 1 row in set (0.00 sec)
-</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="stored-routines"></a>20.2 ストアドルーチン (プロシージャーと関数) の使用</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="stored-programs-views.html#stored-routines-syntax">20.2.1 ストアドルーチンの構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-privileges">20.2.2 ストアドルーチンと MySQL 権限</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-metadata">20.2.3 ストアドルーチンのメタデータ</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-last-insert-id">20.2.4 ストアドプロシージャー、関数、トリガー、および LAST_INSERT_ID()</a></span></dt></dl></div><a class="indexterm" name="idm139926399545616"></a><a class="indexterm" name="idm139926399544160"></a><a class="indexterm" name="idm139926399542128"></a><a class="indexterm" name="idm139926399540752"></a><p>
+</pre></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="stored-routines"></a>20.2 ストアドルーチン (プロシージャーと関数) の使用</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="stored-programs-views.html#stored-routines-syntax">20.2.1 ストアドルーチンの構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-privileges">20.2.2 ストアドルーチンと MySQL 権限</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-metadata">20.2.3 ストアドルーチンのメタデータ</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#stored-routines-last-insert-id">20.2.4 ストアドプロシージャー、関数、トリガー、および LAST_INSERT_ID()</a></span></dt></dl></div><a class="indexterm" name="idm140396760100160"></a><a class="indexterm" name="idm140396760098704"></a><a class="indexterm" name="idm140396760096672"></a><a class="indexterm" name="idm140396760095296"></a><p>
     ストアドルーチン (プロシージャーおよび関数) は MySQL 5.6 でサポートされています。ストアドルーチンとは、サーバーに格納できる一連の SQL ステートメントです。これが行われていると、クライアントは個々のステートメントを繰り返し発行し続ける必要はなく、代わりにストアドルーチンを参照できます。
   </p><p>
     ストアドルーチンには、<code class="literal">mysql</code> データベース内の <code class="literal">proc</code> テーブルが必要です。このテーブルは、MySQL 5.6 インストール手順中に作成されます。以前のバージョンから MySQL 5.6 にアップグレードしている場合、必ず付与テーブルを更新して、<code class="literal">proc</code> テーブルの存在を確認してください。<a class="xref" href="programs.html#mysql-upgrade" title="4.4.7 mysql_upgrade — MySQL テーブルのチェックとアップグレード">セクション4.4.7「<span class="command"><strong>mysql_upgrade</strong></span> — MySQL テーブルのチェックとアップグレード」</a>を参照してください。
@@ -122,7 +90,7 @@ mysql&gt; <strong class="userinput"><code>SELECT hello('world');</code></strong>
     ストアドルーチンを使用すれば、データベースサーバーで関数のライブラリを保持することもできます。これは、内部的に (たとえばクラスを使用して) このような設計を可能にする、現代のアプリケーション言語で共有されている機能です。これらのクライアントアプリケーションの言語機能を使用すると、データベース使用のスコープ外でもプログラマにとって利点があります。
   </p><p>
     MySQL はストアドルーチンについて SQL:2003 構文に従っており、これは IBM の DB2 でも使用されています。ここで説明するすべての構文はサポートされており、すべての制限と拡張が適宜ドキュメント化されています。
-  </p><h3><a name="idm139926399526400"></a>追加のリソース</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+  </p><h3><a name="idm140396760080944"></a>追加のリソース</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
         ストアドプロシージャーおよびストアドファンクションを扱うときに、<a class="ulink" href="http://forums.mysql.com/list.php?98" target="_top">ストアドプロシージャーのユーザーフォーラム</a>が役立ちます。
       </p></li><li class="listitem"><p>
         MySQL のストアドルーチンに関するよくある質問とその回答については、<a class="xref" href="faqs.html#faqs-stored-procs" title="A.4 MySQL 5.6 FAQ: ストアドプロシージャーおよびストアドファンクション">セクションA.4「MySQL 5.6 FAQ: ストアドプロシージャーおよびストアドファンクション」</a>を参照してください。
@@ -162,7 +130,7 @@ mysql&gt; <strong class="userinput"><code>SELECT hello('world');</code></strong>
           ルーチンの作成者は、ルーチンの <code class="literal">CREATE</code> ステートメントを実行するために使用されるアカウントです。これは、ルーチン定義で <code class="literal">DEFINER</code> として名前が指定されているアカウントと同じでないことがあります。
         </p></li></ul></div><p>
       サーバーは、ストアドルーチンを作成、変更、または削除するステートメントに応じて、<code class="literal">mysql.proc</code> テーブルを操作します。このテーブルの手動操作に対するサーバーでの認識はサポートされていません。
-    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="stored-routines-metadata"></a>20.2.3 ストアドルーチンのメタデータ</h3></div></div></div><a class="indexterm" name="idm139926399460928"></a><a class="indexterm" name="idm139926399458800"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="stored-routines-metadata"></a>20.2.3 ストアドルーチンのメタデータ</h3></div></div></div><a class="indexterm" name="idm140396760015520"></a><a class="indexterm" name="idm140396760013392"></a><p>
       ストアドルーチンに関するメタデータは次のように取得できます。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           <code class="literal">INFORMATION_SCHEMA</code> データベースの <code class="literal">ROUTINES</code> テーブルをクエリーします。<a class="xref" href="information-schema.html#routines-table" title="21.18 INFORMATION_SCHEMA ROUTINES テーブル">セクション21.18「INFORMATION_SCHEMA ROUTINES テーブル」</a>を参照してください。
@@ -170,13 +138,13 @@ mysql&gt; <strong class="userinput"><code>SELECT hello('world');</code></strong>
           <code class="literal">SHOW CREATE PROCEDURE</code> および <code class="literal">SHOW CREATE FUNCTION</code> ステートメントを使用して、ルーチン定義を表示します。<a class="xref" href="sql-syntax.html#show-create-procedure" title="13.7.5.11 SHOW CREATE PROCEDURE 構文">セクション13.7.5.11「SHOW CREATE PROCEDURE 構文」</a>を参照してください。
         </p></li><li class="listitem"><p>
           <code class="literal">SHOW PROCEDURE STATUS</code> および <code class="literal">SHOW FUNCTION STATUS</code> ステートメントを使用して、ルーチン特性を表示します。<a class="xref" href="sql-syntax.html#show-procedure-status" title="13.7.5.29 SHOW PROCEDURE STATUS 構文">セクション13.7.5.29「SHOW PROCEDURE STATUS 構文」</a>を参照してください。
-        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="stored-routines-last-insert-id"></a>20.2.4 ストアドプロシージャー、関数、トリガー、および LAST_INSERT_ID()</h3></div></div></div><a class="indexterm" name="idm139926399444000"></a><a class="indexterm" name="idm139926399441904"></a><a class="indexterm" name="idm139926399439872"></a><a class="indexterm" name="idm139926399437920"></a><p>
+        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="stored-routines-last-insert-id"></a>20.2.4 ストアドプロシージャー、関数、トリガー、および LAST_INSERT_ID()</h3></div></div></div><a class="indexterm" name="idm140396759998592"></a><a class="indexterm" name="idm140396759996496"></a><a class="indexterm" name="idm140396759994464"></a><a class="indexterm" name="idm140396759992512"></a><p>
       ストアドルーチン (プロシージャーまたは関数) またはトリガーの本体内では、<code class="literal">LAST_INSERT_ID()</code> の値は、このような種類のオブジェクトの本体外で実行されたステートメントと同様に変更されます (<a class="xref" href="functions.html#information-functions" title="12.14 情報関数">セクション12.14「情報関数」</a>を参照してください)。あとに続くステートメントで参照される <code class="literal">LAST_INSERT_ID()</code> の値でのストアドルーチンまたはトリガーの効果は、ルーチンの種類によって異なります。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           ストアドプロシージャーで <code class="literal">LAST_INSERT_ID()</code> の値を変更するステートメントが実行される場合は、プロシージャー呼び出しが続くステートメントで変更された値が参照されます。
         </p></li><li class="listitem"><p>
           値を変更するストアドファンクションやトリガーでは、値は関数やトリガーが終了したときにリストアされるので、後続のステートメントは変更された値を表示しません。
-        </p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="triggers"></a>20.3 トリガーの使用</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="stored-programs-views.html#trigger-syntax">20.3.1 トリガーの構文と例</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#trigger-metadata">20.3.2 トリガーのメタデータ</a></span></dt></dl></div><a class="indexterm" name="idm139926399426784"></a><p>
+        </p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="triggers"></a>20.3 トリガーの使用</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="stored-programs-views.html#trigger-syntax">20.3.1 トリガーの構文と例</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#trigger-metadata">20.3.2 トリガーのメタデータ</a></span></dt></dl></div><a class="indexterm" name="idm140396759981376"></a><p>
     トリガーとは、テーブルに関連付けられ、そのテーブルに対して特定のイベントが発生するとアクティブ化される名前付きデータベースオブジェクトのことです。トリガーを使用する場合には、テーブルに挿入する値のチェックを実行したり、更新にかかわる値の計算を実行したりする場合があります。
   </p><p>
     トリガーは、関連付けられたテーブルでステートメントが行の挿入、更新、または削除を行なったときにアクティブ化するように定義されます。これらの行操作がトリガーイベントになります。たとえば、行は、<code class="literal">INSERT</code> または <code class="literal">LOAD DATA</code> ステートメントで挿入でき、挿入トリガーは挿入された行ごとにアクティブ化します。トリガーは、トリガーイベントの前または後のどちらかでアクティブ化するように設定できます。たとえば、テーブルに挿入される各行の前、または更新される各行のあとでトリガーをアクティブ化させることができます。
@@ -188,7 +156,7 @@ mysql&gt; <strong class="userinput"><code>SELECT hello('world');</code></strong>
           トリガーは、<code class="literal">NDB</code> API を使用して行われた更新によってアクティブ化されません。
         </p></li></ul></div></div><p>
     次のセクションでは、トリガーを作成および削除するための構文について説明し、使用方法の例をいくつか挙げ、トリガーメタデータを取得する方法を示します。
-  </p><h3><a name="idm139926399413680"></a>追加のリソース</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+  </p><h3><a name="idm140396759968272"></a>追加のリソース</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
         トリガーを扱うときには、<a class="ulink" href="http://forums.mysql.com/list.php?100" target="_top">トリガーユーザーフォーラム</a>が役立ちます。
       </p></li><li class="listitem"><p>
         MySQL でのトリガーに関するよくある質問とその回答については、<a class="xref" href="faqs.html#faqs-triggers" title="A.5 MySQL 5.6 FAQ: トリガー">セクションA.5「MySQL 5.6 FAQ: トリガー」</a>を参照してください。
@@ -380,7 +348,7 @@ mysql&gt; <strong class="userinput"><code>SELECT * FROM test4;</code></strong>
 | 10 |    0 |
 +----+------+
 10 rows in set (0.00 sec)
-</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="trigger-metadata"></a>20.3.2 トリガーのメタデータ</h3></div></div></div><a class="indexterm" name="idm139926399283920"></a><a class="indexterm" name="idm139926399281808"></a><p>
+</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="trigger-metadata"></a>20.3.2 トリガーのメタデータ</h3></div></div></div><a class="indexterm" name="idm140396759838640"></a><a class="indexterm" name="idm140396759836528"></a><p>
       トリガーに関するメタデータは次のように取得できます。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           <code class="literal">INFORMATION_SCHEMA</code> データベースの <code class="literal">TRIGGERS</code> テーブルをクエリーします。<a class="xref" href="information-schema.html#triggers-table" title="21.26 INFORMATION_SCHEMA TRIGGERS テーブル">セクション21.26「INFORMATION_SCHEMA TRIGGERS テーブル」</a>を参照してください。
@@ -388,7 +356,7 @@ mysql&gt; <strong class="userinput"><code>SELECT * FROM test4;</code></strong>
           <code class="literal">SHOW CREATE TRIGGER</code> ステートメントを使用します。<a class="xref" href="sql-syntax.html#show-create-trigger" title="13.7.5.13 SHOW CREATE TRIGGER 構文">セクション13.7.5.13「SHOW CREATE TRIGGER 構文」</a>を参照してください。
         </p></li><li class="listitem"><p>
           <code class="literal">SHOW TRIGGERS</code> ステートメントを使用します。<a class="xref" href="sql-syntax.html#show-triggers" title="13.7.5.39 SHOW TRIGGERS 構文">セクション13.7.5.39「SHOW TRIGGERS 構文」</a>を参照してください。
-        </p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="events"></a>20.4 イベントスケジューラの使用</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="stored-programs-views.html#events-overview">20.4.1 イベントスケジューラの概要</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-configuration">20.4.2 イベントスケジューラの構成</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-syntax">20.4.3 イベント構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-metadata">20.4.4 イベントメタデータ</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-status-info">20.4.5 イベントスケジューラのステータス</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-privileges">20.4.6 イベントスケジューラと MySQL 権限</a></span></dt></dl></div><a class="indexterm" name="idm139926399269136"></a><a class="indexterm" name="idm139926399267680"></a><p>
+        </p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="events"></a>20.4 イベントスケジューラの使用</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="stored-programs-views.html#events-overview">20.4.1 イベントスケジューラの概要</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-configuration">20.4.2 イベントスケジューラの構成</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-syntax">20.4.3 イベント構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-metadata">20.4.4 イベントメタデータ</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-status-info">20.4.5 イベントスケジューラのステータス</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#events-privileges">20.4.6 イベントスケジューラと MySQL 権限</a></span></dt></dl></div><a class="indexterm" name="idm140396759823920"></a><a class="indexterm" name="idm140396759822464"></a><p>
     <em class="firstterm">MySQL イベントスケジューラ</em>は、イベント、つまりスケジュールに従って実行するタスクのスケジュール設定および実行を管理します。次の説明では、イベントスケジューラを取り上げ、次のセクションに分かれています。
   </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
         <a class="xref" href="stored-programs-views.html#events-overview" title="20.4.1 イベントスケジューラの概要">セクション20.4.1「イベントスケジューラの概要」</a>では、MySQL イベントの概論と概念的概要を示します。
@@ -400,13 +368,13 @@ mysql&gt; <strong class="userinput"><code>SELECT * FROM test4;</code></strong>
         <a class="xref" href="stored-programs-views.html#events-privileges" title="20.4.6 イベントスケジューラと MySQL 権限">セクション20.4.6「イベントスケジューラと MySQL 権限」</a>では、イベントを処理するために必要な権限と、実行時に権限に関してイベントが持つ派生問題について説明します。
       </p></li></ul></div><p>
     ストアドルーチンには、<code class="literal">mysql</code> データベース内の <code class="literal">event</code> テーブルが必要です。このテーブルは、MySQL 5.6 インストール手順中に作成されます。以前のバージョンから MySQL 5.6 にアップグレードしている場合は、必ず付与テーブルを更新して、<code class="literal">event</code> テーブルがあるかどうか確認してください。<a class="xref" href="programs.html#mysql-upgrade" title="4.4.7 mysql_upgrade — MySQL テーブルのチェックとアップグレード">セクション4.4.7「<span class="command"><strong>mysql_upgrade</strong></span> — MySQL テーブルのチェックとアップグレード」</a>を参照してください。
-  </p><h3><a name="idm139926399253488"></a>追加のリソース</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+  </p><h3><a name="idm140396759808272"></a>追加のリソース</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
         スケジュール設定済みイベントを扱うときには、「<a class="ulink" href="http://forums.mysql.com/list.php?119" target="_top">MySQL Event Scheduler User Forum</a>」が役立ちます。
       </p></li><li class="listitem"><p>
         イベントの使用にはいくつかの制限があります。<a class="xref" href="restrictions.html#stored-program-restrictions" title="D.1 ストアドプログラムの制約">セクションD.1「ストアドプログラムの制約」</a>を参照してください。
       </p></li><li class="listitem"><p>
         イベントのバイナリロギングは、<a class="xref" href="stored-programs-views.html#stored-programs-logging" title="20.7 ストアドプログラムのバイナリロギング">セクション20.7「ストアドプログラムのバイナリロギング」</a>で説明しているように行われます。
-      </p></li></ul></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="events-overview"></a>20.4.1 イベントスケジューラの概要</h3></div></div></div><a class="indexterm" name="idm139926399246448"></a><p>
+      </p></li></ul></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="events-overview"></a>20.4.1 イベントスケジューラの概要</h3></div></div></div><a class="indexterm" name="idm140396759801232"></a><p>
       MySQL イベントはスケジュールに従って実行するタスクです。したがって、これらを<span class="emphasis"><em>スケジュール設定済み</em></span>イベントと呼ぶことがあります。イベントの作成時には、特定の日時に開始して終了し、1 つ以上の定期的な間隔で実行される 1 つ以上の SQL ステートメントを含んだ、名前付きデータベースオブジェクトを作成します。概念的には、このことは Unix の <code class="literal">crontab</code> (<span class="quote">「<span class="quote">cron ジョブ</span>」</span>とも呼ばれます) や、Windows のタスクスケジューラの考え方に似ています。
     </p><p>
       この種のスケジュール設定済みのタスクは、<span class="quote">「<span class="quote">時間トリガー</span>」</span>と呼ばれる場合もあり、これらが時間の経過によってトリガーされるオブジェクトであることを示しています。これは基本的には正しいのですが、<a class="xref" href="stored-programs-views.html#triggers" title="20.3 トリガーの使用">セクション20.3「トリガーの使用」</a>で説明している種類のトリガーと混同しないように、<span class="emphasis"><em>イベント</em></span>の用語を使用します。さらに厳密にいえば、イベントは<span class="quote">「<span class="quote">時間トリガー</span>」</span>と混同しないようにする必要があります。トリガーは、指定したテーブルで行われるイベントの特定の種類に応じて実行されるステートメントを持つデータベースオブジェクトですが、(スケジュール設定済み) イベントは、指定された時間間隔の経過に応じて実行されるステートメントを持つオブジェクトです。
@@ -430,7 +398,7 @@ mysql&gt; <strong class="userinput"><code>SELECT * FROM test4;</code></strong>
           イベントのアクションステートメントには、ストアドルーチン内で許可されているほとんどの SQL ステートメントを含めることができます。制限については、<a class="xref" href="restrictions.html#stored-program-restrictions" title="D.1 ストアドプログラムの制約">セクションD.1「ストアドプログラムの制約」</a>を参照してください。
         </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="events-configuration"></a>20.4.2 イベントスケジューラの構成</h3></div></div></div><p>
       イベントは、特別な<em class="firstterm">イベントスケジューラスレッド</em>によって実行されます。イベントスケジューラと呼ぶ場合、実際にはこのスレッドを指しています。実行中、イベントスケジューラスレッドとその現在の状態は、次の説明で示すように、<code class="literal">PROCESS</code> 権限を保有するユーザーが <code class="literal">SHOW PROCESSLIST</code> の出力で確認できます。
-    </p><a class="indexterm" name="idm139926399211824"></a><a class="indexterm" name="idm139926399209632"></a><p><a name="events-event-scheduler-option"></a>
+    </p><a class="indexterm" name="idm140396759766608"></a><a class="indexterm" name="idm140396759764416"></a><p><a name="events-event-scheduler-option"></a>
       <code class="literal">event_scheduler</code> グローバルシステム変数によって、イベントスケジューラがサーバー上で有効であり実行しているかどうかが決まります。これは次の 3 つの値のいずれかを取り、それぞれ次に説明するようにイベントスケジュール設定に影響します。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           <code class="literal">OFF</code>: イベントスケジューラは停止しています。イベントスケジューラスレッドは実行されておらず、<code class="literal">SHOW PROCESSLIST</code> の出力に表示されておらず、スケジュール設定済みイベントが実行されていません。<code class="literal">OFF</code> が <code class="literal">event_scheduler</code> のデフォルト値です。
@@ -438,7 +406,7 @@ mysql&gt; <strong class="userinput"><code>SELECT * FROM test4;</code></strong>
           イベントスケジューラが停止している場合 (<code class="literal">event_scheduler</code> が <code class="literal">OFF</code> です)、<code class="literal">event_scheduler</code> の値を <code class="literal">ON</code> に設定することで開始できます。(次の項目を参照してください。)
         </p></li><li class="listitem"><p>
           <code class="literal">ON</code>: イベントスケジューラが開始され、イベントスケジューラスレッドがすべてのスケジュール設定済みイベントを実行しています。
-        </p><a class="indexterm" name="idm139926399194528"></a><p>
+        </p><a class="indexterm" name="idm140396759749344"></a><p>
           イベントスケジューラが <code class="literal">ON</code> の場合、イベントスケジューラスレッドは、デーモンプロセスとして <code class="literal">SHOW PROCESSLIST</code> の出力に一覧表示され、その状態は次に示すように表示されます。
         </p><pre class="programlisting">
 mysql&gt; <strong class="userinput"><code>SHOW PROCESSLIST\G</code></strong>
@@ -511,7 +479,7 @@ event_scheduler=DISABLED
       MySQL 5.6 は、<code class="literal">INFORMATION_SCHEMA</code> データベースの <code class="literal">EVENTS</code> テーブルを提供します。このテーブルは、サーバー上で定義されているスケジュール設定済みイベントに関する情報を取得するためにクエリーできます。詳細は、<a class="xref" href="stored-programs-views.html#events-metadata" title="20.4.4 イベントメタデータ">セクション20.4.4「イベントメタデータ」</a>および<a class="xref" href="information-schema.html#events-table" title="21.7 INFORMATION_SCHEMA EVENTS テーブル">セクション21.7「INFORMATION_SCHEMA EVENTS テーブル」</a>を参照してください。
     </p><p>
       イベントスケジュール設定と MySQL 権限システムに関する情報については、<a class="xref" href="stored-programs-views.html#events-privileges" title="20.4.6 イベントスケジューラと MySQL 権限">セクション20.4.6「イベントスケジューラと MySQL 権限」</a>を参照してください。
-    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="events-syntax"></a>20.4.3 イベント構文</h3></div></div></div><a class="indexterm" name="idm139926399118976"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="events-syntax"></a>20.4.3 イベント構文</h3></div></div></div><a class="indexterm" name="idm140396759673312"></a><p>
       MySQL 5.6 には、スケジュール設定済みイベントを処理するための複数の SQL ステートメントが用意されています。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           新しいイベントは <code class="literal">CREATE EVENT</code> ステートメントを使用して定義されます。<a class="xref" href="sql-syntax.html#create-event" title="13.1.11 CREATE EVENT 構文">セクション13.1.11「CREATE EVENT 構文」</a>を参照してください。
@@ -521,7 +489,7 @@ event_scheduler=DISABLED
           スケジュール設定済みイベントが不要になった場合は、その定義者が、<code class="literal">DROP EVENT</code> ステートメントを使用してサーバーから削除できます。<a class="xref" href="sql-syntax.html#drop-event" title="13.1.22 DROP EVENT 構文">セクション13.1.22「DROP EVENT 構文」</a>を参照してください。イベントがそのスケジュールの終了を過ぎても持続されるかどうかは、<code class="literal">ON COMPLETION</code> 句がある場合、この句によって決まります。<a class="xref" href="sql-syntax.html#create-event" title="13.1.11 CREATE EVENT 構文">セクション13.1.11「CREATE EVENT 構文」</a>を参照してください。
         </p><p>
           イベントが定義されているデータベースに対する <code class="literal">EVENT</code> 権限を保有するすべてのユーザーは、そのイベントをドロップできます。<a class="xref" href="stored-programs-views.html#events-privileges" title="20.4.6 イベントスケジューラと MySQL 権限">セクション20.4.6「イベントスケジューラと MySQL 権限」</a>を参照してください。
-        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="events-metadata"></a>20.4.4 イベントメタデータ</h3></div></div></div><a class="indexterm" name="idm139926399102320"></a><a class="indexterm" name="idm139926399100144"></a><p>
+        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="events-metadata"></a>20.4.4 イベントメタデータ</h3></div></div></div><a class="indexterm" name="idm140396759656592"></a><a class="indexterm" name="idm140396759654416"></a><p>
       イベントに関するメタデータは次のように取得できます。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           <code class="literal">mysql</code> データベースの <code class="literal">event</code> テーブルをクエリーします。
@@ -533,7 +501,7 @@ event_scheduler=DISABLED
           <code class="literal">SHOW EVENTS</code> ステートメントを使用します。<a class="xref" href="sql-syntax.html#show-events" title="13.7.5.19 SHOW EVENTS 構文">セクション13.7.5.19「SHOW EVENTS 構文」</a>を参照してください。
         </p></li></ul></div><p>
       <span class="bold"><strong>イベントスケジューラの時間表現</strong></span>
-    </p><a class="indexterm" name="idm139926399085504"></a><a class="indexterm" name="idm139926399083312"></a><p>
+    </p><a class="indexterm" name="idm140396759639792"></a><a class="indexterm" name="idm140396759637600"></a><p>
       MySQL の各セッションには、セッションタイムゾーン (STZ) があります。これは、セッションの開始時にサーバーの <code class="literal">time_zone</code> グローバル値から初期化される <code class="literal">time_zone</code> セッション値ですが、セッション中に変更される可能性があります。
     </p><p>
       <code class="literal">CREATE EVENT</code> または <code class="literal">ALTER EVENT</code> ステートメントが実行するときに使用されているセッションタイムゾーンが、イベント定義で指定されている時間の解釈に使用されます。これがイベントタイムゾーン (ETZ) になります。つまり、イベントのスケジュール設定に使用され、イベントが実行するときにそのイベント内で有効になるタイムゾーンになります。
@@ -541,7 +509,7 @@ event_scheduler=DISABLED
       <code class="literal">mysql.event</code> テーブル内のイベント情報の表現については、<code class="literal">execute_at</code>、<code class="literal">starts</code>、および <code class="literal">ends</code> 時間は UTC に変換され、イベントタイムゾーンとともに格納されます。これにより、サーバータイムゾーンまたはサマータイムの影響に対し生じた変更とは無関係に、定義されたとおりにイベントの実行を処理できます。<code class="literal">last_executed</code> 時間も UTC で格納されます。
     </p><p>
       <code class="literal">mysql.event</code> から情報を選択すると、前述の時間は、UTC 値として取得されます。これらの時間は、<code class="literal">INFORMATION_SCHEMA.EVENTS</code> テーブルから、または <code class="literal">SHOW EVENTS</code> から選択して取得することもできますが、ETZ 値としてレポートされます。これらのソースから利用できるほかの時間は、イベントの作成時や最後の変更時を示します。これらは STZ 値として表示されます。次の表は、イベント時間の表現をまとめています。
-    </p><div class="informaltable"><table summary="この表は、mysql.event、INFORMATION_SCHEMA.EVENTS、および SHOW EVENTS のイベント時間の (UTC、EZT、または STZ 値としての) 表現をまとめています。" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th scope="col">値</th><th scope="col"><code class="literal">mysql.event</code></th><th scope="col"><code class="literal">INFORMATION_SCHEMA.EVENTS</code></th><th scope="col"><code class="literal">SHOW EVENTS</code></th></tr></thead><tbody><tr><td scope="row">Execute at</td><td>UTC</td><td>ETZ</td><td>ETZ</td></tr><tr><td scope="row">Starts</td><td>UTC</td><td>ETZ</td><td>ETZ</td></tr><tr><td scope="row">Ends</td><td>UTC</td><td>ETZ</td><td>ETZ</td></tr><tr><td scope="row">Last executed</td><td>UTC</td><td>ETZ</td><td>該当なし</td></tr><tr><td scope="row">Created</td><td>STZ</td><td>STZ</td><td>該当なし</td></tr><tr><td scope="row">Last altered</td><td>STZ</td><td>STZ</td><td>該当なし</td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="events-status-info"></a>20.4.5 イベントスケジューラのステータス</h3></div></div></div><a class="indexterm" name="idm139926399042272"></a><a class="indexterm" name="idm139926399040080"></a><a class="indexterm" name="idm139926399038848"></a><p>
+    </p><div class="informaltable"><table class="informaltable" summary="この表は、mysql.event、INFORMATION_SCHEMA.EVENTS、および SHOW EVENTS のイベント時間の (UTC、EZT、または STZ 値としての) 表現をまとめています。" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th scope="col">値</th><th scope="col"><code class="literal">mysql.event</code></th><th scope="col"><code class="literal">INFORMATION_SCHEMA.EVENTS</code></th><th scope="col"><code class="literal">SHOW EVENTS</code></th></tr></thead><tbody><tr><td scope="row">Execute at</td><td>UTC</td><td>ETZ</td><td>ETZ</td></tr><tr><td scope="row">Starts</td><td>UTC</td><td>ETZ</td><td>ETZ</td></tr><tr><td scope="row">Ends</td><td>UTC</td><td>ETZ</td><td>ETZ</td></tr><tr><td scope="row">Last executed</td><td>UTC</td><td>ETZ</td><td>該当なし</td></tr><tr><td scope="row">Created</td><td>STZ</td><td>STZ</td><td>該当なし</td></tr><tr><td scope="row">Last altered</td><td>STZ</td><td>STZ</td><td>該当なし</td></tr></tbody></table></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="events-status-info"></a>20.4.5 イベントスケジューラのステータス</h3></div></div></div><a class="indexterm" name="idm140396759596560"></a><a class="indexterm" name="idm140396759594368"></a><a class="indexterm" name="idm140396759593136"></a><p>
       イベントスケジューラは、エラーまたは警告で終了したイベント実行に関する情報を、MySQL Server のエラーログに書き込みます。例については <a class="xref" href="stored-programs-views.html#events-privileges" title="20.4.6 イベントスケジューラと MySQL 権限">セクション20.4.6「イベントスケジューラと MySQL 権限」</a>を参照してください。
     </p><p>
       デバッグおよびトラブルシューティングのためにイベントスケジューラの状態に関する状態を取得するには、<span class="command"><strong>mysqladmin debug</strong></span> を実行します (<a class="xref" href="programs.html#mysqladmin" title="4.5.2 mysqladmin — MySQL サーバーの管理を行うクライアント">セクション4.5.2「<span class="command"><strong>mysqladmin</strong></span> — MySQL サーバーの管理を行うクライアント」</a>を参照してください)。このコマンドの実行後に、ここに示すようなイベントスケジューラに関連した出力がサーバーのエラーログに含まれます。
@@ -570,7 +538,7 @@ WOC             : NO
 Next activation : 0000-00-00 00:00:00
 </pre><p>
       イベントスケジューラが実行するイベントの一部として生じるステートメント内で、診断メッセージ (エラーだけでなく警告も) がエラーログと、Windows ではアプリケーションイベントログに書き込まれます。頻繁に実行するイベントの場合、これにより、多数のメッセージが記録される結果になることがあります。たとえば、<code class="literal">SELECT ... INTO <em class="replaceable"><code>var_list</code></em></code> ステートメントの場合、クエリーが行を返さなければ、エラーコード 1329 で警告が発生し (<code class="literal">No data</code>)、変数値は変更されないままになります。クエリーが複数の行を返す場合は、エラー 1172 が発生します (<code class="literal">結果が 2 行以上です</code>)。どちらの条件についても、条件ハンドラを宣言すると、警告を記録させないようにできます。<a class="xref" href="sql-syntax.html#declare-handler" title="13.6.7.2 DECLARE ... HANDLER 構文">セクション13.6.7.2「DECLARE ... HANDLER 構文」</a>を参照してください。複数の行を取得できるステートメントの場合、<code class="literal">LIMIT 1</code> を使用して結果セットを単一の行に制限するという別の方法があります。
-    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="events-privileges"></a>20.4.6 イベントスケジューラと MySQL 権限</h3></div></div></div><a class="indexterm" name="idm139926399024592"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="events-privileges"></a>20.4.6 イベントスケジューラと MySQL 権限</h3></div></div></div><a class="indexterm" name="idm140396759578880"></a><p>
       スケジュール設定済みイベントの実行を有効または無効にするには、<code class="literal">event_scheduler</code> グローバルシステム変数の値を設定する必要があります。これには <code class="literal">SUPER</code> 権限が必要です。
     </p><p>
       <code class="literal">EVENT</code> 権限は、イベントの作成、変更、および削除を制御します。この権限は、<code class="literal">GRANT</code> を使用して与えることができます。たとえば、次の <code class="literal">GRANT</code> ステートメントは、<code class="literal">myschema</code> という名前のスキーマに対する <code class="literal">EVENT</code> 権限を、ユーザー <code class="literal">jon@ghidora</code> に与えます。
@@ -613,7 +581,7 @@ CREATE EVENT e_store_ts
 mysql&gt; <strong class="userinput"><code>INSERT INTO myschema.mytable VALUES (UNIX_TIMESTAMP());</code></strong>
 <span class="errortext">ERROR 1142 (42000): INSERT command denied to user
 'jon'@'ghidora' for table 'mytable'</span>
-</pre><a class="indexterm" name="idm139926398989664"></a><p>
+</pre><a class="indexterm" name="idm140396759543952"></a><p>
       <code class="literal">INFORMATION_SCHEMA.EVENTS</code> テーブルを調べることによって、<code class="literal">e_store_ts</code> が存在し有効になっているが、その <code class="literal">LAST_EXECUTED</code> カラムが <code class="literal">NULL</code> になっていることがわかります。
     </p><pre class="programlisting">
 mysql&gt; <strong class="userinput"><code>SELECT * FROM INFORMATION_SCHEMA.EVENTS</code></strong>
@@ -664,7 +632,7 @@ CREATE EVENT e_insert
           <code class="literal">RENAME USER jon@ghidora TO someotherguy@ghidora;</code>
         </p></li></ul></div><p>
       <code class="literal">DROP USER</code> または <code class="literal">RENAME USER</code> ステートメントの発行前後で、<code class="literal">mysql.event</code> テーブル (このセクションで後述します) か、<code class="literal">INFORMATION_SCHEMA.EVENTS</code> テーブル (<a class="xref" href="information-schema.html#events-table" title="21.7 INFORMATION_SCHEMA EVENTS テーブル">セクション21.7「INFORMATION_SCHEMA EVENTS テーブル」</a>を参照してください) を調べると、これが当てはまることを確認できます。
-    </p><a class="indexterm" name="idm139926398952784"></a><p>
+    </p><a class="indexterm" name="idm140396759507072"></a><p>
       イベント定義は、<code class="literal">mysql.event</code> テーブルに格納されています。別のユーザーアカウントが作成したイベントを削除するには、MySQL <code class="literal">root</code> ユーザー (または必要な権限を保有する別のユーザー) がこのテーブルから行を削除できます。たとえば、前述のイベント <code class="literal">e_insert</code> を削除するには、<code class="literal">root</code> は次のステートメントを使用できます。
     </p><pre class="programlisting">
 DELETE FROM mysql.event
@@ -675,7 +643,7 @@ DELETE FROM mysql.event
       <code class="literal">mysql.event</code> テーブルから行を削除するときには、イベント名、データベーススキーマ名、ユーザーアカウントを一致させることが重要です。これは、同じユーザーが、別々のスキーマに同じ名前の異なるイベントを作成できるためです。
     </p><p>
       ユーザーの <code class="literal">EVENT</code> 権限は、<code class="literal">mysql.user</code> および <code class="literal">mysql.db</code> テーブルの <code class="literal">Event_priv</code> カラムに格納されています。どちらの場合でも、このカラムには、<code class="literal">「Y」</code>または<code class="literal">「N」</code>のどちらかの値が含まれています。<code class="literal">「N」</code>がデフォルトです。指定されたユーザーがグローバルな <code class="literal">EVENT</code> 権限を保有している場合 (つまり、<code class="literal">GRANT EVENT ON *.*</code> を使用して権限が与えられた場合) にのみ、そのユーザーの <code class="literal">mysql.user.Event_priv</code> は<code class="literal">「Y」</code>に設定されます。スキーマレベルの <code class="literal">EVENT</code> 権限の場合、<code class="literal">GRANT</code> は、<code class="literal">mysql.db</code> に行を作成し、その行の <code class="literal">Db</code> カラムをスキーマの名前に、<code class="literal">User</code> カラムをユーザーの名前に、<code class="literal">Event_priv</code> カラムを<code class="literal">「Y」</code>に設定します。<code class="literal">GRANT EVENT</code> および <code class="literal">REVOKE EVENT</code> ステートメントがこれらのテーブルでの必要な操作を実行するので、これらのテーブルを直接操作する必要はありません。
-    </p><a class="indexterm" name="idm139926398927360"></a><p>
+    </p><a class="indexterm" name="idm140396759481648"></a><p>
       5 つのステータス変数が、イベント関連操作のカウントを提供します (ただし、イベントが実行するステートメントのカウントは提供<span class="emphasis"><em>しません</em></span>。<a class="xref" href="restrictions.html#stored-program-restrictions" title="D.1 ストアドプログラムの制約">セクションD.1「ストアドプログラムの制約」</a>を参照してください)。これらを次に示します。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           <code class="literal">Com_create_event</code>: サーバーが最後に再起動してから実行された <code class="literal">CREATE EVENT</code> ステートメントの数。
@@ -689,13 +657,13 @@ DELETE FROM mysql.event
           <code class="literal">Com_show_events</code>: サーバーが最後に再起動してから実行された <code class="literal">SHOW EVENTS</code> ステートメントの数。
         </p></li></ul></div><p>
       ステートメント <code class="literal">SHOW STATUS LIKE '%event%';</code> を実行すると、これらのすべての現在値を一度に表示できます。
-    </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="views"></a>20.5 ビューの使用</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="stored-programs-views.html#view-syntax">20.5.1 ビューの構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-algorithms">20.5.2 ビュー処理アルゴリズム</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-updatability">20.5.3 更新可能および挿入可能なビュー</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-metadata">20.5.4 ビューのメタデータ</a></span></dt></dl></div><a class="indexterm" name="idm139926398906896"></a><p>
+    </p></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="views"></a>20.5 ビューの使用</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="stored-programs-views.html#view-syntax">20.5.1 ビューの構文</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-algorithms">20.5.2 ビュー処理アルゴリズム</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-updatability">20.5.3 更新可能および挿入可能なビュー</a></span></dt><dt><span class="section"><a href="stored-programs-views.html#view-metadata">20.5.4 ビューのメタデータ</a></span></dt></dl></div><a class="indexterm" name="idm140396759461184"></a><p>
     ビュー (更新可能なビューを含む) は MySQL Server 5.6 で使用できます。ビューは、呼び出されたときに結果セットを生成するストアドクエリーです。ビューは仮想テーブルとして機能します。
   </p><p>
     ビューをサポートしていなかった古いリリースから MySQL 5.6 にアップグレードした場合、ビューを使用するには、ビュー関連の権限を含めるように付与テーブルをアップグレードする必要があります。<a class="xref" href="programs.html#mysql-upgrade" title="4.4.7 mysql_upgrade — MySQL テーブルのチェックとアップグレード">セクション4.4.7「<span class="command"><strong>mysql_upgrade</strong></span> — MySQL テーブルのチェックとアップグレード」</a>を参照してください。
   </p><p>
     次の説明では、ビューを作成し削除するための構文について記述し、それらの使用法の例をいくつか示します。
-  </p><h3><a name="idm139926398902128"></a>追加のリソース</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+  </p><h3><a name="idm140396759456416"></a>追加のリソース</h3><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
         ビューを扱うときには、「<a class="ulink" href="http://forums.mysql.com/list.php?100" target="_top">Views User Forum</a>」が役立ちます。
       </p></li><li class="listitem"><p>
         MySQL のビューに関するよくある質問とその回答については、<a class="xref" href="faqs.html#faqs-views" title="A.6 MySQL 5.6 FAQ: ビュー">セクションA.6「MySQL 5.6 FAQ: ビュー」</a>を参照してください。
@@ -722,7 +690,7 @@ mysql&gt; <strong class="userinput"><code>SELECT * FROM v WHERE qty = 5;</code><
 +------+-------+-------+
 |    5 |    60 |   300 |
 +------+-------+-------+
-</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="view-algorithms"></a>20.5.2 ビュー処理アルゴリズム</h3></div></div></div><a class="indexterm" name="idm139926398879040"></a><p>
+</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="view-algorithms"></a>20.5.2 ビュー処理アルゴリズム</h3></div></div></div><a class="indexterm" name="idm140396759433200"></a><p>
       <code class="literal">CREATE VIEW</code> または <code class="literal">ALTER VIEW</code> のオプションの <code class="literal">ALGORITHM</code> 句は、標準 SQL に対する MySQL 拡張です。これは、MySQL によるビューの処理方法に影響を与えます。<code class="literal">ALGORITHM</code> は、<code class="literal">MERGE</code>、<code class="literal">TEMPTABLE</code>、または <code class="literal">UNDEFINED</code> の 3 つの値を受け取ります。<code class="literal">ALGORITHM</code> 句が存在しない場合、デフォルトのアルゴリズムは <code class="literal">UNDEFINED</code> です。
     </p><p>
       <code class="literal">MERGE</code> の場合、ビューを参照するステートメントのテキストとビュー定義がマージされ、ビュー定義の部分が対応するステートメントの部分と置き換えられます。
@@ -791,7 +759,7 @@ WHERE (select WHERE) AND (view WHERE)
           選択リスト内のサブクエリー
         </p></li><li class="listitem"><p>
           リテラル値だけの参照 (この場合、ベースとなるテーブルがありません)
-        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="view-updatability"></a>20.5.3 更新可能および挿入可能なビュー</h3></div></div></div><a class="indexterm" name="idm139926398805728"></a><a class="indexterm" name="idm139926398804272"></a><a class="indexterm" name="idm139926398802240"></a><p>
+        </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="view-updatability"></a>20.5.3 更新可能および挿入可能なビュー</h3></div></div></div><a class="indexterm" name="idm140396759359952"></a><a class="indexterm" name="idm140396759358496"></a><a class="indexterm" name="idm140396759356464"></a><p>
       いくつかのビューは更新可能です。つまり、これらのビューを <code class="literal">UPDATE</code>、<code class="literal">DELETE</code>、<code class="literal">INSERT</code> などのステートメントで使用して、ベースとなるテーブルの内容を更新できます。ビューが更新可能であるためには、そのビュー内の行とベースとなるテーブル内の行の間に 1 対 1 の関係が存在する必要があります。また、ビューを更新不可能にするその他の特定の構造構文も存在します。より具体的には、次のいずれかを含む場合、ビューは更新可能ではありません。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           集計関数 (<code class="literal">SUM()</code>、<code class="literal">MIN()</code>、<code class="literal">MAX()</code>、<code class="literal">COUNT()</code> など)
@@ -874,7 +842,7 @@ ERROR 1369 (HY000): CHECK OPTION failed 'test.v3'
       MySQL は、<code class="literal">CREATE VIEW</code> 時に、ビューの更新可能性フラグというフラグを設定します。<code class="literal">UPDATE</code> および <code class="literal">DELETE</code> (および同様の操作) がビューで有効な場合、フラグは <code class="literal">YES</code> (true) に設定されます。それ以外の場合、フラグは <code class="literal">NO</code> (false) に設定されます。<code class="literal">INFORMATION_SCHEMA.VIEWS</code> テーブルの <code class="literal">IS_UPDATABLE</code> カラムは、このフラグのステータスを表示します。これは、ビューが更新可能であるかどうかをサーバーが常に把握していることを意味します。ビューが更新可能ではない場合、<code class="literal">UPDATE</code>、<code class="literal">DELETE</code>、<code class="literal">INSERT</code> などのステートメントは無効であり、拒否されます。(このセクションの別の箇所で説明しているように、ビューが更新可能である場合でも、ビューへの挿入はできない場合もあります。)
     </p><p>
       ビューを更新できるかどうかは、<code class="literal">updatable_views_with_limit</code> システム変数の値に影響されます。<a class="xref" href="server-administration.html#server-system-variables" title="5.1.4 サーバーシステム変数">セクション5.1.4「サーバーシステム変数」</a>を参照してください。
-    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="view-metadata"></a>20.5.4 ビューのメタデータ</h3></div></div></div><a class="indexterm" name="idm139926398708944"></a><a class="indexterm" name="idm139926398706832"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="view-metadata"></a>20.5.4 ビューのメタデータ</h3></div></div></div><a class="indexterm" name="idm140396759263168"></a><a class="indexterm" name="idm140396759261056"></a><p>
       ビューに関するメタデータは次のように取得できます。
     </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
           <code class="literal">INFORMATION_SCHEMA</code> データベースの <code class="literal">VIEWS</code> テーブルをクエリーします。<a class="xref" href="information-schema.html#views-table" title="21.28 INFORMATION_SCHEMA VIEWS テーブル">セクション21.28「INFORMATION_SCHEMA VIEWS テーブル」</a>を参照してください。
@@ -1094,7 +1062,7 @@ variable)
         </p><p>
           一般に、ストアドプロシージャー内で実行されるステートメントは、スタンドアロンでステートメントを実行した場合に適用されるものと同じルールを使用して、バイナリログに書き込まれます。プロシージャー内でのステートメントの実行は、非プロシージャーのコンテキストとまったく同じにはならないので、プロシージャーステートメントのロギング時には、十分に注意してください。
         </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: circle; "><li class="listitem"><p>
-              <a class="indexterm" name="idm139926398468480"></a> 記録されるステートメントには、ローカルプロシージャー変数への参照が含まれる場合があります。これらの変数は、ストアドプロシージャーのコンテキスト外に存在しないので、このような変数を参照するステートメントは、文字どおりには記録できません。代わりに、ローカル変数のそれぞれの参照は、ロギングのために次の構造構文に置き換えられます。
+              <a class="indexterm" name="idm140396759022704"></a> 記録されるステートメントには、ローカルプロシージャー変数への参照が含まれる場合があります。これらの変数は、ストアドプロシージャーのコンテキスト外に存在しないので、このような変数を参照するステートメントは、文字どおりには記録できません。代わりに、ローカル変数のそれぞれの参照は、ロギングのために次の構造構文に置き換えられます。
             </p><pre class="programlisting">
 NAME_CONST(<em class="replaceable"><code>var_name</code></em>, <em class="replaceable"><code>var_value</code></em>)
 </pre><p>

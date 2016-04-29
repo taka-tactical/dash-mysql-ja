@@ -1,38 +1,6 @@
-<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>第 3 章 チュートリアル</title><link rel="stylesheet" type="text/css" href="mvl.css"><meta name="generator" content="DocBook XSL Stylesheets V1.78.1"><link rel="home" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="up" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="prev" href="installing.html" title="第 2 章 MySQL のインストールと更新"><link rel="next" href="programs.html" title="第 4 章 MySQL プログラム">
-<script language="javascript" type="text/javascript">
-  function addOnload(theFunc)
-  {
-    var previous = window.onload;
-    if (typeof window.onload != 'function')
-    {
-      window.onload = theFunc;
-    }
-    else
-    {
-      window.onload = function()
-      {
-        previous();
-        theFunc();
-      }
-    }
-  }
+<html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><title>第 3 章 チュートリアル</title><link rel="stylesheet" type="text/css" href="mvl.css"><meta name="generator" content="DocBook XSL Stylesheets V1.79.1"><link rel="home" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="up" href="index.html" title="MySQL 5.6 リファレンスマニュアル"><link rel="prev" href="installing.html" title="第 2 章 MySQL のインストールと更新"><link rel="next" href="programs.html" title="第 4 章 MySQL プログラム">
 
-  addOnload(function()
-  {
-    var base = new Date(1446597221*1000);
-    var now = new Date();
-    var diff = ((now-base)/1000)/(24*3600);
-
-    if (diff > 90) {
-      var nodes = document.getElementsByClassName('titlepage');
-      nodes[0].innerHTML = '<p style="border: 5px #ff0000 solid; padding: 5px; margin 5px">' +
-        'This copy of the manual is more than 90 days old. We encourage you to download a ' +
-        'new version from <a href="http://dev.mysql.com">dev.mysql.com/doc</a>.</p>' + nodes[0].innerHTML;
-    }
-  });
-</script>
-<noscript></noscript>
-</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">第 3 章 チュートリアル</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="installing.html">前</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="programs.html">次へ</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="tutorial"></a>第 3 章 チュートリアル</h1></div></div></div><div class="toc"><p><b>目次</b></p><dl class="toc"><dt><span class="section"><a href="tutorial.html#connecting-disconnecting">3.1 サーバーへの接続とサーバーからの切断</a></span></dt><dt><span class="section"><a href="tutorial.html#entering-queries">3.2 クエリーの入力</a></span></dt><dt><span class="section"><a href="tutorial.html#database-use">3.3 データベースの作成と使用</a></span></dt><dd><dl><dt><span class="section"><a href="tutorial.html#creating-database">3.3.1 データベースの作成と選択</a></span></dt><dt><span class="section"><a href="tutorial.html#creating-tables">3.3.2 テーブルの作成</a></span></dt><dt><span class="section"><a href="tutorial.html#loading-tables">3.3.3 テーブルへのデータのロード</a></span></dt><dt><span class="section"><a href="tutorial.html#retrieving-data">3.3.4 テーブルからの情報の取り出し</a></span></dt></dl></dd><dt><span class="section"><a href="tutorial.html#getting-information">3.4 データベースとテーブルに関する情報の取得</a></span></dt><dt><span class="section"><a href="tutorial.html#batch-mode">3.5 バッチモードでの MySQL の使用</a></span></dt><dt><span class="section"><a href="tutorial.html#examples">3.6 一般的なクエリーの例</a></span></dt><dd><dl><dt><span class="section"><a href="tutorial.html#example-maximum-column">3.6.1 カラムの最大値</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-row">3.6.2 特定のカラムの最大値が格納されている行</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-column-group">3.6.3 グループごとのカラムの最大値</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-column-group-row">3.6.4 特定のカラムのグループごとの最大値が格納されている行</a></span></dt><dt><span class="section"><a href="tutorial.html#example-user-variables">3.6.5 ユーザー定義の変数の使用</a></span></dt><dt><span class="section"><a href="tutorial.html#example-foreign-keys">3.6.6 外部キーの使用</a></span></dt><dt><span class="section"><a href="tutorial.html#searching-on-two-keys">3.6.7 2 つのキーを使用した検索</a></span></dt><dt><span class="section"><a href="tutorial.html#calculating-days">3.6.8 日ごとの訪問数の計算</a></span></dt><dt><span class="section"><a href="tutorial.html#example-auto-increment">3.6.9 AUTO_INCREMENT の使用</a></span></dt></dl></dd><dt><span class="section"><a href="tutorial.html#apache">3.7 Apache での MySQL の使用</a></span></dt></dl></div><a class="indexterm" name="idm139926546686656"></a><a class="indexterm" name="idm139926546685200"></a><a class="indexterm" name="idm139926546683152"></a><a class="indexterm" name="idm139926546681120"></a><p>
+</head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">第 3 章 チュートリアル</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="installing.html">前</a> </td><th width="60%" align="center"> </th><td width="20%" align="right"> <a accesskey="n" href="programs.html">次へ</a></td></tr></table><hr></div><div class="chapter"><div class="titlepage"><div><div><h1 class="title"><a name="tutorial"></a>第 3 章 チュートリアル</h1></div></div></div><div class="toc"><p><b>目次</b></p><dl class="toc"><dt><span class="section"><a href="tutorial.html#connecting-disconnecting">3.1 サーバーへの接続とサーバーからの切断</a></span></dt><dt><span class="section"><a href="tutorial.html#entering-queries">3.2 クエリーの入力</a></span></dt><dt><span class="section"><a href="tutorial.html#database-use">3.3 データベースの作成と使用</a></span></dt><dd><dl><dt><span class="section"><a href="tutorial.html#creating-database">3.3.1 データベースの作成と選択</a></span></dt><dt><span class="section"><a href="tutorial.html#creating-tables">3.3.2 テーブルの作成</a></span></dt><dt><span class="section"><a href="tutorial.html#loading-tables">3.3.3 テーブルへのデータのロード</a></span></dt><dt><span class="section"><a href="tutorial.html#retrieving-data">3.3.4 テーブルからの情報の取り出し</a></span></dt></dl></dd><dt><span class="section"><a href="tutorial.html#getting-information">3.4 データベースとテーブルに関する情報の取得</a></span></dt><dt><span class="section"><a href="tutorial.html#batch-mode">3.5 バッチモードでの MySQL の使用</a></span></dt><dt><span class="section"><a href="tutorial.html#examples">3.6 一般的なクエリーの例</a></span></dt><dd><dl><dt><span class="section"><a href="tutorial.html#example-maximum-column">3.6.1 カラムの最大値</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-row">3.6.2 特定のカラムの最大値が格納されている行</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-column-group">3.6.3 グループごとのカラムの最大値</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-column-group-row">3.6.4 特定のカラムのグループごとの最大値が格納されている行</a></span></dt><dt><span class="section"><a href="tutorial.html#example-user-variables">3.6.5 ユーザー定義の変数の使用</a></span></dt><dt><span class="section"><a href="tutorial.html#example-foreign-keys">3.6.6 外部キーの使用</a></span></dt><dt><span class="section"><a href="tutorial.html#searching-on-two-keys">3.6.7 2 つのキーを使用した検索</a></span></dt><dt><span class="section"><a href="tutorial.html#calculating-days">3.6.8 日ごとの訪問数の計算</a></span></dt><dt><span class="section"><a href="tutorial.html#example-auto-increment">3.6.9 AUTO_INCREMENT の使用</a></span></dt></dl></dd><dt><span class="section"><a href="tutorial.html#apache">3.7 Apache での MySQL の使用</a></span></dt></dl></div><a class="indexterm" name="idm140396907157040"></a><a class="indexterm" name="idm140396907155584"></a><a class="indexterm" name="idm140396907153536"></a><a class="indexterm" name="idm140396907151504"></a><p>
     この章では、<span class="command"><strong>mysql</strong></span> クライアントプログラムを使用して、簡単なデータベースを作成して使用する方法を示すことで、MySQL のチュートリアルを提供します。<span class="command"><strong>mysql</strong></span> (<span class="quote">「<span class="quote">端末モニター</span>」</span>または単に<span class="quote">「<span class="quote">モニター</span>」</span>と呼ばれることもあります) は、MySQL Server への接続、クエリーの実行、および結果の表示を可能にするインタラクティブなプログラムです。<span class="command"><strong>mysql</strong></span> は、バッチモードでも使用できます。クエリーを前もってファイルに入れておき、<span class="command"><strong>mysql</strong></span> にファイルのコンテンツを実行するよう指示します。ここでは、<span class="command"><strong>mysql</strong></span> の両方の使用方法について説明します。
   </p><p>
     <span class="command"><strong>mysql</strong></span> で提供されているオプションのリストを表示するには、<code class="option">--help</code> オプションを指定して mysql を起動します。
@@ -44,7 +12,7 @@ shell&gt; <strong class="userinput"><code>mysql --help</code></strong>
     この章では、データベースの設定と使用の手順全体について説明します。既存のデータベースへのアクセス手順だけを知りたい場合は、データベースおよびそれに含まれるテーブルの作成方法に関するセクションはスキップすることもできます。
   </p><p>
     この章はチュートリアルであるため、必然的に多くの詳細が省略されています。ここで説明されているトピックの詳細については、ドキュメントの関連セクションを参照してください。
-  </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connecting-disconnecting"></a>3.1 サーバーへの接続とサーバーからの切断</h2></div></div></div><a class="indexterm" name="idm139926546663776"></a><a class="indexterm" name="idm139926546661664"></a><a class="indexterm" name="idm139926546659632"></a><a class="indexterm" name="idm139926546657600"></a><p>
+  </p><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="connecting-disconnecting"></a>3.1 サーバーへの接続とサーバーからの切断</h2></div></div></div><a class="indexterm" name="idm140396907134224"></a><a class="indexterm" name="idm140396907132112"></a><a class="indexterm" name="idm140396907130080"></a><a class="indexterm" name="idm140396907128048"></a><p>
       サーバーに接続するには、通常は <span class="command"><strong>mysql</strong></span> の起動時に MySQL ユーザー名を入力し、多くの場合はパスワードも入力する必要があります。ログインするマシンとは異なるマシンでサーバーが稼働している場合は、ホスト名も指定する必要があります。接続に使用する接続パラメータ (使用するホスト、ユーザー名、およびパスワード) については、管理者に問い合わせてください。正しいパラメータがわかったら、次の方法で接続できます。
     </p><pre class="programlisting">
 shell&gt; <strong class="userinput"><code>mysql -h <em class="replaceable"><code>host</code></em> -u <em class="replaceable"><code>user</code></em> -p</code></strong>
@@ -85,7 +53,7 @@ Bye
       Unix では、Control+D を押しても切断できます。
     </p><p>
       以降のセクションに示すほとんどの例では、サーバーに接続していることを前提にしています。このことは、<code class="literal">mysql&gt;</code> プロンプトによって示されます。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="entering-queries"></a>3.2 クエリーの入力</h2></div></div></div><a class="indexterm" name="idm139926546622992"></a><a class="indexterm" name="idm139926546620848"></a><a class="indexterm" name="idm139926546618816"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="entering-queries"></a>3.2 クエリーの入力</h2></div></div></div><a class="indexterm" name="idm140396907093488"></a><a class="indexterm" name="idm140396907091344"></a><a class="indexterm" name="idm140396907089312"></a><p>
       前のセクションで説明したように、サーバーに接続していることを確認します。それだけでは操作するデータベースは選択されていませんが、それでかまいません。この時点では、テーブルの作成、テーブルへのデータのロード、テーブルからのデータの取り出しに今すぐ進むのではなく、クエリーの発行方法を学ぶことが重要です。このセクションでは、<span class="command"><strong>mysql</strong></span> の動作に習熟するために、いくつかのクエリーを使用してコマンド入力の基本原則について説明します。
     </p><p>
       サーバーにバージョン番号と現在の日付を照会する単純なコマンドを次に示します。<code class="literal">mysql&gt;</code> プロンプトに続けて、次に示すように入力してから Enter を押します。
@@ -167,7 +135,7 @@ mysql&gt;
       ここでもプロンプトに注目してください。<code class="literal">\c</code> の入力後に <code class="literal">mysql&gt;</code> に戻り、<span class="command"><strong>mysql</strong></span> が新しいコマンドに対して準備できていることを示すフィードバックが与えられます。
     </p><p>
       次の表に、表示される各プロンプトとそれらが示す <span class="command"><strong>mysql</strong></span> の状態をまとめます。
-    </p><a class="indexterm" name="idm139926546570832"></a><div class="informaltable"><table summary="この表には、MySQL プロンプトを一覧表示し、それぞれの意味について説明します。" border="1"><colgroup><col><col></colgroup><thead><tr><th scope="col">プロンプト</th><th scope="col">意味</th></tr></thead><tbody><tr><td scope="row"><code class="literal">mysql&gt;</code></td><td>新しいコマンドを入力できます。</td></tr><tr><td scope="row"><code class="literal">-&gt;</code></td><td>複数行コマンドの次の行を待機しています。</td></tr><tr><td scope="row"><code class="literal">'&gt;</code></td><td>単一引用符 (<span class="quote">「<span class="quote"><code class="literal">'</code></span>」</span>) で始まった文字列が完了するまで次の行を待機しています。</td></tr><tr><td scope="row"><code class="literal">"&gt;</code></td><td>二重引用符 (<span class="quote">「<span class="quote"><code class="literal">"</code></span>」</span>) で始まった文字列が完了するまで次の行を待機しています。</td></tr><tr><td scope="row"><code class="literal">`&gt;</code></td><td>逆引用符 (<span class="quote">「<span class="quote"><code class="literal">`</code></span>」</span>) で始まった識別子が完了するまで次の行を待機しています。</td></tr><tr><td scope="row"><code class="literal">/*&gt;</code></td><td><code class="literal">/*</code> で始まったコメントが完了するまで次の行を待機しています。</td></tr></tbody></table></div><p>
+    </p><a class="indexterm" name="idm140396907041280"></a><div class="informaltable"><table class="informaltable" summary="この表には、MySQL プロンプトを一覧表示し、それぞれの意味について説明します。" border="1"><colgroup><col><col></colgroup><thead><tr><th scope="col">プロンプト</th><th scope="col">意味</th></tr></thead><tbody><tr><td scope="row"><code class="literal">mysql&gt;</code></td><td>新しいコマンドを入力できます。</td></tr><tr><td scope="row"><code class="literal">-&gt;</code></td><td>複数行コマンドの次の行を待機しています。</td></tr><tr><td scope="row"><code class="literal">'&gt;</code></td><td>単一引用符 (<span class="quote">「<span class="quote"><code class="literal">'</code></span>」</span>) で始まった文字列が完了するまで次の行を待機しています。</td></tr><tr><td scope="row"><code class="literal">"&gt;</code></td><td>二重引用符 (<span class="quote">「<span class="quote"><code class="literal">"</code></span>」</span>) で始まった文字列が完了するまで次の行を待機しています。</td></tr><tr><td scope="row"><code class="literal">`&gt;</code></td><td>逆引用符 (<span class="quote">「<span class="quote"><code class="literal">`</code></span>」</span>) で始まった識別子が完了するまで次の行を待機しています。</td></tr><tr><td scope="row"><code class="literal">/*&gt;</code></td><td><code class="literal">/*</code> で始まったコメントが完了するまで次の行を待機しています。</td></tr></tbody></table></div><p>
       一般に、1 行のコマンドを発行しようとして終端のセミコロンを忘れると、複数行ステートメントが発生します。この場合、<span class="command"><strong>mysql</strong></span> は追加の入力を待機します。
     </p><pre class="programlisting">
 mysql&gt; <strong class="userinput"><code>SELECT USER()</code></strong>
@@ -201,7 +169,7 @@ mysql&gt;
       <code class="literal">`&gt;</code> プロンプトは <code class="literal">'&gt;</code> および <code class="literal">"&gt;</code> プロンプトと同様ですが、逆引用符を開始したがまだ終了していないことを示しています。
     </p><p>
       <code class="literal">'&gt;</code>、<code class="literal">"&gt;</code>、および <code class="literal">`&gt;</code> の各プロンプトが何を意味するかを理解することが重要です。なぜなら、誤って未終了の文字列を入力した場合、それ以降の入力行は <code class="literal">QUIT</code> を含む行も含めて、<span class="command"><strong>mysql</strong></span> に無視されるように見えるからです。特に、現在のコマンドを取り消すにはまず終端の引用符を入力する必要があることを理解していないと、これにはかなり困惑する可能性があります。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="database-use"></a>3.3 データベースの作成と使用</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="tutorial.html#creating-database">3.3.1 データベースの作成と選択</a></span></dt><dt><span class="section"><a href="tutorial.html#creating-tables">3.3.2 テーブルの作成</a></span></dt><dt><span class="section"><a href="tutorial.html#loading-tables">3.3.3 テーブルへのデータのロード</a></span></dt><dt><span class="section"><a href="tutorial.html#retrieving-data">3.3.4 テーブルからの情報の取り出し</a></span></dt></dl></div><a class="indexterm" name="idm139926546508032"></a><a class="indexterm" name="idm139926546505920"></a><a class="indexterm" name="idm139926546503888"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="database-use"></a>3.3 データベースの作成と使用</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="tutorial.html#creating-database">3.3.1 データベースの作成と選択</a></span></dt><dt><span class="section"><a href="tutorial.html#creating-tables">3.3.2 テーブルの作成</a></span></dt><dt><span class="section"><a href="tutorial.html#loading-tables">3.3.3 テーブルへのデータのロード</a></span></dt><dt><span class="section"><a href="tutorial.html#retrieving-data">3.3.4 テーブルからの情報の取り出し</a></span></dt></dl></div><a class="indexterm" name="idm140396906978528"></a><a class="indexterm" name="idm140396906976416"></a><a class="indexterm" name="idm140396906974384"></a><p>
       コマンドの入力方法を理解したら、データベースにアクセスすることができます。
     </p><p>
       何匹かのペット (menagerie、動物) を家で飼っているとします。これらのペットについてさまざまな種類の情報の記録をつける場合を考えます。これは、データを保持するためのテーブルを作成し、必要な情報をテーブルにロードすることで実現できます。次に、テーブルからデータを取り出すことで、ペットに関する各種の質問に回答できます。このセクションでは、次の操作の実行方法について説明します。
@@ -245,7 +213,7 @@ Database changed
 mysql&gt; <strong class="userinput"><code>GRANT ALL ON menagerie.* TO 'your_mysql_name'@'your_client_host';</code></strong>
 </pre><p>
       ここで、<code class="literal">your_mysql_name</code> はユーザーに割り当てられた MySQL ユーザー名、<code class="literal">your_client_host</code> はサーバーに接続するホストです。
-    </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="creating-database"></a>3.3.1 データベースの作成と選択</h3></div></div></div><a class="indexterm" name="idm139926546470240"></a><a class="indexterm" name="idm139926546468128"></a><p>
+    </p><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="creating-database"></a>3.3.1 データベースの作成と選択</h3></div></div></div><a class="indexterm" name="idm140396906940704"></a><a class="indexterm" name="idm140396906938592"></a><p>
         管理者がユーザーのアクセス権を設定する際にユーザー用のデータベースを作成した場合、ユーザーはそのデータベースを使用し始めることができます。そうでない場合は、ユーザー自身で作成する必要があります。
       </p><pre class="programlisting">
 mysql&gt; <strong class="userinput"><code>CREATE DATABASE menagerie;</code></strong>
@@ -267,7 +235,7 @@ Enter password: <strong class="userinput"><code>********</code></strong>
           このコマンド内の <code class="literal">menagerie</code> はパスワードでは<span class="bold"><strong>ありません</strong></span>。コマンド行で <code class="literal">-p</code> オプションのあとにパスワードを入力する場合は、間にスペースを入れずに入力する必要があります (たとえば、<code class="literal">-p mypassword</code> ではなく、<code class="literal">-pmypassword</code>)。ただし、コマンド行にパスワードを入力することは、同じマシンにログインしているほかのユーザーに覗き見られるおそれがあるため、お勧めできません。
         </p></div><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><div class="admon-title">注記</div><p>
           <code class="literal">SELECT</code> <code class="literal">DATABASE()</code> を使用すると、現在どのデータベースが選択されているかをいつでも調べることができます。
-        </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="creating-tables"></a>3.3.2 テーブルの作成</h3></div></div></div><a class="indexterm" name="idm139926546438528"></a><a class="indexterm" name="idm139926546436384"></a><p>
+        </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="creating-tables"></a>3.3.2 テーブルの作成</h3></div></div></div><a class="indexterm" name="idm140396906909056"></a><a class="indexterm" name="idm140396906906912"></a><p>
         データベースの作成は簡単な部分ですが、<code class="literal">SHOW TABLES</code> が示すとおり、この時点では空です。
       </p><pre class="programlisting">
 mysql&gt; <strong class="userinput"><code>SHOW TABLES;</code></strong>
@@ -322,11 +290,11 @@ mysql&gt; <strong class="userinput"><code>DESCRIBE pet;</code></strong>
         <code class="literal">DESCRIBE</code> ステートメントは、テーブル内のカラムの名前や型を忘れた場合などに、いつでも使用できます。
       </p><p>
         MySQL のデータ型に関する詳細は、<a class="xref" href="data-types.html" title="第 11 章 データ型">第11章「<i>データ型</i>」</a>を参照してください。
-      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="loading-tables"></a>3.3.3 テーブルへのデータのロード</h3></div></div></div><a class="indexterm" name="idm139926546391936"></a><a class="indexterm" name="idm139926546389824"></a><a class="indexterm" name="idm139926546387792"></a><p>
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="loading-tables"></a>3.3.3 テーブルへのデータのロード</h3></div></div></div><a class="indexterm" name="idm140396906862576"></a><a class="indexterm" name="idm140396906860464"></a><a class="indexterm" name="idm140396906858432"></a><p>
         テーブルを作成したら、データを移入する必要があります。これには、<code class="literal">LOAD DATA</code> ステートメントと <code class="literal">INSERT</code> ステートメントが役立ちます。
       </p><p>
         ペットのレコードを次のように記述できると仮定します。(MySQL では、日付の形式は <code class="literal">'YYYY-MM-DD'</code> と想定されています。これはユーザーが通常使用する形式とは異なる場合があります。)
-      </p><div class="informaltable"><table summary="この表は、前述したペットのレコードの例を示しています。" border="1"><colgroup><col><col><col><col><col><col></colgroup><thead><tr><th scope="col">name</th><th scope="col">owner</th><th scope="col">species</th><th scope="col">sex</th><th scope="col">birth</th><th scope="col">death</th></tr></thead><tbody><tr><td scope="row">Fluffy</td><td>Harold</td><td>cat</td><td>f</td><td>1993-02-04</td><td> </td></tr><tr><td scope="row">Claws</td><td>Gwen</td><td>cat</td><td>m</td><td>1994-03-17</td><td> </td></tr><tr><td scope="row">Buffy</td><td>Harold</td><td>dog</td><td>f</td><td>1989-05-13</td><td> </td></tr><tr><td scope="row">Fang</td><td>Benny</td><td>dog</td><td>m</td><td>1990-08-27</td><td> </td></tr><tr><td scope="row">Bowser</td><td>Diane</td><td>dog</td><td>m</td><td>1979-08-31</td><td>1995-07-29</td></tr><tr><td scope="row">Chirpy</td><td>Gwen</td><td>bird</td><td>f</td><td>1998-09-11</td><td> </td></tr><tr><td scope="row">Whistler</td><td>Gwen</td><td>bird</td><td> </td><td>1997-12-09</td><td> </td></tr><tr><td scope="row">Slim</td><td>Benny</td><td>snake</td><td>m</td><td>1996-04-29</td><td> </td></tr></tbody></table></div><p>
+      </p><div class="informaltable"><table class="informaltable" summary="この表は、前述したペットのレコードの例を示しています。" border="1"><colgroup><col><col><col><col><col><col></colgroup><thead><tr><th scope="col">name</th><th scope="col">owner</th><th scope="col">species</th><th scope="col">sex</th><th scope="col">birth</th><th scope="col">death</th></tr></thead><tbody><tr><td scope="row">Fluffy</td><td>Harold</td><td>cat</td><td>f</td><td>1993-02-04</td><td> </td></tr><tr><td scope="row">Claws</td><td>Gwen</td><td>cat</td><td>m</td><td>1994-03-17</td><td> </td></tr><tr><td scope="row">Buffy</td><td>Harold</td><td>dog</td><td>f</td><td>1989-05-13</td><td> </td></tr><tr><td scope="row">Fang</td><td>Benny</td><td>dog</td><td>m</td><td>1990-08-27</td><td> </td></tr><tr><td scope="row">Bowser</td><td>Diane</td><td>dog</td><td>m</td><td>1979-08-31</td><td>1995-07-29</td></tr><tr><td scope="row">Chirpy</td><td>Gwen</td><td>bird</td><td>f</td><td>1998-09-11</td><td> </td></tr><tr><td scope="row">Whistler</td><td>Gwen</td><td>bird</td><td> </td><td>1997-12-09</td><td> </td></tr><tr><td scope="row">Slim</td><td>Benny</td><td>snake</td><td>m</td><td>1996-04-29</td><td> </td></tr></tbody></table></div><p>
         空のテーブルから始めているため、データを移入する簡単な方法は、各ペットに対応する行を記述したテキストファイルを作成してから、1 つのステートメントでそのファイルの内容をテーブルにロードすることです。
       </p><p>
         たとえば、テキストファイル <code class="filename">pet.txt</code> を作成し、1 行に 1 レコードを記述します。値は、<code class="literal">CREATE TABLE</code> ステートメントに指定したカラムの順序に従い、タブで区切って指定します。性別が不明な場合やまだ生きているペットの死亡年月日など、不足している値には <code class="literal">NULL</code> 値を使用できます。テキストファイルでこれらを表現するには、<code class="literal">\N</code> (バックスラッシュと大文字の N) を使用します。たとえば、Whistler という鳥のレコードは次のようになります (値の間の空白は 1 つのタブ文字です)。
@@ -356,7 +324,7 @@ mysql&gt; <strong class="userinput"><code>INSERT INTO pet</code></strong>
         ここでは、文字値と日付値を、引用符付きの文字列で指定しています。また、<code class="literal">INSERT</code> では、不足している値を表す <code class="literal">NULL</code> を直接挿入することができます。<code class="literal">LOAD DATA</code> の場合のように <code class="literal">\N</code> を使用することはありません。
       </p><p>
         この例からわかるとおり、初期レコードをロードするために複数の <code class="literal">INSERT</code> ステートメントを使用すると、1 つの <code class="literal">LOAD DATA</code> ステートメントを使用する場合よりもかなり多くの入力が必要になります。
-      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="retrieving-data"></a>3.3.4 テーブルからの情報の取り出し</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="tutorial.html#selecting-all">3.3.4.1 すべてのデータの選択</a></span></dt><dt><span class="section"><a href="tutorial.html#selecting-rows">3.3.4.2 特定の行の選択</a></span></dt><dt><span class="section"><a href="tutorial.html#selecting-columns">3.3.4.3 特定のカラムの選択</a></span></dt><dt><span class="section"><a href="tutorial.html#sorting-rows">3.3.4.4 行のソート</a></span></dt><dt><span class="section"><a href="tutorial.html#date-calculations">3.3.4.5 日付の計算</a></span></dt><dt><span class="section"><a href="tutorial.html#working-with-null">3.3.4.6 NULL 値の操作</a></span></dt><dt><span class="section"><a href="tutorial.html#pattern-matching">3.3.4.7 パターンマッチング</a></span></dt><dt><span class="section"><a href="tutorial.html#counting-rows">3.3.4.8 行のカウント</a></span></dt><dt><span class="section"><a href="tutorial.html#multiple-tables">3.3.4.9 複数のテーブルの使用</a></span></dt></dl></div><a class="indexterm" name="idm139926546316528"></a><a class="indexterm" name="idm139926546314416"></a><a class="indexterm" name="idm139926546312352"></a><a class="indexterm" name="idm139926546310288"></a><p>
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="retrieving-data"></a>3.3.4 テーブルからの情報の取り出し</h3></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="tutorial.html#selecting-all">3.3.4.1 すべてのデータの選択</a></span></dt><dt><span class="section"><a href="tutorial.html#selecting-rows">3.3.4.2 特定の行の選択</a></span></dt><dt><span class="section"><a href="tutorial.html#selecting-columns">3.3.4.3 特定のカラムの選択</a></span></dt><dt><span class="section"><a href="tutorial.html#sorting-rows">3.3.4.4 行のソート</a></span></dt><dt><span class="section"><a href="tutorial.html#date-calculations">3.3.4.5 日付の計算</a></span></dt><dt><span class="section"><a href="tutorial.html#working-with-null">3.3.4.6 NULL 値の操作</a></span></dt><dt><span class="section"><a href="tutorial.html#pattern-matching">3.3.4.7 パターンマッチング</a></span></dt><dt><span class="section"><a href="tutorial.html#counting-rows">3.3.4.8 行のカウント</a></span></dt><dt><span class="section"><a href="tutorial.html#multiple-tables">3.3.4.9 複数のテーブルの使用</a></span></dt></dl></div><a class="indexterm" name="idm140396906787168"></a><a class="indexterm" name="idm140396906785056"></a><a class="indexterm" name="idm140396906782992"></a><a class="indexterm" name="idm140396906780928"></a><p>
         テーブルから情報を取り出すには、<code class="literal">SELECT</code> ステートメントを使用します。このステートメントの一般的な形式は次のとおりです。
       </p><pre class="programlisting">
 SELECT <em class="replaceable"><code>what_to_select</code></em>
@@ -398,7 +366,7 @@ mysql&gt; <strong class="userinput"><code>LOAD DATA LOCAL INFILE 'pet.txt' INTO 
 mysql&gt; <strong class="userinput"><code>UPDATE pet SET birth = '1989-08-31' WHERE name = 'Bowser';</code></strong>
 </pre><p>
               <code class="literal">UPDATE</code> は該当するレコードだけを変更するため、テーブルをリロードする必要はありません。
-            </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="selecting-rows"></a>3.3.4.2 特定の行の選択</h4></div></div></div><a class="indexterm" name="idm139926546279744"></a><a class="indexterm" name="idm139926546277600"></a><p>
+            </p></li></ul></div></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="selecting-rows"></a>3.3.4.2 特定の行の選択</h4></div></div></div><a class="indexterm" name="idm140396906750384"></a><a class="indexterm" name="idm140396906748240"></a><p>
           前のセクションで説明したとおり、テーブル全体を取り出すことは簡単です。<code class="literal">SELECT</code> ステートメントから <code class="literal">WHERE</code> 句を省略するだけで済みます。ただし、特にテーブルが大きくなってくると、テーブル全体を取り出すことは通常ありません。通常は特定の質問に対する回答が必要であり、そのために、取得する情報に関していくつかの制約を指定します。ペットに関する質問に対して回答を得る選択クエリーをいくつか見てみましょう。
         </p><p>
           テーブルから特定の行だけを選択することができます。たとえば、Bowser の誕生日に加えた変更を確認するには、次のように Bowser のレコードを選択します。
@@ -454,7 +422,7 @@ mysql&gt; <strong class="userinput"><code>SELECT * FROM pet WHERE (species = 'ca
 | Claws | Gwen   | cat     | m    | 1994-03-17 | NULL  |
 | Buffy | Harold | dog     | f    | 1989-05-13 | NULL  |
 +-------+--------+---------+------+------------+-------+
-</pre></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="selecting-columns"></a>3.3.4.3 特定のカラムの選択</h4></div></div></div><a class="indexterm" name="idm139926546248160"></a><a class="indexterm" name="idm139926546246048"></a><p>
+</pre></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="selecting-columns"></a>3.3.4.3 特定のカラムの選択</h4></div></div></div><a class="indexterm" name="idm140396906718864"></a><a class="indexterm" name="idm140396906716752"></a><p>
           テーブルの行全体ではなく特定のカラムを取得するには、カラムの名前をカンマで区切って指定します。たとえば、ペットの生年月日を調べるには、<code class="literal">name</code> カラムと <code class="literal">birth</code> カラムを選択します。
         </p><pre class="programlisting">
 mysql&gt; <strong class="userinput"><code>SELECT name, birth FROM pet;</code></strong>
@@ -488,7 +456,7 @@ mysql&gt; <strong class="userinput"><code>SELECT owner FROM pet;</code></strong>
 | Benny  |
 | Diane  |
 +--------+
-</pre><a class="indexterm" name="idm139926546237872"></a><p>
+</pre><a class="indexterm" name="idm140396906708576"></a><p>
           このクエリーは各レコードから <code class="literal">owner</code> カラムを取り出すだけなため、一部は複数回出現しています。出力を最小化するには、キーワード <code class="literal">DISTINCT</code> を追加して、一意の出力レコードをそれぞれ 1 回だけ取り出すようにします。
         </p><pre class="programlisting">
 mysql&gt; <strong class="userinput"><code>SELECT DISTINCT owner FROM pet;</code></strong>
@@ -514,7 +482,7 @@ mysql&gt; <strong class="userinput"><code>SELECT name, species, birth FROM pet</
 | Fang   | dog     | 1990-08-27 |
 | Bowser | dog     | 1989-08-31 |
 +--------+---------+------------+
-</pre></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="sorting-rows"></a>3.3.4.4 行のソート</h4></div></div></div><a class="indexterm" name="idm139926546227328"></a><a class="indexterm" name="idm139926546225984"></a><a class="indexterm" name="idm139926546223840"></a><a class="indexterm" name="idm139926546221808"></a><a class="indexterm" name="idm139926546219776"></a><p>
+</pre></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="sorting-rows"></a>3.3.4.4 行のソート</h4></div></div></div><a class="indexterm" name="idm140396906698080"></a><a class="indexterm" name="idm140396906696736"></a><a class="indexterm" name="idm140396906694592"></a><a class="indexterm" name="idm140396906692560"></a><a class="indexterm" name="idm140396906690528"></a><p>
           前の例で、結果の行の表示には特定の順序がないことに気付いたでしょう。多くの場合、クエリーの出力は、行を何らかの意味のある順序でソートすると確認しやすくなります。結果をソートするには、<code class="literal">ORDER BY</code> 句を使用します。
         </p><p>
           次に、ペットの生年月日を日付でソートしたものを示します。
@@ -572,7 +540,7 @@ mysql&gt; <strong class="userinput"><code>SELECT name, species, birth FROM pet</
 +----------+---------+------------+
 </pre><p>
           <code class="literal">DESC</code> キーワードはその直前のカラム名 (<code class="literal">birth</code>) だけに適用されます。<code class="literal">species</code> カラムのソート順序には影響を与えません。
-        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="date-calculations"></a>3.3.4.5 日付の計算</h4></div></div></div><a class="indexterm" name="idm139926546199744"></a><a class="indexterm" name="idm139926546198272"></a><a class="indexterm" name="idm139926546196240"></a><a class="indexterm" name="idm139926546194208"></a><p>
+        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="date-calculations"></a>3.3.4.5 日付の計算</h4></div></div></div><a class="indexterm" name="idm140396906670384"></a><a class="indexterm" name="idm140396906668912"></a><a class="indexterm" name="idm140396906666880"></a><a class="indexterm" name="idm140396906664848"></a><p>
           MySQL には、年齢の計算や日付の一部の抽出など、日付の計算に使用できる関数がいくつか用意されています。
         </p><p>
           それぞれのペットが何歳なのかを判別するには、<code class="literal">TIMESTAMPDIFF()</code> 関数を使用します。引数は、結果を表現する単位、および差を求める 2 つの日付です。次のクエリーでは、各ペットの生年月日、現在の日付、および年齢が表示されます。出力の最後のカラムラベルに意味を持たせるために、<span class="emphasis"><em>エイリアス</em></span> (<code class="literal">age</code>) が使用されています。
@@ -684,7 +652,7 @@ mysql&gt; <strong class="userinput"><code>SELECT name, birth FROM pet</code></st
     -&gt; <strong class="userinput"><code>WHERE MONTH(birth) = MOD(MONTH(CURDATE()), 12) + 1;</code></strong>
 </pre><p>
           <code class="literal">MONTH()</code> は <code class="literal">1</code> から <code class="literal">12</code> までの数値を返します。また、<code class="literal">MOD(something,12)</code> は <code class="literal">0</code> から <code class="literal">11</code> までの数値を返します。したがって、<code class="literal">MOD()</code> のあとで加算を行わないと、<code class="literal">11</code> 月から <code class="literal">1</code> 月に進んでしまいます。
-        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="working-with-null"></a>3.3.4.6 NULL 値の操作</h4></div></div></div><a class="indexterm" name="idm139926546123856"></a><a class="indexterm" name="idm139926546122544"></a><p>
+        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="working-with-null"></a>3.3.4.6 NULL 値の操作</h4></div></div></div><a class="indexterm" name="idm140396906594560"></a><a class="indexterm" name="idm140396906593248"></a><p>
           <code class="literal">NULL</code> 値に慣れるまでは驚くかもしれません。概念的には、<code class="literal">NULL</code> は<span class="quote">「<span class="quote">存在しない不明な値</span>」</span>を意味し、ほかの値とは多少異なる方法で扱われます。
         </p><p>
           <code class="literal">NULL</code> を調べるために、次に示すように <code class="literal">IS NULL</code> および <code class="literal">IS NOT NULL</code> 演算子を使用します。
@@ -725,7 +693,7 @@ mysql&gt; <strong class="userinput"><code>SELECT 0 IS NULL, 0 IS NOT NULL, '' IS
 +-----------+---------------+------------+----------------+
 </pre><p>
           このように、ゼロや空の文字列は実際に <code class="literal">NOT NULL</code> であるため、<code class="literal">NOT NULL</code> カラムに挿入することができます。<a class="xref" href="error-handling.html#problems-with-null" title="B.5.5.3 NULL 値に関する問題">セクションB.5.5.3「NULL 値に関する問題」</a>を参照してください。
-        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="pattern-matching"></a>3.3.4.7 パターンマッチング</h4></div></div></div><a class="indexterm" name="idm139926546083424"></a><a class="indexterm" name="idm139926546081968"></a><a class="indexterm" name="idm139926546079936"></a><p>
+        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="pattern-matching"></a>3.3.4.7 パターンマッチング</h4></div></div></div><a class="indexterm" name="idm140396906554096"></a><a class="indexterm" name="idm140396906552640"></a><a class="indexterm" name="idm140396906550608"></a><p>
           MySQL では、標準の SQL パターンマッチングに加え、<span class="command"><strong>vi</strong></span>、<span class="command"><strong>grep</strong></span>、<span class="command"><strong>sed</strong></span> などの Unix ユーティリティーで使用されるものに似た拡張正規表現に基づくパターンマッチング形式が提供されています。
         </p><p>
           SQL のパターンマッチングを使用すると、<span class="quote">「<span class="quote"><code class="literal">_</code></span>」</span> で任意の単一の文字、<span class="quote">「<span class="quote"><code class="literal">%</code></span>」</span> で任意の数の文字 (ゼロ文字を含む) に一致させることができます。MySQL のデフォルトでは、SQL パターンでは大文字と小文字が区別されません。次にいくつかの例を示します。SQL パターンを使用するときには、<code class="literal">=</code> や <code class="literal">&lt;&gt;</code> は使用しません。代わりに、<code class="literal">LIKE</code> または <code class="literal">NOT LIKE</code> 比較演算子を使用します。
@@ -845,7 +813,7 @@ mysql&gt; <strong class="userinput"><code>SELECT * FROM pet WHERE name REGEXP '^
 +-------+--------+---------+------+------------+-------+
 </pre><p>
           <a class="xref" href="functions.html#regexp" title="12.5.2 正規表現">セクション12.5.2「正規表現」</a>で、正規表現の構文の詳細について説明しています。
-        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="counting-rows"></a>3.3.4.8 行のカウント</h4></div></div></div><a class="indexterm" name="idm139926545999600"></a><a class="indexterm" name="idm139926545997456"></a><a class="indexterm" name="idm139926545995408"></a><p>
+        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="counting-rows"></a>3.3.4.8 行のカウント</h4></div></div></div><a class="indexterm" name="idm140396906470352"></a><a class="indexterm" name="idm140396906468208"></a><a class="indexterm" name="idm140396906466160"></a><p>
           データベースは、<span class="quote">「<span class="quote">テーブルの中に、特定のタイプのデータがどの程度の頻度で現れるか</span>」</span>という質問に答えるために使用されることがよくあります。たとえば、何匹ペットを飼っているのか、それぞれの所有者が何匹のペットを所有しているかを調べたり、または動物に対してさまざまな個体数調査を実施したりすることがあるでしょう。
         </p><p>
           ペットの総数をカウントすることは、<span class="quote">「<span class="quote"><code class="literal">pet</code> テーブルには何行あるか</span>」</span>という質問と同等です。このテーブルにはペットごとに 1 つのレコードが存在するからです。<code class="literal">COUNT(*)</code> は行数をカウントするため、ペットの数をカウントするクエリーは次のようになります。
@@ -969,7 +937,7 @@ mysql&gt; <strong class="userinput"><code>SELECT owner, COUNT(*) FROM pet;</code
 1 row in set (0.00 sec)
 </pre></li></ul></div><p>
           <a class="xref" href="functions.html#group-by-handling" title="12.19.3 MySQL での GROUP BY の処理">セクション12.19.3「MySQL での GROUP BY の処理」</a>も参照してください。
-        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="multiple-tables"></a>3.3.4.9 複数のテーブルの使用</h4></div></div></div><a class="indexterm" name="idm139926545949088"></a><p>
+        </p></div><div class="section"><div class="titlepage"><div><div><h4 class="title"><a name="multiple-tables"></a>3.3.4.9 複数のテーブルの使用</h4></div></div></div><a class="indexterm" name="idm140396906419840"></a><p>
           <code class="literal">pet</code> テーブルはペットの記録を保持します。獣医の診察や出産といったペットの生涯におけるイベントなど、ペットに関するほかの情報を記録するには、別のテーブルが必要です。このテーブルはどのようなものにしたらよいでしょうか。次の情報を含める必要があります。
         </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
               各イベントがどのペットに関するものかを示すためのペット名。
@@ -986,7 +954,7 @@ mysql&gt; <strong class="userinput"><code>CREATE TABLE event (name VARCHAR(20), 
     -&gt; <strong class="userinput"><code>type VARCHAR(15), remark VARCHAR(255));</code></strong>
 </pre><p>
           <code class="literal">pet</code> テーブルの場合と同様に、初期レコードをロードするもっとも簡単な方法として、次の情報を記述したタブ区切りのテキストファイルを作成します。
-        </p><div class="informaltable"><table summary="この表では、これまでに説明したように、タブ区切りのテキストファイルに現れるペットの記録データを示します。" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th scope="col">name</th><th scope="col">date</th><th scope="col">type</th><th scope="col">remark</th></tr></thead><tbody><tr><td scope="row">Fluffy</td><td>1995-05-15</td><td>litter</td><td>4 kittens, 3 female, 1 male</td></tr><tr><td scope="row">Buffy</td><td>1993-06-23</td><td>litter</td><td>5 puppies, 2 female, 3 male</td></tr><tr><td scope="row">Buffy</td><td>1994-06-19</td><td>litter</td><td>3 puppies, 3 female</td></tr><tr><td scope="row">Chirpy</td><td>1999-03-21</td><td>vet</td><td>needed beak straightened</td></tr><tr><td scope="row">Slim</td><td>1997-08-03</td><td>vet</td><td>broken rib</td></tr><tr><td scope="row">Bowser</td><td>1991-10-12</td><td>kennel</td><td> </td></tr><tr><td scope="row">Fang</td><td>1991-10-12</td><td>kennel</td><td> </td></tr><tr><td scope="row">Fang</td><td>1998-08-28</td><td>birthday</td><td>Gave him a new chew toy</td></tr><tr><td scope="row">Claws</td><td>1998-03-17</td><td>birthday</td><td>Gave him a new flea collar</td></tr><tr><td scope="row">Whistler</td><td>1998-12-09</td><td>birthday</td><td>First birthday</td></tr></tbody></table></div><p>
+        </p><div class="informaltable"><table class="informaltable" summary="この表では、これまでに説明したように、タブ区切りのテキストファイルに現れるペットの記録データを示します。" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th scope="col">name</th><th scope="col">date</th><th scope="col">type</th><th scope="col">remark</th></tr></thead><tbody><tr><td scope="row">Fluffy</td><td>1995-05-15</td><td>litter</td><td>4 kittens, 3 female, 1 male</td></tr><tr><td scope="row">Buffy</td><td>1993-06-23</td><td>litter</td><td>5 puppies, 2 female, 3 male</td></tr><tr><td scope="row">Buffy</td><td>1994-06-19</td><td>litter</td><td>3 puppies, 3 female</td></tr><tr><td scope="row">Chirpy</td><td>1999-03-21</td><td>vet</td><td>needed beak straightened</td></tr><tr><td scope="row">Slim</td><td>1997-08-03</td><td>vet</td><td>broken rib</td></tr><tr><td scope="row">Bowser</td><td>1991-10-12</td><td>kennel</td><td> </td></tr><tr><td scope="row">Fang</td><td>1991-10-12</td><td>kennel</td><td> </td></tr><tr><td scope="row">Fang</td><td>1998-08-28</td><td>birthday</td><td>Gave him a new chew toy</td></tr><tr><td scope="row">Claws</td><td>1998-03-17</td><td>birthday</td><td>Gave him a new flea collar</td></tr><tr><td scope="row">Whistler</td><td>1998-12-09</td><td>birthday</td><td>First birthday</td></tr></tbody></table></div><p>
           次のようにレコードをロードします。
         </p><pre class="programlisting">
 mysql&gt; <strong class="userinput"><code>LOAD DATA LOCAL INFILE 'event.txt' INTO TABLE event;</code></strong>
@@ -1033,7 +1001,7 @@ mysql&gt; <strong class="userinput"><code>SELECT p1.name, p1.sex, p2.name, p2.se
 +--------+------+--------+------+---------+
 </pre><p>
           このクエリーでは、テーブル名のエイリアスを指定してカラムを参照し、各カラムがテーブルのどちらのインスタンスに関連するかを必ず明確にしています。
-        </p></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="getting-information"></a>3.4 データベースとテーブルに関する情報の取得</h2></div></div></div><a class="indexterm" name="idm139926545871120"></a><a class="indexterm" name="idm139926545869008"></a><a class="indexterm" name="idm139926545866976"></a><p>
+        </p></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="getting-information"></a>3.4 データベースとテーブルに関する情報の取得</h2></div></div></div><a class="indexterm" name="idm140396906341728"></a><a class="indexterm" name="idm140396906339616"></a><a class="indexterm" name="idm140396906337584"></a><p>
       データベースやテーブルの名前を忘れた場合や、特定のテーブルの構造 (カラムの名前など) を忘れた場合はどうしますか。MySQL では、この問題に対処するために、サポートしているデータベースとテーブルについて情報を提供するステートメントがいくつか用意されています。
     </p><p>
       前出の <code class="literal">SHOW DATABASES</code> は、サーバーで管理されているデータベースのリストを表示します。現在どのデータベースが選択されているかを調べるには、<code class="literal">DATABASE()</code> 関数を使用します。
@@ -1080,7 +1048,7 @@ mysql&gt; <strong class="userinput"><code>DESCRIBE pet;</code></strong>
       既存のテーブルを作成するために必要な <code class="literal">CREATE TABLE</code> ステートメントを、<code class="literal">SHOW CREATE TABLE</code> ステートメントを使用して取得できます。<a class="xref" href="sql-syntax.html#show-create-table" title="13.7.5.12 SHOW CREATE TABLE 構文">セクション13.7.5.12「SHOW CREATE TABLE 構文」</a>を参照してください。
     </p><p>
       テーブルにインデックスが設定されている場合は、<code class="literal">SHOW INDEX FROM <em class="replaceable"><code>tbl_name</code></em></code> でその情報を表示できます。このステートメントの詳細については、<a class="xref" href="sql-syntax.html#show-index" title="13.7.5.23 SHOW INDEX 構文">セクション13.7.5.23「SHOW INDEX 構文」</a>を参照してください。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="batch-mode"></a>3.5 バッチモードでの MySQL の使用</h2></div></div></div><a class="indexterm" name="idm139926545831984"></a><a class="indexterm" name="idm139926545829872"></a><a class="indexterm" name="idm139926545828528"></a><a class="indexterm" name="idm139926545826496"></a><a class="indexterm" name="idm139926545825120"></a><a class="indexterm" name="idm139926545823088"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="batch-mode"></a>3.5 バッチモードでの MySQL の使用</h2></div></div></div><a class="indexterm" name="idm140396906302688"></a><a class="indexterm" name="idm140396906300576"></a><a class="indexterm" name="idm140396906299232"></a><a class="indexterm" name="idm140396906297200"></a><a class="indexterm" name="idm140396906295824"></a><a class="indexterm" name="idm140396906293792"></a><p>
       前のセクションでは、<span class="command"><strong>mysql</strong></span> をインタラクティブに使用してクエリーを入力し、結果を表示しました。<span class="command"><strong>mysql</strong></span> をバッチモードで実行することもできます。そのためには、実行するコマンドをファイルに記述し、そのファイルから入力を読み取るように <span class="command"><strong>mysql</strong></span> に指示します。
     </p><pre class="programlisting">
 shell&gt; <strong class="userinput"><code>mysql &lt; <em class="replaceable"><code>batch-file</code></em></code></strong>
@@ -1140,14 +1108,14 @@ hamster
 snake
 </pre><p>
       バッチモードで、インタラクティブ出力形式のデータを取得するには、<code class="literal">mysql -t</code> を使用します。実行したコマンドを出力にエコーするには、<code class="literal">mysql -vvv</code> を使用します。
-    </p><a class="indexterm" name="idm139926545785120"></a><a class="indexterm" name="idm139926545783552"></a><a class="indexterm" name="idm139926545782128"></a><a class="indexterm" name="idm139926545780576"></a><p>
+    </p><a class="indexterm" name="idm140396906255824"></a><a class="indexterm" name="idm140396906254368"></a><a class="indexterm" name="idm140396906252832"></a><a class="indexterm" name="idm140396906251280"></a><p>
       <code class="literal">source</code> コマンドまたは <code class="literal">\.</code> コマンドを使用すると、<span class="command"><strong>mysql</strong></span> プロンプトからでもスクリプトを使用できます。
     </p><pre class="programlisting">
 mysql&gt; <strong class="userinput"><code>source <em class="replaceable"><code>filename</code></em>;</code></strong>
 mysql&gt; <strong class="userinput"><code>\. <em class="replaceable"><code>filename</code></em></code></strong>
 </pre><p>
       詳細については、<a class="xref" href="programs.html#mysql-batch-commands" title="4.5.1.5 テキストファイルから SQL ステートメントを実行する">セクション4.5.1.5「テキストファイルから SQL ステートメントを実行する」</a>を参照してください。
-    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="examples"></a>3.6 一般的なクエリーの例</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="tutorial.html#example-maximum-column">3.6.1 カラムの最大値</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-row">3.6.2 特定のカラムの最大値が格納されている行</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-column-group">3.6.3 グループごとのカラムの最大値</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-column-group-row">3.6.4 特定のカラムのグループごとの最大値が格納されている行</a></span></dt><dt><span class="section"><a href="tutorial.html#example-user-variables">3.6.5 ユーザー定義の変数の使用</a></span></dt><dt><span class="section"><a href="tutorial.html#example-foreign-keys">3.6.6 外部キーの使用</a></span></dt><dt><span class="section"><a href="tutorial.html#searching-on-two-keys">3.6.7 2 つのキーを使用した検索</a></span></dt><dt><span class="section"><a href="tutorial.html#calculating-days">3.6.8 日ごとの訪問数の計算</a></span></dt><dt><span class="section"><a href="tutorial.html#example-auto-increment">3.6.9 AUTO_INCREMENT の使用</a></span></dt></dl></div><a class="indexterm" name="idm139926545771088"></a><a class="indexterm" name="idm139926545768976"></a><p>
+    </p></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="examples"></a>3.6 一般的なクエリーの例</h2></div></div></div><div class="toc"><dl class="toc"><dt><span class="section"><a href="tutorial.html#example-maximum-column">3.6.1 カラムの最大値</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-row">3.6.2 特定のカラムの最大値が格納されている行</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-column-group">3.6.3 グループごとのカラムの最大値</a></span></dt><dt><span class="section"><a href="tutorial.html#example-maximum-column-group-row">3.6.4 特定のカラムのグループごとの最大値が格納されている行</a></span></dt><dt><span class="section"><a href="tutorial.html#example-user-variables">3.6.5 ユーザー定義の変数の使用</a></span></dt><dt><span class="section"><a href="tutorial.html#example-foreign-keys">3.6.6 外部キーの使用</a></span></dt><dt><span class="section"><a href="tutorial.html#searching-on-two-keys">3.6.7 2 つのキーを使用した検索</a></span></dt><dt><span class="section"><a href="tutorial.html#calculating-days">3.6.8 日ごとの訪問数の計算</a></span></dt><dt><span class="section"><a href="tutorial.html#example-auto-increment">3.6.9 AUTO_INCREMENT の使用</a></span></dt></dl></div><a class="indexterm" name="idm140396906241744"></a><a class="indexterm" name="idm140396906239632"></a><p>
       ここでは、MySQL に関する一般的な問題を解決する方法の例を示します。
     </p><p>
       一部の例では、テーブル <code class="literal">shop</code> を使用します。このテーブルには、業者 (ディーラー) の物品 (品番) ごとの価格が格納されます。各業者は物品ごとに 1 つの定価を付けていると仮定すると、(<code class="literal">article</code>, <code class="literal">dealer</code>) がレコードの主キーになります。
@@ -1292,7 +1260,7 @@ mysql&gt; <strong class="userinput"><code>SELECT * FROM shop WHERE price=@min_pr
 +---------+--------+-------+
 </pre><div class="note" style="margin-left: 0.5in; margin-right: 0.5in;"><div class="admon-title">注記</div><p>
           また、テーブルやカラムといったデータベースオブジェクトの名前をユーザー変数に格納してから、この変数を SQL ステートメントで使用することもできます。ただし、これにはプリペアドステートメントを使用する必要があります。詳細は、<a class="xref" href="sql-syntax.html#sql-syntax-prepared-statements" title="13.5 準備済みステートメントのための SQL 構文">セクション13.5「準備済みステートメントのための SQL 構文」</a>を参照してください。
-        </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="example-foreign-keys"></a>3.6.6 外部キーの使用</h3></div></div></div><a class="indexterm" name="idm139926545716512"></a><a class="indexterm" name="idm139926545715056"></a><p>
+        </p></div></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="example-foreign-keys"></a>3.6.6 外部キーの使用</h3></div></div></div><a class="indexterm" name="idm140396906187120"></a><a class="indexterm" name="idm140396906185664"></a><p>
         MySQL では、<code class="literal">InnoDB</code> テーブルで外部キー制約の確認をサポートしています。<a class="xref" href="innodb-storage-engine.html" title="第 14 章 InnoDB ストレージエンジン">第14章「<i>InnoDB ストレージエンジン</i>」</a>、<a class="xref" href="introduction.html#ansi-diff-foreign-keys" title="1.8.2.4 外部キーの違い">セクション1.8.2.4「外部キーの違い」</a>を参照してください。
       </p><p>
         2 つのテーブルを結合するだけの場合は、外部キー制約は必要ありません。<code class="literal">InnoDB</code> 以外のストレージエンジンの場合、カラムを定義するときに <code class="literal">REFERENCES <em class="replaceable"><code>tbl_name</code></em>(<em class="replaceable"><code>col_name</code></em>)</code> 句を使用できます。これは実際の効果はありませんが、<span class="emphasis"><em>現在定義しようとしているカラムが別のテーブルのカラムを参照する予定であるという自分のメモまたはコメントとして役立ちます</em></span>。この構文を使用するときは、次の点を理解しておくことが非常に重要です。
@@ -1387,7 +1355,7 @@ PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1
 </pre><p>
         <code class="literal">REFERENCES</code> をこのようにカラム定義のコメントまたは<span class="quote">「<span class="quote">リマインダ</span>」</span>として使用する方法は、<code class="literal">MyISAM</code> テーブルで機能します。
-      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="searching-on-two-keys"></a>3.6.7 2 つのキーを使用した検索</h3></div></div></div><a class="indexterm" name="idm139926545682400"></a><a class="indexterm" name="idm139926545681152"></a><a class="indexterm" name="idm139926545679808"></a><a class="indexterm" name="idm139926545677648"></a><p>
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="searching-on-two-keys"></a>3.6.7 2 つのキーを使用した検索</h3></div></div></div><a class="indexterm" name="idm140396906153056"></a><a class="indexterm" name="idm140396906151808"></a><a class="indexterm" name="idm140396906150464"></a><a class="indexterm" name="idm140396906148304"></a><p>
         1 つのキーを使用した <code class="literal">OR</code> の処理は、<code class="literal">AND</code> の処理と同様にかなり最適化されています。
       </p><p>
         注意が必要なのは、<code class="literal">OR</code> で結合された 2 つの異なるキーを使用して検索する場合です。
@@ -1406,7 +1374,7 @@ SELECT field1_index, field2_index
 UNION
 SELECT field1_index, field2_index
     FROM test_table WHERE field2_index = '1';
-</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="calculating-days"></a>3.6.8 日ごとの訪問数の計算</h3></div></div></div><a class="indexterm" name="idm139926545662288"></a><a class="indexterm" name="idm139926545660976"></a><a class="indexterm" name="idm139926545659632"></a><a class="indexterm" name="idm139926545658160"></a><p>
+</pre></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="calculating-days"></a>3.6.8 日ごとの訪問数の計算</h3></div></div></div><a class="indexterm" name="idm140396906132896"></a><a class="indexterm" name="idm140396906131584"></a><a class="indexterm" name="idm140396906130240"></a><a class="indexterm" name="idm140396906128768"></a><p>
         ビットグループ関数を使用して、あるユーザーが Web ページを訪問した月ごとの日数を計算する方法の例を次に示します。
       </p><pre class="programlisting">
 CREATE TABLE t1 (year YEAR(4), month INT(2) UNSIGNED ZEROFILL,
@@ -1429,7 +1397,7 @@ SELECT year,month,BIT_COUNT(BIT_OR(1&lt;&lt;day)) AS days FROM t1
 +------+-------+------+
 </pre><p>
         このクエリーでは、年と月の組み合わせに対して異なる日付が何回テーブルに出現するかを、自動的に重複エントリを除去することによって計算しています。
-      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="example-auto-increment"></a>3.6.9 AUTO_INCREMENT の使用</h3></div></div></div><a class="indexterm" name="idm139926545648560"></a><a class="indexterm" name="idm139926545647216"></a><a class="indexterm" name="idm139926545645872"></a><p>
+      </p></div><div class="section"><div class="titlepage"><div><div><h3 class="title"><a name="example-auto-increment"></a>3.6.9 AUTO_INCREMENT の使用</h3></div></div></div><a class="indexterm" name="idm140396906119104"></a><a class="indexterm" name="idm140396906117760"></a><a class="indexterm" name="idm140396906116416"></a><p>
         <code class="literal">AUTO_INCREMENT</code> 属性を使用すると、新しい行に一意の識別子を生成できます。
       </p><pre class="programlisting">
 CREATE TABLE animals (
@@ -1468,9 +1436,9 @@ SELECT * FROM animals;
         1 以外の <code class="literal">AUTO_INCREMENT</code> 値で開始するには、次のように、その値を <code class="literal">CREATE TABLE</code> または <code class="literal">ALTER TABLE</code> でセットします。
       </p><pre class="programlisting">
 mysql&gt; <strong class="userinput"><code>ALTER TABLE tbl AUTO_INCREMENT = 100;</code></strong>
-</pre><h4><a name="idm139926545615936"></a>InnoDB の注意</h4><p>
+</pre><h4><a name="idm140396906086480"></a>InnoDB の注意</h4><p>
         <code class="literal">InnoDB</code> テーブルでは、一連の <code class="literal">INSERT</code> ステートメントの途中で自動インクリメント値を含むカラムを修正する場合は注意が必要です。たとえば、<code class="literal">UPDATE</code> ステートメントを使用して、自動インクリメントカラムに新しくより大きい値を入れると、後続の <code class="literal">INSERT</code> は<span class="quote">「<span class="quote">重複</span>」</span>エラーになる場合があります。<code class="literal">DELETE</code> を実行したあとでさらに <code class="literal">INSERT</code> ステートメントが続く場合、またはトランザクションを <code class="literal">COMMIT</code> したが <code class="literal">UPDATE</code> ステートメントのあとではない場合に、自動インクリメント値がすでに存在するかどうかのテストが行われます。
-      </p><h4><a name="idm139926545605632"></a>MyISAM の注意</h4><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
+      </p><h4><a name="idm140396906076176"></a>MyISAM の注意</h4><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
             <code class="literal">MyISAM</code> テーブルには、マルチカラムインデックス内のセカンダリカラムに <code class="literal">AUTO_INCREMENT</code> を指定することができます。この場合、<code class="literal">AUTO_INCREMENT</code> カラムに生成される値は、<code class="literal">MAX(<em class="replaceable"><code>auto_increment_column</code></em>) + 1 WHERE prefix=<em class="replaceable"><code>given-prefix</code></em></code> として計算されます。これは、データを順序付きのグループに分割する場合に便利です。
           </p><pre class="programlisting">
 CREATE TABLE animals (
@@ -1503,7 +1471,7 @@ SELECT * FROM animals ORDER BY grp,id;
             この場合 (<code class="literal">AUTO_INCREMENT</code> カラムがマルチカラムインデックスの一部として使用されている場合)、グループ内で最大の <code class="literal">AUTO_INCREMENT</code> 値を持つ行を削除すると、そのグループで同じ <code class="literal">AUTO_INCREMENT</code> 値が再使用されることになります。これは、通常は <code class="literal">AUTO_INCREMENT</code> 値が再使用されることのない <code class="literal">MyISAM</code> テーブルの場合にも発生します。
           </p></li><li class="listitem"><p>
             <code class="literal">AUTO_INCREMENT</code> カラムが複合インデックスの一部である場合、MySQL は <code class="literal">AUTO_INCREMENT</code> カラムで始まるインデックスを使用してシーケンス値を生成します (ある場合)。たとえば、<code class="literal">animals</code> テーブルにインデックス <code class="literal">PRIMARY KEY (grp, id)</code> と <code class="literal">INDEX (id)</code> が含まれている場合、MySQL はシーケンス値の生成で <code class="literal">PRIMARY KEY</code> を無視します。その結果、テーブルには <code class="literal">grp</code> 値ごとに 1 つのシーケンスではなく、単一のシーケンスが含まれることになります。
-          </p></li></ul></div><h4><a name="idm139926545585392"></a>参照情報</h4><p>
+          </p></li></ul></div><h4><a name="idm140396906055936"></a>参照情報</h4><p>
         <code class="literal">AUTO_INCREMENT</code> に関する詳細の参照先を次に示します。
       </p><div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem"><p>
             カラムに <code class="literal">AUTO_INCREMENT</code> 属性を割り当てる方法: <a class="xref" href="sql-syntax.html#create-table" title="13.1.17 CREATE TABLE 構文">セクション13.1.17「CREATE TABLE 構文」</a>、および<a class="xref" href="sql-syntax.html#alter-table" title="13.1.7 ALTER TABLE 構文">セクション13.1.7「ALTER TABLE 構文」</a>。
@@ -1517,7 +1485,7 @@ SELECT * FROM animals ORDER BY grp,id;
             <code class="literal">AUTO_INCREMENT</code> とレプリケーション: <a class="xref" href="replication.html#replication-features-auto-increment" title="17.4.1.1 レプリケーションと AUTO_INCREMENT">セクション17.4.1.1「レプリケーションと AUTO_INCREMENT」</a>。
           </p></li><li class="listitem"><p>
             レプリケーションに使用できる <code class="literal">AUTO_INCREMENT</code> 関連のサーバーシステム変数 (<code class="literal">auto_increment_increment</code> と <code class="literal">auto_increment_offset</code>): <a class="xref" href="server-administration.html#server-system-variables" title="5.1.4 サーバーシステム変数">セクション5.1.4「サーバーシステム変数」</a>。
-          </p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="apache"></a>3.7 Apache での MySQL の使用</h2></div></div></div><a class="indexterm" name="idm139926545563376"></a><p>
+          </p></li></ul></div></div></div><div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="apache"></a>3.7 Apache での MySQL の使用</h2></div></div></div><a class="indexterm" name="idm140396906033856"></a><p>
       MySQL データベースを使用してユーザーを認証し、ログファイルを MySQL のテーブルに書き込むプログラムがあります。
     </p><p>
       Apache 構成ファイルに次を追加することで、MySQL に簡単に読み込めるように Apache のロギング形式を変更することができます。
