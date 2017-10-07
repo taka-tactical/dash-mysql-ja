@@ -1,11 +1,24 @@
 <?php
+/**
+dash-mysql-ja
 
+Copyright (c) 2015 T.Takamatsu <takamatsu@tactical.jp>
+
+This software is released under the MIT License.
+http://opensource.org/licenses/mit-license.php
+*/
+
+
+//----------------------------------------
 // config
+//----------------------------------------
 $lang = 'ja';
 $ver  = '5.6';
 
 
-// const
+//----------------------------------------
+// consts
+//----------------------------------------
 $c_class = ' クラス';
 $c_state = ' 構文';
 $c_types = ' 型';
@@ -14,17 +27,35 @@ $c_mbor  = 'および';
 
 
 //----------------------------------------
-// get manual
+//
+// Main process
+//
+//----------------------------------------
+
+echo "\nStart build MySQL docset ...\n";
+
 $base = '/MySQL.docset/Contents/Resources/Documents';
 $dir  = "refman-{$ver}-{$lang}.html-chapter";
 $zip  = "{$dir}.zip";
 
-exec('rm -rf MySQL.docset/Contents/Resources/');
-exec('mkdir -p MySQL.docset/Contents/Resources/');
-exec("wget http://downloads.mysql.com/docs/{$zip}");
-exec("unzip {$zip}");
-exec('mv ' . __DIR__ . "/{$dir} " . __DIR__ . $base);
-exec('rm -f ' . __DIR__ . "/{$zip}");
+try {
+	exec_ex('rm -rf MySQL.docset/Contents/Resources/');
+	//exec_ex('mkdir -p MySQL.docset/Contents/Resources/');
+
+	if (!mkdir('MySQL.docset/Contents/Resources/', 0777, true)) {
+		do_exception(__LINE__);
+	}
+
+	exec_ex("wget http://downloads.mysql.com/docs/{$zip}");
+	exec_ex("unzip {$zip}");
+	exec_ex('mv ' . __DIR__ . "/{$dir} " . __DIR__ . $base);
+}
+catch (Exception $e) {
+	throw new Exception("\nMySQL docset build failed.\nFix error and try again.\n\n", -1, $e);
+}
+finally {
+	exec('rm -f ' . __DIR__ . "/{$zip}");
+}
 
 // gen plist
 file_put_contents(__DIR__ . '/MySQL.docset/Contents/Info.plist', <<<ENDI
@@ -299,6 +330,7 @@ echo "\nMySQL docset created !\n";
 
 //----------------------------------------
 // helper functions
+//----------------------------------------
 
 function get_span_a_child($element) {
 	$child = null;
@@ -354,11 +386,32 @@ function validate_page_href($href) {
 	return true;
 }
 
-function remove_jstag($html) {
+function remove_jstag($html, $alt = '') {
 	if ($html && ($p = strpos($html, '<script language="javascript" type="text/javascript">')) !== false) {
 		if (($q = strpos($html, '<noscript></noscript>', $p + 1)) !== false)
 			$html = substr($html, 0, $p) . $alt . substr($html, $q + 21);
 	}
 	return $html;
 }
+
+function do_exception($line, $code = -1) {
+	throw new Exception("Error at line: {$line}", $code);
+}
+
+function exec_ex($cmd) {
+	if (($cmd = strval($cmd)) === '') {
+		do_exception(__LINE__);
+	}
+
+	$out = null;
+	$ret = 0;
+	exec($cmd, $out, $ret);
+
+	if ($ret) {
+		do_exception(__LINE__, $ret);
+	}
+
+	return true;
+}
+
 
