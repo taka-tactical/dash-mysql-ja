@@ -323,7 +323,7 @@ $html =<<< EOF
   border: none;
 }
 EOF;
-file_put_contents(__DIR__ . $base . '/mvl.css', $html, FILE_APPEND);
+file_put_contents(__DIR__ . "{$base}/mvl.css", $html, FILE_APPEND);
 
 echo "\nMySQL docset created !\n";
 
